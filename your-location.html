@@ -1,0 +1,121 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta http-equiv="X-UA-Compatible" content="IE=edge">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<!-- The above 3 meta tags *must* come first in the head; any other head content must come *after* these tags -->
+<meta name="description" content="">
+<meta name="author" content="">
+<title>Wellnowhealth</title>
+
+<!-- Bootstrap CSS -->
+<link rel="stylesheet" href="css/bootstrap.min.css">
+<!-- /Bootstrap CSS -->
+
+<!-- Font Awesome CSS -->
+<link rel="stylesheet" href="css/font-awesome.min.css">
+<!-- /Font Awesome CSS -->
+
+<!-- Custom Style CSS -->
+<link rel="stylesheet" href="css/slidenav.css">
+<!-- /Custom Style CSS -->
+
+<!-- Common Style CSS -->
+<link rel="stylesheet" href="css/style.css">
+<link rel="stylesheet" href="css/mycss.css">
+<!-- /Common Style CSS -->
+
+<!-- HTML5 shim and Respond.js for IE8 support of HTML5 elements and media queries -->
+<!-- WARNING: Respond.js doesn't work if you view the page via file:// -->
+<!--[if lt IE 9]>
+      <script src="https://oss.maxcdn.com/html5shiv/3.7.3/html5shiv.min.js"></script>
+      <script src="https://oss.maxcdn.com/respond/1.4.2/respond.min.js"></script>
+    <![endif]-->
+</head>
+
+<body>
+<div class="sidenav" id="mySidenav" >
+  <div  class="navigation"> <a  class="closebtn" href="javascript:void(0)" onClick="closeNav()">×</a>
+    <div class="menu_section">
+      <ul class="nav side-menu">
+        <li><a href="my-account.html">Update Info </a> </li>
+        <li><a href="past-emergencies.html">Past Emergencies </a> </li>
+		<li><a href="logout.html">Logout </a> </li>
+      </ul>
+    </div>
+  </div>
+</div>
+
+
+
+
+
+<div class="full-height background-layer"> 
+    
+    <!-----Header Start------->
+    <header class="header container-fluid">
+        <div class="container">
+        <div class="nav-icon" onClick="openNav()"> <a id="menu_toggle"><img src="images/hamburger.png" alt=""></a> </div>
+            <div class="logo"><a href="#"><img src="images/logo.png"  alt=""></a></div>
+        </div>
+    </header>
+    <!-----Header End-------> 
+    
+    <!-----Main wrapper Start------->
+    <div class="main-wrapper mt-5">
+        <div class="container">
+         <h1 class="entry-title text-center text-white">Your Location</h1>
+        </div>
+     <div class="location-map mb-4"><div id="ourgmap"></div></div> 
+        
+    </div>
+    <!-----Main wrapper End-------> 
+    
+</div>
+<script src="js/jquery-3.2.1.min.js" ></script>
+	<script type="text/javascript" charset="utf-8" src="cordova.js"></script>
+	<script type="text/javascript" src="js/config.js"></script>
+	<script type="text/javascript" src="js/validate.js"></script>
+<script src="https://maps.googleapis.com/maps/api/js?sensor=true&libraries=geometry&key=AIzaSyAdRw4y6QbeCa2AVoQcI_j7NMQZPYDrabU" type="text/javascript"></script>
+<script>
+  function openNav() {
+      document.getElementById("mySidenav").style.width = "100%";
+  }
+
+  function closeNav() {
+      document.getElementById("mySidenav").style.width = "0";
+  }
+  var Staff_Lat= localStorage.getItem('Manager_clinic_lati');
+	var Staff_Long= localStorage.getItem('Manager_clinic_longi');
+	var our_address=localStorage.getItem('Manager_clinicaddress');
+	
+	var setgooglepath=function() {
+		var latit=parseFloat(Staff_Lat);
+		var longit=parseFloat(Staff_Long);
+        var map = new google.maps.Map(document.getElementById('ourgmap'), {
+          zoom: 12,
+          center: {lat: latit, lng: longit}
+        });
+		
+		var geocoder = new google.maps.Geocoder;
+		var infowindow = new google.maps.InfoWindow;
+		var latlng = {lat: parseFloat(latit), lng: parseFloat(longit)};
+		var ourphoto='images/home.png';
+		var marker = new google.maps.Marker({
+			position: latlng,
+			map: map,
+			animation: google.maps.Animation.DROP,
+			icon: ourphoto
+		});
+	  marker.setPosition( latlng );
+	   google.maps.event.addListener(marker, "click", function (e) {
+			var infoWindow = new google.maps.InfoWindow();
+			infoWindow.setContent(our_address);
+			infoWindow.open(map, marker);
+		});
+	}
+	setTimeout(setgooglepath,1000);
+</script>
+</body>
+</html>

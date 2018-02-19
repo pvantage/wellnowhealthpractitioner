@@ -1,0 +1,349 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta http-equiv="X-UA-Compatible" content="IE=edge">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<!-- The above 3 meta tags *must* come first in the head; any other head content must come *after* these tags -->
+<meta name="description" content="">
+<meta name="author" content="">
+<title>Wellnowhealth</title>
+
+<!-- Bootstrap CSS -->
+<link rel="stylesheet" href="css/bootstrap.min.css">
+<!-- /Bootstrap CSS -->
+
+<!-- Font Awesome CSS -->
+<link rel="stylesheet" href="css/font-awesome.min.css">
+<!-- /Font Awesome CSS -->
+
+<!-- Custom Style CSS -->
+<link rel="stylesheet" href="css/slidenav.css">
+<!-- /Custom Style CSS -->
+
+<!-- Common Style CSS -->
+<link rel="stylesheet" href="css/style.css">
+<link rel="stylesheet" href="css/mycss.css">
+<!-- /Common Style CSS -->
+
+<!-- HTML5 shim and Respond.js for IE8 support of HTML5 elements and media queries -->
+<!-- WARNING: Respond.js doesn't work if you view the page via file:// -->
+<!--[if lt IE 9]>
+      <script src="https://oss.maxcdn.com/html5shiv/3.7.3/html5shiv.min.js"></script>
+      <script src="https://oss.maxcdn.com/respond/1.4.2/respond.min.js"></script>
+    <![endif]-->
+</head>
+
+<body>
+<div class="sidenav" id="mySidenav" >
+  <div  class="navigation"> <a  class="closebtn" href="javascript:void(0)" onClick="closeNav()">×</a>
+    <div class="menu_section">
+      <ul class="nav side-menu">
+        <li><a href="my-account.html">Update Info </a> </li>
+        <li><a href="past-emergencies.html">Past Emergencies </a> </li>
+		<li><a href="logout.html">Logout </a> </li>
+      </ul>
+    </div>
+  </div>
+</div>
+
+
+
+
+
+<div class="full-height background-layer"> 
+    
+    <!-----Header Start------->
+    <header class="header container-fluid">
+        <div class="container">
+        <div class="nav-icon" onClick="openNav()"> <a id="menu_toggle"><img src="images/hamburger.png" alt=""></a> </div>
+            <div class="logo"><a href="#"><img src="images/logo.png"  alt=""></a></div>
+        </div>
+    </header>
+    <!-----Header End-------> 
+    
+    <!-----Main wrapper Start------->
+    <div class="main-wrapper mt-5">
+        <div class="container">
+         <h1 class="entry-title text-center text-white">Emergency Location</h1>
+        </div>
+     <div class="location-map mb-4"><div id="ourgmap"></div></div>   
+        
+    </div>
+    <!-----Main wrapper End-------> 
+    
+</div>
+<script src="js/jquery-3.2.1.min.js" ></script>
+	<script type="text/javascript" charset="utf-8" src="cordova.js"></script>
+	<script type="text/javascript" src="js/config.js"></script>
+	<script type="text/javascript" src="js/validate.js"></script>
+<script src="https://maps.googleapis.com/maps/api/js?sensor=true&libraries=geometry&key=AIzaSyAdRw4y6QbeCa2AVoQcI_j7NMQZPYDrabU" type="text/javascript"></script>
+<script>
+  function openNav() {
+      document.getElementById("mySidenav").style.width = "100%";
+  }
+
+  function closeNav() {
+      document.getElementById("mySidenav").style.width = "0";
+  }
+  
+</script>
+<script type="text/javascript">
+function checkcurrentpostion(company_id){
+	var url=siteurl+'/api/emergencies/companydetail';
+	jQuery.ajax({  
+		type: 'POST',  
+		url: url,           
+		dataType: 'json',  
+		crossDomain: true,
+		data: {company_id:company_id}, 
+		beforeSend: function() {
+		
+		},		
+		complete: function() {
+		}, 
+		crossDomain: true,  
+		success: function(res) { 
+			if(res['current_lati']){
+				localStorage.setItem('Driver_Lat',res['current_lati']);
+				localStorage.setItem('Driver_Long',res['current_longi']);
+			}
+		},  
+		error: function(response, d, a){
+		
+		
+		return false; 
+		}
+	});
+	setTimeout(function(){checkcurrentpostion(company_id);},3000);
+}
+var map, marker, old_lati, old_longi;
+	var speed = 50; // km/h
+	var startPos = [];
+var delay = 100;
+var mapicon='images/refspot.png';
+function mylocation(map,old_lati,old_longi,marker,mapicon,geocoder,infowindow){
+	
+	var new_lati=localStorage.getItem('Driver_Lat');
+	var new_longi=localStorage.getItem('Driver_Long');
+	updateMarker(geocoder,infowindow,marker, new_lati, new_longi,mapicon);
+	if(old_lati!=new_lati && old_longi!=new_longi){
+		old_lati=new_lati;
+		old_longi=new_longi;
+		google.maps.event.addListenerOnce(map, 'idle', function()
+		{
+			animateMarker(marker, [
+				[new_lati, new_longi]
+			], speed);
+		});
+	}
+	/*else{
+		google.maps.event.addListenerOnce(map, 'idle', function()
+		{
+			animateMarker(marker, [
+				[new_lati, new_longi]
+			], speed);
+		});
+	}*/
+   setTimeout(function(){mylocation(map,old_lati,old_longi,marker,mapicon,geocoder,infowindow)},3000);
+}
+function updateMarker(geocoder,infowindow,marker, latitude, longitude,mapicon) {
+  var latlng3 = {lat: parseFloat(latitude), lng: parseFloat(longitude)};
+        geocoder.geocode({'location': latlng3}, function(results, status) {
+          if (status === 'OK') {
+            if (results[0]) {
+              infowindow.setContent(results[0].formatted_address);
+            } 
+          }
+        });
+ 
+  
+}
+function animateMarker(marker, coords, km_h)
+{
+    var target = 0;
+    var km_h = km_h || 50;
+    coords.push([startPos[0], startPos[1]]);
+    
+    function goToPoint()
+    {
+		
+        var lat = marker.position.lat();
+        var lng = marker.position.lng();
+        var step = (km_h * 1000 * delay) / 3600000; // in meters
+        
+        var dest = new google.maps.LatLng(
+        coords[target][0], coords[target][1]);
+        
+        var distance =
+        google.maps.geometry.spherical.computeDistanceBetween(
+        dest, marker.position); // in meters
+        
+        var numStep = distance / step;
+        var i = 0;
+        var deltaLat = (coords[target][0] - lat) / numStep;
+        var deltaLng = (coords[target][1] - lng) / numStep;
+        
+        function moveMarker()
+        {
+            lat += deltaLat;
+            lng += deltaLng;
+            i += step;
+            
+            if (i < distance)
+            {
+                marker.setPosition(new google.maps.LatLng(lat, lng));
+                setTimeout(moveMarker, delay);
+            }
+            else
+            {   marker.setPosition(dest);
+                target++;
+                if (target == coords.length){ target = 0; }
+                
+                //setTimeout(goToPoint, delay);
+            }
+        }
+        moveMarker();
+    }
+    goToPoint();
+}
+jQuery(document).ready(function(){
+	jQuery( document ).on( "mobileinit", function() {
+		jQuery.mobile.allowCrossDomainPages = true;
+	});
+	var contentType ="application/x-www-form-urlencoded; charset=utf-8";
+    if(window.XDomainRequest){contentType = "text/plain";}
+	jQuery.support.cors = true;
+	var id=gup('id');
+	var Staff_Lat= localStorage.getItem('Manager_clinic_lati');
+	var Staff_Long= localStorage.getItem('Manager_clinic_longi');
+	var our_address=localStorage.getItem('Manager_clinicaddress');
+	
+	var setgooglepath=function(joblati,joblongi, jobaddress,our_address, mapid) {
+        var directionsDisplay = new google.maps.DirectionsRenderer({suppressMarkers:true});
+        var directionsService = new google.maps.DirectionsService;
+		var latit=parseFloat(Staff_Lat);
+		var longit=parseFloat(Staff_Long);
+        var map = new google.maps.Map(document.getElementById(mapid), {
+          zoom: 12,
+          center: {lat: latit, lng: longit}
+        });
+        directionsDisplay.setMap(map);
+		
+		
+		
+		var geocoder = new google.maps.Geocoder;
+		var infowindow = new google.maps.InfoWindow;
+		var latlng = {lat: parseFloat(latit), lng: parseFloat(longit)};
+		var ourphoto='images/home.png';
+		var marker = new google.maps.Marker({
+			position: latlng,
+			map: map,
+			animation: google.maps.Animation.DROP,
+			icon: ourphoto
+		});
+	  marker.setPosition( latlng );
+	   google.maps.event.addListener(marker, "click", function (e) {
+			var infoWindow = new google.maps.InfoWindow();
+			infoWindow.setContent(our_address);
+			infoWindow.open(map, marker);
+		});
+		var imgommap='images/mapicon.png';
+		var latlng2={lat: parseFloat(joblati), lng: parseFloat(joblongi)};
+		var marker2 = new google.maps.Marker({
+			position: latlng2,
+			map: map,
+			animation: google.maps.Animation.DROP,
+			icon: imgommap
+		});
+	  marker2.setPosition( latlng2 );
+	  google.maps.event.addListener(marker2, "click", function (e) {
+			var infoWindow = new google.maps.InfoWindow();
+			infoWindow.setContent(jobaddress);
+			infoWindow.open(map, marker2);
+		});
+	  var latlng = {lat: parseFloat(joblati), lng: parseFloat(joblongi)};
+        geocoder.geocode({'location': latlng}, function(results, status) {
+          if (status === 'OK') {
+            if (results[0]) {
+              var marker = new google.maps.Marker({
+                position: latlng,
+                map: map,
+				icon: {
+						url: mapicon
+					}
+              });
+			 
+              infowindow.setContent(results[0].formatted_address);
+			  mylocation(map,joblati,joblongi,marker,mapicon,geocoder,infowindow);
+            } else {
+              window.alert('No results found');
+            }
+          } else {
+            window.alert('Geocoder failed due to: ' + status);
+          }
+        });
+		
+		directionsService.route({
+          origin: our_address,  
+          destination: jobaddress,  
+          travelMode: google.maps.TravelMode.DRIVING
+        }, function(response, status) {
+          if (status == 'OK') {
+            directionsDisplay.setDirections(response);
+          } else {
+            //window.alert('Directions request failed due to ' + status);
+          }
+        });
+        
+      }
+	
+	var url=siteurl+'/api/emergencies/ergencydetail';
+	jQuery.ajax({  
+		type: 'POST',  
+		url: url,           
+		dataType: 'json',  
+		crossDomain: true,
+		data: {id:id}, 
+		beforeSend: function() {
+		
+		},		
+		complete: function() {
+		}, 
+		crossDomain: true,  
+		success: function(res) { 
+		if(res['data'])
+		{
+			var html='';
+			jQuery(res['data']).each(function(index){
+				jQuery('.main-wrapper').append('<div class="text-center mb-3"><a href="tel:'+res['data'][index]['emergency_phone']+'" class="btn btn-primary">CONTACT EMERGENCY</a></div>');
+				setTimeout(function(){
+				var lati=res['data'][index]['current_lati'], 
+				longi=res['data'][index]['current_longi'],
+				address=res['data'][index]['companyaddress'], 
+				mapid='ourgmap';
+				setgooglepath(lati,longi, address,our_address, mapid);
+				setTimeout(function(){checkcurrentpostion(res['data'][index]['company_id']);},2000);
+				},1000);
+			});
+			
+		}else if(res['nodata']){				
+			//jQuery('.activity-map-wrap').append(res['nodata']);
+		}
+		
+		},  
+		error: function(response, d, a){
+		
+		jQuery('body .showmessage').remove();
+		var html='<div class="showmessage">Server Error.</div>';
+		jQuery('body').append(html);
+		setTimeout(function(){jQuery('.showmessage').slideUp();},1000);
+		return false; 
+		}
+	});
+	
+});
+
+</script>
+</body>
+</html>

@@ -1,0 +1,221 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta http-equiv="X-UA-Compatible" content="IE=edge">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<!-- The above 3 meta tags *must* come first in the head; any other head content must come *after* these tags -->
+<meta name="description" content="">
+<meta name="author" content="">
+<title>Wellnowhealth</title>
+
+<!-- Bootstrap CSS -->
+<link rel="stylesheet" href="css/bootstrap.min.css">
+<!-- /Bootstrap CSS -->
+
+<!-- Font Awesome CSS -->
+<link rel="stylesheet" href="css/font-awesome.min.css">
+<!-- /Font Awesome CSS -->
+
+<!-- Custom Style CSS -->
+<link rel="stylesheet" href="css/slidenav.css">
+<!-- /Custom Style CSS -->
+
+<!-- Common Style CSS -->
+<link rel="stylesheet" href="css/style.css">
+<link rel="stylesheet" href="css/mycss.css">
+<!-- /Common Style CSS -->
+
+<!-- HTML5 shim and Respond.js for IE8 support of HTML5 elements and media queries -->
+<!-- WARNING: Respond.js doesn't work if you view the page via file:// -->
+<!--[if lt IE 9]>
+      <script src="https://oss.maxcdn.com/html5shiv/3.7.3/html5shiv.min.js"></script>
+      <script src="https://oss.maxcdn.com/respond/1.4.2/respond.min.js"></script>
+    <![endif]-->
+</head>
+
+<body>
+<div class="full-height background-layer"> 
+    
+    <!-----Header Start------->
+    <header class="header container-fluid">
+        <div class="container"> <a href="your-location.html" class="header-back-btn"><i  class="fa fa-angle-left"></i> </a>
+            <div class="logo"><a href="your-location.html"><img src="images/logo.png"  alt=""></a></div>
+        </div>
+    </header>
+    <!-----Header End-------> 
+    
+    <!-----Main wrapper Start------->
+    <div class="main-wrapper mt-5">
+        <div class="container">
+            <div class="login-intro text-white mb-3">Manage your account here </div>
+            <div class="login-form">
+               <form id="loginuser" action="" method="post">
+			   	<input type="hidden" name="id" value="" />
+                    <div class="input-group mb-3">
+						<label>Name</label>
+						<div>
+						  <input type="text" class="form-control" name="fname" required="" value="" placeholder="Company Name">
+						</div>
+                    </div>
+                    <div class="input-group mb-3">
+                        <label>Phone No</label>
+						<div>
+						  <input type="text" class="form-control" name="phone" required="" value="" placeholder="Phone No">
+						</div>
+                    </div>
+					 <div class="input-group mb-3">
+                        <label>Email Id</label>
+						<div>
+						  <input type="email" class="form-control" required="" value="" name="email" placeholder="Email Id">
+						</div>
+                    </div>
+					<div class="input-group mb-3">
+                        <label>Clinic: <span class="your_clinic"></span></label>
+                    </div>
+					
+					 <div class="input-group mb-3">
+                       <label>Password</label>
+						<div>
+						  <input type="password" class="form-control" placeholder="Old Password" name="oldpwd" />
+						  <br>
+						  <input type="password" class="form-control" placeholder="Password" name="pwd" />
+						  <br>
+						  <input type="password" class="form-control" placeholder="Confirm Password" name="pwd2" />
+						</div>
+                    </div>
+                    <div  class="submitwrap">
+                        <div class="pull-left">
+                            <button type="submit" class="btn btn-primary">Submit</button>
+                        </div>
+                        <!--<div class="pull-right"> <a href="#" class="btn btn-dark">REGISTER</a></div>-->
+                    </div>
+                </form>
+            </div>
+            <div class="clearfix"></div>
+            <div class="text-center text-white mt-4 mb-3 ">Emergency Services are available for registered member 24x7</div>
+        </div>
+    </div>
+    <!-----Main wrapper End-------> 
+    
+</div>
+
+<script src="js/jquery-3.2.1.min.js" ></script>
+	<script type="text/javascript" charset="utf-8" src="cordova.js"></script>
+	<script type="text/javascript" src="js/config.js"></script>
+	<script type="text/javascript" src="js/validate.js"></script>
+<script type="text/javascript">
+
+jQuery(document).ready(function(){
+	jQuery( document ).on( "mobileinit", function() {
+		jQuery.mobile.allowCrossDomainPages = true;
+	});
+	var contentType ="application/x-www-form-urlencoded; charset=utf-8";
+    if(window.XDomainRequest){contentType = "text/plain";}
+	jQuery.support.cors = true;
+	jQuery('#loginuser').validate();
+	/*if(localStorage.getItem('UserRedirect')!=null){
+		window.location=localStorage.getItem('UserRedirect');
+	}*/
+	
+	var id=localStorage.getItem('Manager_ID');
+	jQuery('input[name="id"]').val(id);
+	var email=localStorage.getItem('Manager_email');
+	jQuery('input[name="email"]').val(email);
+	var phone=localStorage.getItem('Manager_phone');
+	jQuery('input[name="phone"]').val(phone);
+	var fname=localStorage.getItem('Manager_fname');
+	jQuery('input[name="fname"]').val(fname);
+	var clinic_id=localStorage.getItem('Manager_clinic_id');
+	if(parseInt(clinic_id)>0){
+		var clinic=localStorage.getItem('Manager_clinic');
+		var clinicaddress=localStorage.getItem('Manager_clinicaddress');
+		jQuery('.your_clinic').html(clinic+' ('+clinicaddress+')');
+	}
+	jQuery('#loginuser').submit( function(){	
+		var error=false;
+		jQuery('#loginuser input').each(function(){
+			if(jQuery(this).hasClass('error')){
+				error=true;
+			}
+		});
+		
+		var url=siteurl+'/api/account/updatemanager';
+		if(error)
+		{
+			return false;
+		}
+		else
+		{
+			 jQuery.ajax({  
+			 type: 'POST',  
+			 url: url,           
+			 dataType: 'json',  
+			 data: jQuery('#loginuser').serialize(), 
+			 beforeSend: function() {
+			 	
+			 },		
+			 complete: function() {
+			 }, 
+			 crossDomain: true,  
+			 success: function(res) { 
+				if(res['udetail'])
+				{
+					localStorage.setItem('Manager_email', res['udetail']['email']);
+					localStorage.setItem('Manager_phone', res['udetail']['phone']);
+					localStorage.setItem('Manager_fname', res['udetail']['fname']);
+					localStorage.setItem('Manager_clinic_id', res['udetail']['clinic_id']);
+					if(parseInt(res['udetail']['clinic_id'])>0){
+						localStorage.setItem('Manager_clinic', res['udetail']['clinic']);
+						localStorage.setItem('Manager_clinicaddress', res['udetail']['clinicaddress']);
+						localStorage.setItem('Manager_clinic_lati', res['udetail']['clinic_lati']);
+						localStorage.setItem('Manager_clinic_longi', res['udetail']['clinic_longi']);
+					}
+					jQuery('body .showmessage').remove();
+					var html='<div class="showmessage">'+res['success']+'</div>';
+					jQuery('body').append(html);
+					setTimeout(function(){jQuery('.showmessage').slideUp();},3000);
+				
+				}else if(res['errors']){				
+					jQuery('body .showmessage').remove();
+					var html2='';
+					jQuery(res['errors']).each(function(index){
+						html2+=res['errors'][index]+'<br>';
+					});
+					var html='<div class="showmessage">'+html2+'</div>';
+					jQuery('body').append(html);
+					setTimeout(function(){jQuery('.showmessage').slideUp();},3000);
+				}
+				else
+				{
+					alert('Server error');
+				}
+				return false; 
+			 },  
+			 error: function(response, d, a){
+				
+				jQuery('body .showmessage').remove();
+				var html='<div class="showmessage">Server Error.</div>';
+				jQuery('body').append(html);
+				setTimeout(function(){jQuery('.showmessage').slideUp();},1000);
+				return false; 
+			 }
+			        
+		   });
+		 }	
+		 return false;   
+	});
+	
+	
+	
+});
+var uid=localStorage.getItem('Manager_ID');
+if(typeof uid=='undefined' || uid=='' || uid=='undefined' || uid==null){
+	setTimeout(function(){
+		window.location='login.html';
+	},1000);
+}
+	
+</script>
+</body>
+</html>

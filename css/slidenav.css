@@ -1,0 +1,123 @@
+.navigation, .sidenav {
+	height: 100%;
+	top: 0;
+	left: 0
+}
+.nav-icon {
+	width: 42px;
+	float: left;
+	margin-top: 27px;
+	cursor: pointer;
+	margin-left:-15px;
+}
+.sidenav {
+	width: 0;
+	position: fixed;
+	z-index: 99;
+	background-color:rgba(0, 149, 240, 0.6);
+	overflow-x: hidden;
+	transition: .5s
+}
+.navigation {
+	width: 280px;
+	 background-color: rgba(0, 149, 240, 0.9);
+	position: relative;
+	padding-top: 0;
+	float: left
+}
+.panel-group {
+	padding: 8px 8px 8px 32px;
+	background: #fff;
+	margin-bottom: 0!important
+}
+.navigation ul {
+	-webkit-padding-start: 0
+}
+.navigation li {
+	list-style-type: none;
+	position: relative;
+	margin-bottom:2px;
+	display:block;
+	border-bottom:1px solid #3cb5ff;
+	width:100%;
+}
+.navigation li a {
+	color: #fff;
+	font-size: 15px;
+	font-weight: 500;
+	padding: 10px 15px 4px;
+	text-transform: capitalize;
+	transition: all 0.5s ease 0s;
+	display:block;
+	text-transform:uppercase;
+}
+
+.navigation li a .icon{ 
+	bottom:2px;
+    font-size: 25px;
+    margin-bottom: 0;
+    margin-right: 5px;
+    position: relative;
+	display:inline-block;
+	vertical-align:middle;
+
+}
+.navigation li a .icon img{ height:35px;}
+.nav-head, .nav-head:hover, .navigation li a:focus, .navigation li a:hover {
+	text-decoration: none;
+	color: #005fb6;
+}
+.navigation li a [class^="icon-"] {
+	bottom: -6px;
+	font-size: 24px;
+	margin-right: 10px;
+	position: relative;
+}
+.nav-head.first {
+	background-image: none
+}
+.nav-head:focus {
+	text-decoration: none;
+	outline: 0
+}
+.navigation li .sub-nav {
+	position: absolute;
+	left: 0;
+	top: 20px;
+	background: red;
+	width: 100%;
+	height: 50px
+}
+.navigation .panel-default {
+	border: none
+}
+.sidenav .closebtn {
+	position: absolute;
+	top: -9px;
+	right: 25px;
+	font-size: 36px;
+	margin-left: 50px;
+	color: #fff;
+}
+.sidenav .closebtn:focus, .sidenav .closebtn:hover {
+	text-decoration: none
+}
+.menu_section {
+	padding-top: 35px;
+	
+}
+.navigation li a:hover [class*="icon-"]:before, .navigation li a:focus [class*="icon-"]:before, .navigation li a.active [class*="icon-"]:before {
+	color: #005fb6 !important;
+}
+.navigation li a.active {
+	background-color: #fff;
+	color: #005fb6;
+}
+@media screen and (max-height:450px) {
+.sidenav {
+	padding-top: 0px
+}
+.sidenav a {
+	font-size: 18px
+}
+}
