@@ -318,8 +318,8 @@ jQuery(document).ready(function(){
 			jQuery(res['data']).each(function(index){
 				jQuery('.main-wrapper').append('<div class="text-center mb-3"><a href="tel:'+res['data'][index]['emergency_phone']+'" class="btn btn-primary">CONTACT EMERGENCY</a></div>');
 				setTimeout(function(){
-				var lati=res['data'][index]['current_lati'], 
-				longi=res['data'][index]['current_longi'],
+				var lati=res['data'][index]['address_lati'], 
+				longi=res['data'][index]['address_longi'],
 				address=res['data'][index]['companyaddress'], 
 				mapid='ourgmap';
 				setgooglepath(lati,longi, address,our_address, mapid);
