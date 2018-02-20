@@ -115,7 +115,7 @@ function checkcurrentpostion(company_id){
 		return false; 
 		}
 	});
-	setTimeout(function(){checkcurrentpostion(company_id);},3000);
+	setTimeout(function(){checkcurrentpostion(company_id);},15000);
 }
 var map, marker, old_lati, old_longi;
 	var speed = 50; // km/h
@@ -322,6 +322,8 @@ jQuery(document).ready(function(){
 				longi=res['data'][index]['address_longi'],
 				address=res['data'][index]['companyaddress'], 
 				mapid='ourgmap';
+				localStorage.setItem('Driver_Lat',res['data'][index]['current_lati']);
+				localStorage.setItem('Driver_Long',res['data'][index]['current_longi']);
 				setgooglepath(lati,longi, address,our_address, mapid);
 				setTimeout(function(){checkcurrentpostion(res['data'][index]['company_id']);},2000);
 				},1000);
