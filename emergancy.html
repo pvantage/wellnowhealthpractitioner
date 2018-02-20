@@ -215,6 +215,7 @@ jQuery(document).ready(function(){
     if(window.XDomainRequest){contentType = "text/plain";}
 	jQuery.support.cors = true;
 	var id=gup('id');
+	var uid= localStorage.getItem('Manager_ID');
 	var Staff_Lat= localStorage.getItem('Manager_clinic_lati');
 	var Staff_Long= localStorage.getItem('Manager_clinic_longi');
 	var our_address=localStorage.getItem('Manager_clinicaddress');
@@ -304,7 +305,7 @@ jQuery(document).ready(function(){
 		url: url,           
 		dataType: 'json',  
 		crossDomain: true,
-		data: {id:id}, 
+		data: {id:id,from:'doctor',doctor_id:}, 
 		beforeSend: function() {
 		
 		},		
