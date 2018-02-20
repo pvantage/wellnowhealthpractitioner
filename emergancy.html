@@ -66,6 +66,7 @@
     <div class="main-wrapper mt-5">
         <div class="container">
          <h1 class="entry-title text-center text-white">Emergency Location</h1>
+		 <p class="displaydistance"></p>
         </div>
      <div class="location-map mb-4"><div id="ourgmap"></div></div>   
         
@@ -89,6 +90,40 @@
   
 </script>
 <script type="text/javascript">
+function getdistance(fromlati,fromlongi,fromaddress,tolati,tolongi,toaddress){
+	var from = new google.maps.LatLng(fromlati, fromlongi);
+	var fromName = fromaddress;
+	var dest = new google.maps.LatLng(tolati, tolongi);
+	var destName = toaddress;
+	
+	var service = new google.maps.DistanceMatrixService();
+	service.getDistanceMatrix(
+		{
+			origins: [from, fromName],
+			destinations: [destName, dest],
+			travelMode: 'DRIVING'
+		}, callback);
+	
+	function callback(response, status) {
+		if (status == 'OK') {
+			var origins = response.originAddresses;
+			var destinations = response.destinationAddresses;
+	
+			for (var i = 0; i < origins.length; i++) {
+				var results = response.rows[i].elements;
+				console.log(results);
+				for (var j = 0; j < results.length; j++) {
+					var element = results[j];
+					var distance = element.distance.text;
+					var duration = element.duration.text;
+					jQuery('.displaydistance').html('Estimated Distance : '+distance+'<br>Estimated Time: '+duration);
+					var from = origins[i];
+					var to = destinations[j];
+				}
+			}
+		}
+	}
+}
 function checkcurrentpostion(company_id){
 	var url=siteurl+'/api/emergencies/companydetail';
 	jQuery.ajax({  
@@ -122,6 +157,9 @@ var map, marker, old_lati, old_longi;
 	var startPos = [];
 var delay = 100;
 var mapicon='images/refspot.png';
+var Staff_Lat= localStorage.getItem('Manager_clinic_lati');
+var Staff_Long= localStorage.getItem('Manager_clinic_longi');
+var our_address=localStorage.getItem('Manager_clinicaddress');
 function mylocation(map,old_lati,old_longi,marker,mapicon,geocoder,infowindow){
 	
 	var new_lati=localStorage.getItem('Driver_Lat');
@@ -145,6 +183,7 @@ function mylocation(map,old_lati,old_longi,marker,mapicon,geocoder,infowindow){
 			], speed);
 		});
 	}*/
+	
    setTimeout(function(){mylocation(map,old_lati,old_longi,marker,mapicon,geocoder,infowindow)},3000);
 }
 function updateMarker(geocoder,infowindow,marker, latitude, longitude,mapicon) {
@@ -153,6 +192,7 @@ function updateMarker(geocoder,infowindow,marker, latitude, longitude,mapicon) {
           if (status === 'OK') {
             if (results[0]) {
               infowindow.setContent(results[0].formatted_address);
+			  getdistance(latitude,longitude,results[0].formatted_address,Staff_Lat,Staff_Long,our_address);
             } 
           }
         });
@@ -164,10 +204,8 @@ function animateMarker(marker, coords, km_h)
     var target = 0;
     var km_h = km_h || 50;
     coords.push([startPos[0], startPos[1]]);
-    
     function goToPoint()
     {
-		
         var lat = marker.position.lat();
         var lng = marker.position.lng();
         var step = (km_h * 1000 * delay) / 3600000; // in meters
@@ -216,9 +254,7 @@ jQuery(document).ready(function(){
 	jQuery.support.cors = true;
 	var id=gup('id');
 	var uid= localStorage.getItem('Manager_ID');
-	var Staff_Lat= localStorage.getItem('Manager_clinic_lati');
-	var Staff_Long= localStorage.getItem('Manager_clinic_longi');
-	var our_address=localStorage.getItem('Manager_clinicaddress');
+	
 	
 	var setgooglepath=function(joblati,joblongi, jobaddress,our_address, mapid) {
         var directionsDisplay = new google.maps.DirectionsRenderer({suppressMarkers:true});
@@ -263,6 +299,7 @@ jQuery(document).ready(function(){
 			infoWindow.setContent(jobaddress);
 			infoWindow.open(map, marker2);
 		});
+		
 	  var latlng = {lat: parseFloat(joblati), lng: parseFloat(joblongi)};
         geocoder.geocode({'location': latlng}, function(results, status) {
           if (status === 'OK') {
@@ -305,7 +342,7 @@ jQuery(document).ready(function(){
 		url: url,           
 		dataType: 'json',  
 		crossDomain: true,
-		data: {id:id,from:'doctor',doctor_id:}, 
+		data: {id:id,from:'doctor',doctor_id:uid}, 
 		beforeSend: function() {
 		
 		},		
