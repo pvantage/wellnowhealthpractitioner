@@ -186,7 +186,7 @@ function checkNotification(audioElement) {
 							htm+='<div class="trip-content">';
 							htm+='<div class="trip-title">Company: '+res['data'][index]['company']+'</div>';
 							htm+='<div class="trip-title">Note: '+res['data'][index]['note']+'</div>';
-							htm+='</div><div class="trip-link"><a class="closenotification" href="javascript:;">CLOSE</a> <a class="viewnotification" href="emergancy.html?id='+res['data'][index]['id']+'">VIEW</a></div></div>';
+							htm+='</div><div class="trip-link"><a class="closenotification" href="javascript:;">CLOSE</a> <a class="viewnotification" href="emergancy.html?id='+res['data'][index]['emergency_id']+'">VIEW</a></div></div>';
 						});
 						jQuery('.showpopmessage').append(htm);
 						jQuery('a.closenotification').click(function(){
