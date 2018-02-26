@@ -21,23 +21,33 @@ header.header {
 }
 .logo {
 	text-align: center;
+
+	
 }
 .logo a {
 	display: inline-block;
+	position:relative;
 	background-color: #fff;
 	border-radius: 100%;
 	width: 200px;
 	height: 200px;
 	padding: 30px;
-	line-height: 230px;
-	margin-top: -100px;
+	margin-top:-100px;
 	margin-bottom: -25px;
 	-webkit-box-shadow: 0px 0px 28px -7px rgba(209,209,209,1);
 	-moz-box-shadow: 0px 0px 28px -7px rgba(209,209,209,1);
 	box-shadow: 0px 0px 28px -7px rgba(209,209,209,1);
 }
+
+.logo a img{ bottom: 18px;
+    left: 26px;
+    position: absolute;
+    vertical-align: top;
+    width: 150px;}
 .full-height {
 	min-height: calc(100vh - 0px);
+	width:100%;
+	float:left;
 }
 .full-height.center {
 	display: flex;
@@ -247,4 +257,13 @@ height:25px;
 background-color:#fff;
 border-radius:100%;
 z-index:10;	
+}
+
+label.error{ display:none!important;}
+
+.form-control.required.error{ border-color:#F00;}
+
+.input-group>.custom-select:not(:first-child), .input-group>.form-control:not(:first-child) {
+    border-top-right-radius: .25rem;
+    border-bottom-right-radius: .25rem;
 }
