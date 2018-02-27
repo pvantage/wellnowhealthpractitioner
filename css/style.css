@@ -161,7 +161,6 @@ header.header {
 	font-size: 20px;
 	height: 30px;
 	left: 0;
-	line-height: 25px;
 	position: absolute;
 	text-align: center;
 	top: 22px;
@@ -173,6 +172,8 @@ header.header {
 }
 .header-back-btn .fa {
 	margin-left: -2px;
+	margin-top:3px;
+	display:block;
 }
 
 .location-map img{ width:100%;	}
