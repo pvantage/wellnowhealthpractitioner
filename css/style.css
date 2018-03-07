@@ -1,4 +1,26 @@
 @import url('https://fonts.googleapis.com/css?family=Montserrat:300,300i,400,400i,500,500i,600,600i,700');
+
+.p-dtl-main {
+    position: relative;
+}
+.p-dtl-main .location-map.mb-4 {
+    margin: 0px !important;
+}
+
+.btm-btn-sctn {
+    position: fixed;
+    left: 50%;
+    width: 100%;
+  
+    margin-left: -50%;
+    text-align: center;
+	    bottom: 0;
+}
+.btm-btn-sctn a {
+    box-shadow: 0px 1px 4px #000;
+}
+
+
 body {
 	font-family: 'Montserrat', sans-serif;
 	font-size: 14px;
