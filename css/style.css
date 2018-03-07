@@ -14,8 +14,12 @@
   
     margin-left: -50%;
     text-align: center;
+	    BACKGROUND: rgba(0,0,0,0.2);
 	    bottom: 0;
+		padding-top:10px;
 }
+
+
 .btm-btn-sctn a {
     box-shadow: 0px 1px 4px #000;
 }
