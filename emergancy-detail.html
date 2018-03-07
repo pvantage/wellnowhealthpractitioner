@@ -223,7 +223,12 @@ jQuery(document).ready(function(){
 	});
 	
 });
-
+var uid=localStorage.getItem('Manager_ID');
+if(typeof uid=='undefined' || uid=='' || uid=='undefined' || uid==null){
+	setTimeout(function(){
+		window.location='login.html';
+	},1000);
+}
 </script>
 </body>
 </html>

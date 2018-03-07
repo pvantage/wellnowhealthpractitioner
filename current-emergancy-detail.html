@@ -294,7 +294,7 @@ jQuery(document).ready(function(){
           center: {lat: latit, lng: longit}
         });
         directionsDisplay.setMap(map);
-		
+		getdistance(joblati,joblongi,jobaddress,Staff_Lat,Staff_Long,our_address);
 		
 		
 		var geocoder = new google.maps.Geocoder;
@@ -415,8 +415,38 @@ jQuery(document).ready(function(){
 		return false; 
 		}
 	});
-	
+	var url=siteurl+'/api/emergencies/updateemergencymanager';
+	jQuery.ajax({  
+		type: 'POST',  
+		url: url,           
+		crossDomain: true,
+		data: {id:id,doctor_id:uid}, 
+		beforeSend: function() {
+		
+		},		
+		complete: function() {
+		}, 
+		crossDomain: true,  
+		success: function(res) { 
+		
+		
+		},  
+		error: function(response, d, a){
+		
+		jQuery('body .showmessage').remove();
+		var html='<div class="showmessage">Server Error.</div>';
+		jQuery('body').append(html);
+		setTimeout(function(){jQuery('.showmessage').slideUp();},1000);
+		return false; 
+		}
+	});
 });
+var uid=localStorage.getItem('Manager_ID');
+if(typeof uid=='undefined' || uid=='' || uid=='undefined' || uid==null){
+	setTimeout(function(){
+		window.location='login.html';
+	},1000);
+}
 </script>
 </body>
 </html>
