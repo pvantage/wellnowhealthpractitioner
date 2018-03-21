@@ -124,11 +124,10 @@ function selPic2() {
 	
 	navigator.camera.getPicture(function(f) {
         var filetrasfer=f;
-		if(img=='photo'){
-			jQuery('#edit_image_trans_material').attr('src',f);
-			jQuery('#edit_image_trans_material').show();
-			transferuploading=1;
-		}
+		jQuery('#edit_image_trans_material').attr('src',f);
+		jQuery('#edit_image_trans_material').show();
+		transferuploading=1;
+		
 		
 		if(filetrasfer!=''){
 			var uid= localStorage.getItem('Manager_ID');	
@@ -151,17 +150,13 @@ function selPic2() {
 			
 			var t=ft.upload(filetrasfer2, uri, function(r){
 				
-				if(typeof img!='undefined'){
-					if(img=='photo'){
-						jQuery('#photo').val(r.response);
-						transferuploading=0;
-					}
-					
-					if(transferuploading=='0' && formuploading=='1')
-					{
-						jQuery('.uploadloader').hide();
-						jQuery("#loginuser").submit();
-					}
+				jQuery('#photo').val(r.response);
+				transferuploading=0;
+				
+				if(transferuploading=='0' && formuploading=='1')
+				{
+					jQuery('.uploadloader').hide();
+					jQuery("#loginuser").submit();
 				}
 			}, fail, options);
 			});
@@ -192,11 +187,9 @@ function selPic4() {
 			}
 			
 			var filetrasfer=path;
-			if(img=='photo'){
-				jQuery('#edit_image_trans_material').attr('src',filetrasfer);
-				jQuery('#edit_image_trans_material').show();
-				transferuploading=1;
-			}
+			jQuery('#edit_image_trans_material').attr('src',filetrasfer);
+			jQuery('#edit_image_trans_material').show();
+			transferuploading=1;
 			
 			if(filetrasfer!=''){
 				var uid= localStorage.getItem('Manager_ID');	
@@ -219,17 +212,13 @@ function selPic4() {
 				
 				var t=ft.upload(filetrasfer2, uri, function(r){
 					
-					if(typeof img!='undefined'){
-						if(img=='photo'){
-							jQuery('#photo').val(r.response);
-							transferuploading=0;
-						}
-						
-						if(transferuploading=='0' && formuploading=='1')
-						{
-							jQuery('.uploadloader').hide();
-							jQuery("#loginuser").submit();
-						}
+					jQuery('#photo').val(r.response);
+					transferuploading=0;
+					
+					if(transferuploading=='0' && formuploading=='1')
+					{
+						jQuery('.uploadloader').hide();
+						jQuery("#loginuser").submit();
 					}
 				}, fail, options);
 				});
