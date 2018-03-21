@@ -131,6 +131,8 @@ jQuery(document).ready(function(){
 					localStorage.setItem('Manager_phone', res['checklogin']['udetail']['phone']);
 					localStorage.setItem('Manager_fname', res['checklogin']['udetail']['fname']);
 					localStorage.setItem('Manager_clinic_id', res['checklogin']['udetail']['clinic_id']);
+					localStorage.setItem('Manager_photo', res['checklogin']['udetail']['photo']);
+					localStorage.setItem('Manager_photo_map', res['checklogin']['udetail']['photo_thumb']);
 					if(parseInt(res['checklogin']['udetail']['clinic_id'])>0){
 						localStorage.setItem('Manager_clinic', res['checklogin']['udetail']['clinic']);
 						localStorage.setItem('Manager_clinicaddress', res['checklogin']['udetail']['clinicaddress']);

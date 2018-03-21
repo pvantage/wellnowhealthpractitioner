@@ -144,6 +144,7 @@ function playnotification(audioElement){
    //audioElement.play();
    var audiop = document.getElementById(audioElement);
    audiop.play();
+   setTimeout(function(){playnotification(audioElement);},10000);
 }
 function checkNotification(audioElement) {
 	

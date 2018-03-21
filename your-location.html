@@ -90,6 +90,7 @@
   var Staff_Lat= localStorage.getItem('Manager_clinic_lati');
 	var Staff_Long= localStorage.getItem('Manager_clinic_longi');
 	var our_address=localStorage.getItem('Manager_clinicaddress');
+	var map_icon=localStorage.getItem('Manager_photo_map');
 	
 	var setgooglepath=function() {
 		var latit=parseFloat(Staff_Lat);
@@ -103,6 +104,7 @@
 		var infowindow = new google.maps.InfoWindow;
 		var latlng = {lat: parseFloat(latit), lng: parseFloat(longit)};
 		var ourphoto='images/home.png';
+		if(jQuery.trim(map_icon)!=''){ourphoto=map_icon;}
 		var marker = new google.maps.Marker({
 			position: latlng,
 			map: map,
