@@ -153,19 +153,7 @@ function selPic2() {
 				
 				if(typeof img!='undefined'){
 					if(img=='photo'){
-						var images=r.response;
-						if(jQuery.trim(images)!=''){
-							images=images.split(',');
-							var image=images;
-							var thumbimg='';
-							if(images.length>1){
-								image=images[0];
-								thumbimg=images[1];
-							}
-							localStorage.setItem('Manager_photo', image);
-							localStorage.setItem('Manager_photo_map', thumbimg);
-							jQuery('#photo').val(image);
-						}
+						jQuery('#photo').val(r.response);
 						transferuploading=0;
 					}
 					
@@ -233,19 +221,7 @@ function selPic4() {
 					
 					if(typeof img!='undefined'){
 						if(img=='photo'){
-							var images=r.response;
-							if(jQuery.trim(images)!=''){
-								images=images.split(',');
-								var image=images;
-								var thumbimg='';
-								if(images.length>1){
-									image=images[0];
-									thumbimg=images[1];
-								}
-								localStorage.setItem('Manager_photo', image);
-								localStorage.setItem('Manager_photo_map', thumbimg);
-								jQuery('#photo').val(image);
-							}
+							jQuery('#photo').val(r.response);
 							transferuploading=0;
 						}
 						
@@ -340,6 +316,8 @@ jQuery(document).ready(function(){
 					localStorage.setItem('Manager_phone', res['udetail']['phone']);
 					localStorage.setItem('Manager_fname', res['udetail']['fname']);
 					localStorage.setItem('Manager_clinic_id', res['udetail']['clinic_id']);
+					localStorage.setItem('Manager_photo', res['udetail']['photo']);
+					localStorage.setItem('Manager_photo_map', res['udetail']['photo_thumb']);
 					if(parseInt(res['udetail']['clinic_id'])>0){
 						localStorage.setItem('Manager_clinic', res['udetail']['clinic']);
 						localStorage.setItem('Manager_clinicaddress', res['udetail']['clinicaddress']);
