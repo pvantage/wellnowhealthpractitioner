@@ -555,6 +555,83 @@ jQuery(document).ready(function(){
 		return false; 
 		}
 	});
+	jQuery('#loginuser').submit( function(){	
+		var error=false;
+		jQuery('#loginuser input.required').each(function(){
+			var v=jQuery(this).val();
+			if(jQuery.trim(v)==''){
+				jQuery(this).addClass('error');
+				error=true;
+			}
+			else{
+				jQuery(this).removeClass('error');
+			}
+		});
+		jQuery('#loginuser textarea.required').each(function(){
+			var v=jQuery(this).val();
+			if(jQuery.trim(v)==''){
+				jQuery(this).addClass('error');
+				error=true;
+			}
+			else{
+				jQuery(this).removeClass('error');
+			}
+		});
+		var url=siteurl+'/api/emergencies/addemergencymsg';
+		if(error)
+		{
+			return false;
+		}
+		else
+		{
+			var msg=jQuery('#loginuser textarea[name="note"]').val();
+			 jQuery.ajax({  
+			 type: 'POST',  
+			 url: url,           
+			 dataType: 'json',  
+			 data: jQuery('#loginuser').serialize(), 
+			 beforeSend: function() {
+			 	
+			 },		
+			 complete: function() {
+			 }, 
+			 crossDomain: true,  
+			 success: function(res) { 
+				if(res['msg'])
+				{
+					jQuery('.notelists').append('<div class="note-content">'+msg+'</div>');
+					jQuery('body .showmessage').remove();
+					var html='<div class="showmessage">'+res['msg']+'</div>';
+					jQuery('body').append(html);
+					setTimeout(function(){jQuery('.showmessage').slideUp();},3000);
+					jQuery('#loginuser textarea[name="note"]').val('');
+					
+				
+				}else if(res['errors']){				
+					jQuery('body .showmessage').remove();
+					var html='<div class="showmessage">'+res['error']+'</div>';
+					jQuery('body').append(html);
+					setTimeout(function(){jQuery('.showmessage').slideUp();},3000);
+				}
+				else
+				{
+					alert('Server error');
+				}
+				return false; 
+			 },  
+			 error: function(response, d, a){
+				
+				jQuery('body .showmessage').remove();
+				var html='<div class="showmessage">Server Error.</div>';
+				jQuery('body').append(html);
+				setTimeout(function(){jQuery('.showmessage').slideUp();},1000);
+				return false; 
+			 }
+			        
+		   });
+		 }	
+		 return false;   
+	});
 });
 var uid=localStorage.getItem('Manager_ID');
 if(typeof uid=='undefined' || uid=='' || uid=='undefined' || uid==null){
