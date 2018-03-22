@@ -1,5 +1,19 @@
 @import url('https://fonts.googleapis.com/css?family=Montserrat:300,300i,400,400i,500,500i,600,600i,700');
 
+
+
+.photosbox label.text-white {
+    margin-right: 40px;
+}
+.photosbox a#transuploadphoto {
+    margin-right: 20px;
+}
+.photosbox a#transuploadphoto i.fa.fa-camera {
+    color: #fff;
+    font-size: 29px !important;
+}
+
+
 .p-dtl-main {
     position: relative;
 }
