@@ -343,7 +343,14 @@ function opennotes(showmsg){
 		{
 			jQuery('.notelists').html('');
 			jQuery(res['notes']).each(function(index){
-				jQuery('.notelists').append('<div class="note-content">'+res['notes'][index]['note']+'</div>');
+				var msgg='Me: '+res['notes'][index]['note'];
+				if(jQuery.trim(res['notes'][index]['company'])!=''){
+					msgg=res['notes'][index]['company']+': '+res['notes'][index]['note'];
+				}
+				else{
+					msgg='Me: '+res['notes'][index]['note'];
+				}
+				jQuery('.notelists').append('<div class="note-content">'+msgg+'</div>');
 			});
 			
 		
@@ -383,7 +390,14 @@ function notes(){
 		if(res['notes'] && jQuery.trim(res['notes'])!='')
 		{
 			jQuery(res['notes']).each(function(index){
-				jQuery('.notelists').append('<div class="note-content">'+res['notes'][index]['note']+'</div>');
+				var msgg='Me: '+res['notes'][index]['note'];
+				if(jQuery.trim(res['notes'][index]['company'])!=''){
+					msgg=res['notes'][index]['company']+': '+res['notes'][index]['note'];
+				}
+				else{
+					msgg='Me: '+res['notes'][index]['note'];
+				}
+				jQuery('.notelists').append('<div class="note-content">'+msgg+'</div>');
 			});
 			jQuery('#emergency').modal();
 		
@@ -619,7 +633,7 @@ jQuery(document).ready(function(){
 			 success: function(res) { 
 				if(res['msg'])
 				{
-					jQuery('.notelists').append('<div class="note-content">'+msg+'</div>');
+					jQuery('.notelists').append('<div class="note-content">Me: '+msg+'</div>');
 					jQuery('body .showmessage').remove();
 					var html='<div class="showmessage">'+res['msg']+'</div>';
 					jQuery('body').append(html);
