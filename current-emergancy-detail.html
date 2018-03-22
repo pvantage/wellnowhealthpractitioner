@@ -58,7 +58,39 @@
     <!-----Main wrapper End-------> 
     
 </div>
+<div class="modal fade" id="emergency" tabindex="-1" role="dialog" aria-labelledby="exampleModalCenterTitle" aria-hidden="true">
+    <div class="modal-dialog modal-dialog-centered" role="document">
+        <div class="modal-content bg-primary text-white"> 
+            
+             <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+          <span aria-hidden="true">&times;</span>
+        </button>
+            
+            <div class="modal-body">
+                <form id="loginuser" action="" method="post">
+					<input type="hidden" name="manager_id" value="0">
+					<input type="hidden" name="emergency_id" value="0">
+					<input type="hidden" name="add_by" value="manager">
+					<div class="notelists"></div>
+                    <div class="mb-3">
+					   <div>
+						<textarea name="note" rows="4" cols="50" class="form-control required"></textarea>
+					  </div>
+                    </div>
+                    <div  class="submitwrap">
+                        <div class="pull-left">
+                            <button type="submit" class="btn btn-primary">SEND</button>
+                        </div>
+                        <!--<div class="pull-right"> <a href="#" class="btn btn-dark">REGISTER</a></div>-->
+                    </div>
+                </form>  
+            </div>
+        </div>
+    </div>
+</div>
 <script src="js/jquery-3.2.1.min.js" ></script>
+<script src="js/popper.min.js" ></script>
+<script src="js/bootstrap.min.js"></script>
 	<script type="text/javascript" charset="utf-8" src="cordova.js"></script>
 	<script type="text/javascript" src="js/config.js"></script>
 	<script type="text/javascript" src="js/validate.js"></script>
@@ -273,7 +305,85 @@ function completethis(){
 		}
 	});
 }
-
+function opennotes(showmsg){
+	var emergency_id=gup('id');
+	var url=siteurl+'/api/emergencies/getmsgs';
+	 jQuery.ajax({  
+	 type: 'POST',  
+	 url: url,           
+	 dataType: 'json',  
+	 data: {emergency_id:emergency_id,seeby:'manager'}, 
+	 beforeSend: function() {
+	 	if(showmsg=='yes'){
+			jQuery('#emergency').modal();
+		}
+	 },		
+	 complete: function() {
+	 }, 
+	 crossDomain: true,  
+	 success: function(res) { 
+		if(res['notes'])
+		{
+			jQuery('.notelists').html('');
+			jQuery(res['notes']).each(function(index){
+				jQuery('.notelists').append('<div class="note-content">'+res['notes'][index]['note']+'</div>');
+			});
+			
+		
+		}
+		return false; 
+	 },  
+	 error: function(response, d, a){
+		
+		jQuery('body .showmessage').remove();
+		var html='<div class="showmessage">Server Error.</div>';
+		jQuery('body').append(html);
+		setTimeout(function(){jQuery('.showmessage').slideUp();},1000);
+		return false; 
+	 }
+			
+   });
+   if(typeof inter!='undefined'){
+		clearInterval(inter);
+	}
+	var inter=setInterval(notes,10000);
+}
+function notes(){
+	var emergency_id=gup('id');
+	var url=siteurl+'/api/emergencies/getsinglemsgs';
+	 jQuery.ajax({  
+	 type: 'POST',  
+	 url: url,           
+	 dataType: 'json',  
+	 data: {emergency_id:emergency_id,seeby:'manager'}, 
+	 beforeSend: function() {
+		
+	 },		
+	 complete: function() {
+	 }, 
+	 crossDomain: true,  
+	 success: function(res) { 
+		if(res['notes'] && jQuery.trim(res['notes'])!='')
+		{
+			jQuery(res['notes']).each(function(index){
+				jQuery('.notelists').append('<div class="note-content">'+res['notes'][index]['note']+'</div>');
+			});
+			jQuery('#emergency').modal();
+		
+		}
+		return false; 
+	 },  
+	 error: function(response, d, a){
+		
+		jQuery('body .showmessage').remove();
+		var html='<div class="showmessage">Server Error.</div>';
+		jQuery('body').append(html);
+		setTimeout(function(){jQuery('.showmessage').slideUp();},1000);
+		return false; 
+	 }
+			
+   });
+}
 jQuery(document).ready(function(){
 	jQuery( document ).on( "mobileinit", function() {
 		jQuery.mobile.allowCrossDomainPages = true;
@@ -283,7 +393,8 @@ jQuery(document).ready(function(){
 	jQuery.support.cors = true;
 	var id=gup('id');
 	var uid= localStorage.getItem('Manager_ID');
-	
+	jQuery('input[name="emergency_id"]').val(id);
+	jQuery('input[name="manager_id"]').val(uid);
 	
 	var setgooglepath=function(joblati,joblongi, jobaddress,our_address, mapid) {
         var directionsDisplay = new google.maps.DirectionsRenderer({suppressMarkers:true});
@@ -389,6 +500,7 @@ jQuery(document).ready(function(){
 				if(res['data'][index]['status']=='pending'){
 				btnhtm+='<div class="text-center mb-3 complete-btn"><a href="javascript:;" onclick="return completethis();" class="btn btn-primary">COMPLETE</a></div>';
 				}
+				btnhtm+='<div class="text-center mb-3"><a href="javascript:;" onclick="return opennotes(\'yes\');" class="btn btn-primary">MESSAGES</a></div>';
 				btnhtm+='</div>';
 				jQuery('.main-wrapper').append(btnhtm);
 				setTimeout(function(){
@@ -400,6 +512,7 @@ jQuery(document).ready(function(){
 				localStorage.setItem('Driver_Long',res['data'][index]['current_longi']);
 				setgooglepath(lati,longi, address,our_address, mapid);
 				setTimeout(function(){checkcurrentpostion(res['data'][index]['company_id']);},2000);
+				opennotes('no');
 				},1000);
 			});
 			
