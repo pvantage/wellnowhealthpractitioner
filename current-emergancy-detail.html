@@ -308,6 +308,7 @@ function completethis(){
 function opennotes(showmsg){
 	var emergency_id=gup('id');
 	var url=siteurl+'/api/emergencies/getmsgs';
+	var uid= localStorage.getItem('Manager_ID');
 	 jQuery.ajax({  
 	 type: 'POST',  
 	 url: url,           
@@ -331,7 +332,12 @@ function opennotes(showmsg){
 					msgg=res['notes'][index]['company']+': '+res['notes'][index]['note'];
 				}
 				else{
-					msgg='Me: '+res['notes'][index]['note'];
+					if(uid==res['notes'][index]['manager_id']){
+						msgg='Me: '+res['notes'][index]['note'];
+					}
+					else{
+						msgg=res['notes'][index]['manager']+': '+res['notes'][index]['note'];
+					}
 				}
 				jQuery('.notelists').append('<div class="note-content">'+msgg+'</div>');
 			});
@@ -358,6 +364,7 @@ function opennotes(showmsg){
 function notes(){
 	var emergency_id=gup('id');
 	var url=siteurl+'/api/emergencies/getsinglemsgs';
+	var uid= localStorage.getItem('Manager_ID');
 	 jQuery.ajax({  
 	 type: 'POST',  
 	 url: url,           
@@ -378,7 +385,12 @@ function notes(){
 					msgg=res['notes'][index]['company']+': '+res['notes'][index]['note'];
 				}
 				else{
-					msgg='Me: '+res['notes'][index]['note'];
+					if(uid==res['notes'][index]['manager_id']){
+						msgg='Me: '+res['notes'][index]['note'];
+					}
+					else{
+						msgg=res['notes'][index]['manager']+': '+res['notes'][index]['note'];
+					}
 				}
 				jQuery('.notelists').append('<div class="note-content">'+msgg+'</div>');
 			});
@@ -397,6 +409,47 @@ function notes(){
 	 }
 			
    });
+}
+function getemdetail(){
+	var url=siteurl+'/api/emergencies/ergencydetail';
+	var id=gup('id');
+	var uid= localStorage.getItem('Manager_ID');
+	jQuery.ajax({  
+		type: 'POST',  
+		url: url,           
+		dataType: 'json',  
+		crossDomain: true,
+		data: {id:id,from:'doctor',doctor_id:uid}, 
+		beforeSend: function() {
+		
+		},		
+		complete: function() {
+		}, 
+		crossDomain: true,  
+		success: function(res) { 
+		if(res['data'])
+		{
+			var html='';
+			jQuery(res['data']).each(function(index){
+				if(res['data'][index]['status']=='completed')
+				{
+					window.location='emergancy-detail.html?id='+id;
+				}
+			});
+			
+		}else if(res['nodata']){				
+			//jQuery('.activity-map-wrap').append(res['nodata']);
+		}
+		
+		},  
+		error: function(response, d, a){
+			jQuery('body .showmessage').remove();
+			var html='<div class="showmessage">Server Error.</div>';
+			jQuery('body').append(html);
+			setTimeout(function(){jQuery('.showmessage').slideUp();},1000);
+			return false; 
+		}
+	});
 }
 jQuery(document).ready(function(){
 	jQuery( document ).on( "mobileinit", function() {
@@ -646,6 +699,7 @@ jQuery(document).ready(function(){
 		 }	
 		 return false;   
 	});
+	setInterval(getemdetail,5000);
 });
 var uid=localStorage.getItem('Manager_ID');
 if(typeof uid=='undefined' || uid=='' || uid=='undefined' || uid==null){

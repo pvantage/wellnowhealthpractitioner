@@ -133,6 +133,7 @@ function getdistance(fromlati,fromlongi,fromaddress,tolati,tolongi,toaddress){
 function opennotes(){
 	var emergency_id=gup('id');
 	var url=siteurl+'/api/emergencies/getmsgs';
+	var uid= localStorage.getItem('Manager_ID');
 	 jQuery.ajax({  
 	 type: 'POST',  
 	 url: url,           
@@ -154,7 +155,12 @@ function opennotes(){
 					msgg=res['notes'][index]['company']+': '+res['notes'][index]['note'];
 				}
 				else{
-					msgg='Me: '+res['notes'][index]['note'];
+					if(uid==res['notes'][index]['manager_id']){
+						msgg='Me: '+res['notes'][index]['note'];
+					}
+					else{
+						msgg=res['notes'][index]['manager']+': '+res['notes'][index]['note'];
+					}
 				}
 				jQuery('.notelists').append('<div class="note-content">'+msgg+'</div>');
 			});
