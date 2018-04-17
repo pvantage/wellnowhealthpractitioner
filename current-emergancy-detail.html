@@ -112,7 +112,7 @@ function getdistance(fromlati,fromlongi,fromaddress,tolati,tolongi,toaddress){
 	var fromName = fromaddress;
 	var dest = new google.maps.LatLng(tolati, tolongi);
 	var destName = toaddress;
-	
+	//alert(fromName+'==='+destName);
 	var service = new google.maps.DistanceMatrixService();
 	service.getDistanceMatrix(
 		{
@@ -134,6 +134,7 @@ function getdistance(fromlati,fromlongi,fromaddress,tolati,tolongi,toaddress){
 					var distance = element.distance.text;
 					var duration = element.duration.text;
 					jQuery('.displaydistance').html('Estimated Distance : '+distance+'<br>Estimated Time: '+duration);
+					
 					var from = origins[i];
 					var to = destinations[j];
 				}
