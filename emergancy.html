@@ -158,6 +158,46 @@ function getdistance(fromlati,fromlongi,fromaddress,tolati,tolongi,toaddress){
 		}
 	}
 }
+function checkseenmsg(){
+	var seenmsgs=localStorage.getItem('seenmsgs');
+	var seenmsgs_ids='';
+	if(typeof seenmsgs!='undefined' && seenmsgs!='' && seenmsgs!=null){
+		seenmsgs_ids=seenmsgs;
+	}
+	var emergency_id=gup('id');
+	if(emergency_id!='' && emergency_id!='0'){
+		var url=siteurl+'/api/emergencies/checkseenmsgs';
+		jQuery.ajax({  
+		 type: 'POST',  
+		 url: url,           
+		 dataType: 'json',  
+		 data: {seenmsgs_ids:seenmsgs_ids,emergency_id:emergency_id,seeby:'manager'}, 
+		 beforeSend: function() {
+			
+		 },		
+		 complete: function() {
+		 }, 
+		 crossDomain: true,  
+		 success: function(res) { 
+			if(res['seenids']){
+				jQuery(res['seenids']).each(function(index){
+					jQuery('.seen_'+res['seenids'][index]['em_msg_id']).removeClass('notseenmsg');
+					jQuery('.seen_'+res['seenids'][index]['em_msg_id']).addClass('seenmsg');
+				});
+			}
+		 },  
+		 error: function(response, d, a){
+			
+			jQuery('body .showmessage').remove();
+			var html='<div class="showmessage">Server Error.</div>';
+			jQuery('body').append(html);
+			setTimeout(function(){jQuery('.showmessage').slideUp();},1000);
+			return false; 
+		 }
+				
+	   });
+	 }
+}
 function checkcurrentpostion(company_id){
 	var url=siteurl+'/api/emergencies/companydetail';
 	jQuery.ajax({  
@@ -344,13 +384,13 @@ function opennotes(showmsg){
 		{
 			jQuery('.notelists').html('');
 			jQuery(res['notes']).each(function(index){
-				var msgg='Me: '+res['notes'][index]['note'];
+				var msgg='Me: '+res['notes'][index]['note']+' <span class="seen_'+res['notes'][index]['id']+' notseenmsg"></span>';
 				if(jQuery.trim(res['notes'][index]['company'])!=''){
 					msgg=res['notes'][index]['company']+': '+res['notes'][index]['note'];
 				}
 				else{
 					if(uid==res['notes'][index]['manager_id']){
-						msgg='Me: '+res['notes'][index]['note'];
+						msgg='Me: '+res['notes'][index]['note']+' <span class="seen_'+res['notes'][index]['id']+' notseenmsg"></span>';
 					}
 					else{
 						msgg=res['notes'][index]['manager']+': '+res['notes'][index]['note'];
@@ -361,6 +401,7 @@ function opennotes(showmsg){
 			
 		
 		}
+		setInterval(checkseenmsg,6000);
 		return false; 
 	 },  
 	 error: function(response, d, a){
@@ -685,7 +726,7 @@ jQuery(document).ready(function(){
 			 success: function(res) { 
 				if(res['msg'])
 				{
-					jQuery('.notelists').append('<div class="note-content">Me: '+msg+'</div>');
+					jQuery('.notelists').append('<div class="note-content">Me: '+msg+'<span class="seen_'+res['emergency_id']+' notseen"></span></div>');
 					jQuery('body .showmessage').remove();
 					var html='<div class="showmessage">'+res['msg']+'</div>';
 					jQuery('body').append(html);
