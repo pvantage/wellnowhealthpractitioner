@@ -622,6 +622,9 @@ jQuery(document).ready(function(){
 				//jQuery('.main-wrapper').append('<div class="text-center mb-3"><a href="tel:'+res['data'][index]['emergency_phone']+'" class="btn btn-primary">CONTACT EMERGENCY</a></div>');
 				var btnhtm='<div class="btm-btn-sctn">';
 				btnhtm+='<div class="text-center mb-3"><a href="tel:'+res['data'][index]['emergency_phone']+'" class="btn btn-primary">CONTACT EMERGENCY</a></div>';
+				if(res['data'][index]['emergency_phone']!=''){
+					jQuery('.submitwrap').append('<div class="pull-right"><a href="tel:'+res['data'][index]['emergency_phone']+'" class="btn btn-primary">CALL COMPANY</a></div>');
+				}
 				if(res['data'][index]['status']=='pending'){
 				btnhtm+='<div class="text-center mb-3"><a href="javascript:;" onclick="return completethis();" class="btn btn-primary">COMPLETE</a></div>';
 				}
