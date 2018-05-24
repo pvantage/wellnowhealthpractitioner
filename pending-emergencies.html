@@ -91,7 +91,7 @@ jQuery(document).ready(function(){
 			jQuery(res['data']).each(function(index){
 				html+='<div class="row mb-3"><div class="col-4"><div class="meta-date h-100 justify-content-center flex-column"><div class="date-circle">'+res['data'][index]['showdate']+'</div></div></div>';
               
-				html+='<div class="col-8"><div class="past-detail h-100 justify-content-center flex-column"><ul><li><a href="current-emergancy-detail.html?id='+res['data'][index]['id']+'">Company: <strong>'+res['data'][index]['company']+' ('+res['data'][index]['companyaddress']+')</strong></a></li>';
+				html+='<div class="col-8"><div class="past-detail h-100 justify-content-center flex-column"><ul><li><a href="emergancy.html?id='+res['data'][index]['id']+'">Company: <strong>'+res['data'][index]['company']+' ('+res['data'][index]['companyaddress']+')</strong></a></li>';
 				if(jQuery.trim(res['data'][index]['note'])!=''){
 					html+='<li>Note: <strong>'+res['data'][index]['note']+'</strong></li>';
 				}
