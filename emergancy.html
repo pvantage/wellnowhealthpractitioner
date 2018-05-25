@@ -565,6 +565,17 @@ jQuery(document).ready(function(){
 			infoWindow.setContent(our_address);
 			infoWindow.open(map, marker);
 		});*/
+		geocoder.geocode({'location': latlng}, function(results, status) {
+          if (status === 'OK') {
+            if (results[0]) {
+			  google.maps.event.addListener(marker, "click", function (e) {
+				var infoWindow = new google.maps.InfoWindow();
+				infoWindow.setContent(results[0].formatted_address);
+				infoWindow.open(map, marker);
+			});
+            }
+          } 
+        });
 		var imgommap='images/mapicon.png';
 		var latlng2=jobaddress;
 		var marker2 = new google.maps.Marker({
@@ -574,11 +585,22 @@ jQuery(document).ready(function(){
 			icon: imgommap
 		});
 	  marker2.setPosition( latlng2 );
-	  google.maps.event.addListener(marker2, "click", function (e) {
+	  /*google.maps.event.addListener(marker2, "click", function (e) {
 			var infoWindow = new google.maps.InfoWindow();
 			infoWindow.setContent(jobaddress);
 			infoWindow.open(map, marker2);
-		});
+		});*/
+		geocoder.geocode({'location': latlng2}, function(results, status) {
+          if (status === 'OK') {
+            if (results[0]) {
+			  google.maps.event.addListener(marker2, "click", function (e) {
+				var infoWindow = new google.maps.InfoWindow();
+				infoWindow.setContent(results[0].formatted_address);
+				infoWindow.open(map, marker2);
+			});
+            }
+          } 
+        });
 		if(crrentdata.length>0){
 			jQuery(crrentdata).each(function(j){
 				var nlat=crrentdata[j]['current_lati'];

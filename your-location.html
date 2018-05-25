@@ -87,12 +87,18 @@
   function closeNav() {
       document.getElementById("mySidenav").style.width = "0";
   }
-  var Staff_Lat= localStorage.getItem('Manager_clinic_lati');
-	var Staff_Long= localStorage.getItem('Manager_clinic_longi');
-	var our_address=localStorage.getItem('Manager_clinicaddress');
+  	var Staff_Lat= localStorage.getItem('Manager_Lat');
+  
+	var Staff_Long= localStorage.getItem('Manager_Long');
+	//var our_address=localStorage.getItem('Manager_clinicaddress');
 	var map_icon=localStorage.getItem('Manager_photo_map');
 	
 	var setgooglepath=function() {
+		var Staff_Lat= localStorage.getItem('Manager_Lat');
+  
+	var Staff_Long= localStorage.getItem('Manager_Long');
+	//var our_address=localStorage.getItem('Manager_clinicaddress');
+	var map_icon=localStorage.getItem('Manager_photo_map');
 		var latit=parseFloat(Staff_Lat);
 		var longit=parseFloat(Staff_Long);
         var map = new google.maps.Map(document.getElementById('ourgmap'), {
@@ -112,11 +118,24 @@
 			icon: ourphoto
 		});
 	  marker.setPosition( latlng );
-	   google.maps.event.addListener(marker, "click", function (e) {
+	  //var latlng = {lat: parseFloat(latlngStr[0]), lng: parseFloat(latlngStr[1])};
+        geocoder.geocode({'location': latlng}, function(results, status) {
+          if (status === 'OK') {
+            if (results[0]) {
+			  google.maps.event.addListener(marker, "click", function (e) {
+				var infoWindow = new google.maps.InfoWindow();
+				infoWindow.setContent(results[0].formatted_address);
+				infoWindow.open(map, marker);
+			});
+            }
+          } 
+        });
+
+	   /*google.maps.event.addListener(marker, "click", function (e) {
 			var infoWindow = new google.maps.InfoWindow();
 			infoWindow.setContent(our_address);
 			infoWindow.open(map, marker);
-		});
+		});*/
 	}
 	setTimeout(setgooglepath,1000);
 	var uid=localStorage.getItem('Manager_ID');

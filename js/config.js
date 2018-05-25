@@ -96,7 +96,7 @@ function showPosition(position) {
 			
 		 } 
 	   });
-		//setTimeout(getLocation,30000);
+		setTimeout(getLocation,30000);
 	}
     
 }
@@ -121,13 +121,14 @@ function ValidateEmail(inputText)
 		return false;  
 	}  
 }
+
 document.addEventListener("deviceready", onDeviceReady2, false);
 function onDeviceReady2(){
 	var deviceplatform=device.platform;
 	var uid=localStorage.getItem('Manager_ID');
-	if(deviceplatform=='Android'){
+	/*if(deviceplatform=='Android'){
 		if(typeof uid!='undefined' && uid!='' && uid!=null){
-			getLocation();
+			
 		}
 	}
 	else{
@@ -138,8 +139,9 @@ function onDeviceReady2(){
 				getLocation();
 			}
 		}	
-	}
+	}*/
 }
+getLocation();
 function playnotification(audioElement){
    //audioElement.play();
    var audiop = document.getElementById(audioElement);
