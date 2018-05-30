@@ -121,7 +121,7 @@ function ValidateEmail(inputText)
 		return false;  
 	}  
 }
-
+getLocation();
 /*document.addEventListener("deviceready", onDeviceReady2, false);
 function onDeviceReady2(){
 	var deviceplatform=device.platform;
@@ -141,7 +141,7 @@ function onDeviceReady2(){
 		}	
 	}
 }*/
-getLocation();
+
 function playnotification(audioElement){
    //audioElement.play();
    var audiop = document.getElementById(audioElement);
