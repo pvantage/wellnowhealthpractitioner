@@ -54,4 +54,5 @@
 .displaydistance{color:#FFFFFF; text-align:center;}
 .note-content .seenmsg{background:url(../images/g.png) no-repeat; width:20px; height:17px; display:block;background-size:20px auto;}
 .note-content .notseenmsg{background:url(../images/w.png) no-repeat; width:20px; height:17px; display:block;background-size:20px auto;}
-.img-wrape img{ max-width:80%;}
+.img-wrape img{ max-width:50px; max-height:50px;}
+.img-wrape a{color:#FFFFFF;}

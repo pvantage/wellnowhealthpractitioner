@@ -29,7 +29,7 @@ var uid=localStorage.getItem('Manager_ID');
 function checkloggedin(uid)
 {
 	
-	var url=siteurl+'/api/patientlogin/checkloggedin';
+	var url=siteurl+'/api/managerlogin/checkloggedin';
 	
 	jQuery.ajax({  
 	 type: 'POST',  
