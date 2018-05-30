@@ -55,4 +55,5 @@
 .note-content .seenmsg{background:url(../images/g.png) no-repeat; width:20px; height:17px; display:block;background-size:20px auto;}
 .note-content .notseenmsg{background:url(../images/w.png) no-repeat; width:20px; height:17px; display:block;background-size:20px auto;}
 .img-wrape img{ max-width:50px; max-height:50px;}
-.img-wrape a{color:#FFFFFF;}
+.img-wrape a{color:#FFFFFF; padding-left:10px;}
+.img-wrape i{color:#FFFFFF;}
