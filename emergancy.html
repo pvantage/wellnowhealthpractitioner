@@ -155,8 +155,14 @@ function getdistance(fromlati,fromlongi,fromaddress,tolati,tolongi,toaddress){
 				console.log(results);
 				for (var j = 0; j < results.length; j++) {
 					var element = results[j];
-					var distance = element.distance.text;
-					var duration = element.duration.text;
+					var distance = '';
+					if(typeof element.distance!='undefined'){
+						var distance = element.distance.text;
+					}
+					var duration = '';
+					if(typeof element.duration!='undefined'){
+						var duration = element.duration.text;
+					}
 					jQuery('.displaydistance').html('Estimated Distance : '+distance+'<br>Estimated Time: '+duration);
 					var from = origins[i];
 					var to = destinations[j];
