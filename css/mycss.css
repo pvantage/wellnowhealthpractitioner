@@ -57,5 +57,5 @@
 .img-wrape img{ max-width:50px; max-height:50px;}
 .img-wrape a{color:#FFFFFF; padding-left:10px;}
 .img-wrape i{color:#FFFFFF;}
-.trip-notification .img-wrape a{color:#0056b3; padding-left:10px;}
-.trip-notification .img-wrape i{color:#0056b3;}
+.trip-notification .img-wrape a, .justify-content-center .img-wrape a{color:#0056b3; padding-left:10px;}
+.trip-notification .img-wrape i, .justify-content-center .img-wrape i{color:#0056b3;}
