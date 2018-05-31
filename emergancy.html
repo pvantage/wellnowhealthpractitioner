@@ -131,46 +131,7 @@
 var crrentdata=[];
 var activedata=[];
 var map_icon=localStorage.getItem('Manager_photo_map');
-function getdistance(fromlati,fromlongi,fromaddress,tolati,tolongi,toaddress){
-	var from = new google.maps.LatLng(fromlati, fromlongi);
-	var fromName = fromaddress;
-	var dest = new google.maps.LatLng(tolati, tolongi);
-	var destName = toaddress;
-	
-	var service = new google.maps.DistanceMatrixService();
-	service.getDistanceMatrix(
-		{
-			origins: [from, fromName],
-			destinations: [destName, dest],
-			travelMode: 'DRIVING'
-		}, callback);
-	
-	function callback(response, status) {
-		if (status == 'OK') {
-			var origins = response.originAddresses;
-			var destinations = response.destinationAddresses;
-	
-			for (var i = 0; i < origins.length; i++) {
-				var results = response.rows[i].elements;
-				console.log(results);
-				for (var j = 0; j < results.length; j++) {
-					var element = results[j];
-					var distance = '';
-					if(typeof element.distance!='undefined'){
-						var distance = element.distance.text;
-					}
-					var duration = '';
-					if(typeof element.duration!='undefined'){
-						var duration = element.duration.text;
-					}
-					jQuery('.displaydistance').html('Estimated Distance : '+distance+'<br>Estimated Time: '+duration);
-					var from = origins[i];
-					var to = destinations[j];
-				}
-			}
-		}
-	}
-}
+
 function checkseenmsg(){
 	var seenmsgs=localStorage.getItem('seenmsgs');
 	var seenmsgs_ids='';
@@ -557,7 +518,6 @@ jQuery(document).ready(function(){
           center: our_address
         });
         directionsDisplay.setMap(map);
-		//getdistance(joblati,joblongi,jobaddress,Staff_Lat,Staff_Long,our_address);
 		
 		
 		var geocoder = new google.maps.Geocoder;
@@ -577,17 +537,7 @@ jQuery(document).ready(function(){
 			infoWindow.setContent(showaddress2);
 			infoWindow.open(map, marker);
 		});
-		/*geocoder.geocode({'location': latlng}, function(results, status) {
-          if (status === 'OK') {
-            if (results[0]) {
-			  google.maps.event.addListener(marker, "click", function (e) {
-				var infoWindow = new google.maps.InfoWindow();
-				infoWindow.setContent(results[0].formatted_address);
-				infoWindow.open(map, marker);
-			});
-            }
-          } 
-        });*/
+		
 		var imgommap='images/mapicon.png';
 		var latlng2=jobaddress;
 		var marker2 = new google.maps.Marker({
@@ -602,17 +552,7 @@ jQuery(document).ready(function(){
 			infoWindow.setContent(showaddress1);
 			infoWindow.open(map, marker2);
 		});
-		/*geocoder.geocode({'location': latlng2}, function(results, status) {
-          if (status === 'OK') {
-            if (results[0]) {
-			  google.maps.event.addListener(marker2, "click", function (e) {
-				var infoWindow = new google.maps.InfoWindow();
-				infoWindow.setContent(results[0].formatted_address);
-				infoWindow.open(map, marker2);
-			});
-            }
-          } 
-        });*/
+		
 		if(crrentdata.length>0){
 			jQuery(crrentdata).each(function(j){
 				var nlat=crrentdata[j]['current_lati'];
@@ -664,7 +604,7 @@ jQuery(document).ready(function(){
           if (status == 'OK') {
             directionsDisplay.setDirections(response);
           } else {
-            //window.alert('Directions request failed due to ' + status);
+            window.location='';
           }
         });
         
@@ -720,7 +660,7 @@ jQuery(document).ready(function(){
 				if(typeof res['data'][index]['measurement']!='undefined'){
 					jQuery('.displaydistance').html('Estimated Distance : '+res['data'][index]['measurement']['distance']+'<br>Estimated Time: '+res['data'][index]['measurement']['duration']);
 				}
-				setTimeout(function(){checkcurrentpostion(res['data'][index]['company_id']);},2000);
+				setTimeout(function(){checkcurrentpostion(res['data'][index]['company_id']);},10000);
 				
 				opennotes('no');
 				},1000);
