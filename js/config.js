@@ -218,10 +218,12 @@ function checkNotification(audioElement) {
     
 }
 function showimg(imgurl){
-	cordova.InAppBrowser.open(imgurl, '_blank', 'location=yes');	
+	var url=siteurl+'/api/emergencies/showmdeiafile/?file='+imgurl+'&ftype=image';
+	cordova.InAppBrowser.open(url, '_blank', 'location=yes');	
 }
 function showvideo(videourl){
-	cordova.InAppBrowser.open(videourl, '_blank', 'location=yes');	
+	var url=siteurl+'/api/emergencies/showmdeiafile/?file='+videourl+'&ftype=video';
+	cordova.InAppBrowser.open(url, '_blank', 'location=yes');	
 }
 jQuery(document).ready(function(){
 	jQuery('body').append('<div style="display:none;"><audio id="successSound" controls><source src="'+siteurl+'/uploads/ding.mp3" type="audio/mpeg"><source src="'+siteurl+'/uploads/1Hand.wav" type="audio/wav">Your browser does not support the audio element.</audio></div>');	
