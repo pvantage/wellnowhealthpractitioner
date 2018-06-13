@@ -1,5 +1,5 @@
-var siteurl = "http://vantageappspro.com/wellnowhealth";
-var realsiteurl = "http://vantageappspro.com/wellnowhealth/";
+var siteurl = "http://178.128.186.105";
+var realsiteurl = "http://178.128.186.105/";
 function gup(sParam) {
   var sPageURL = decodeURIComponent(window.location.search.substring(1)),
         sURLVariables = sPageURL.split('&'),
