@@ -1,5 +1,5 @@
-var siteurl = "http://178.128.186.105";
-var realsiteurl = "http://178.128.186.105/";
+var siteurl = "https://www.stecare.com";
+var realsiteurl = "https://www.stecare.com/";
 function gup(sParam) {
   var sPageURL = decodeURIComponent(window.location.search.substring(1)),
         sURLVariables = sPageURL.split('&'),
