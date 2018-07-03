@@ -358,7 +358,24 @@ function opennotes(showmsg){
 		{
 			jQuery('.notelists').html('');
 			jQuery(res['notes']).each(function(index){
-				var msgg='Me: '+res['notes'][index]['note']+' <span class="seen_'+res['notes'][index]['id']+' notseenmsg"></span>';
+				var clsas='clinicnote';
+				var msgg=res['notes'][index]['note'];
+				if(jQuery.trim(res['notes'][index]['company'])!=''){
+					msgg=res['notes'][index]['note']+' :'+res['notes'][index]['company'];
+					clsas='managernote';
+				}
+				else{
+					if(uid==res['notes'][index]['manager_id']){
+						msgg=res['notes'][index]['note'];
+					}
+					else{
+						msgg=res['notes'][index]['note']+' :'+res['notes'][index]['manager'];
+						clsas='managernote';
+					}
+				}
+				jQuery('.notelists').append('<div class="note-content"><span class="'+clsas+'">'+msgg+'</span></div>');
+				
+				/*var msgg='Me: '+res['notes'][index]['note']+' <span class="seen_'+res['notes'][index]['id']+' notseenmsg"></span>';
 				if(jQuery.trim(res['notes'][index]['company'])!=''){
 					msgg=res['notes'][index]['company']+': '+res['notes'][index]['note'];
 				}
@@ -370,7 +387,7 @@ function opennotes(showmsg){
 						msgg=res['notes'][index]['manager']+': '+res['notes'][index]['note'];
 					}
 				}
-				jQuery('.notelists').append('<div class="note-content">'+msgg+'</div>');
+				jQuery('.notelists').append('<div class="note-content">'+msgg+'</div>');*/
 			});
 			
 		
@@ -414,7 +431,7 @@ function notes(){
 		if(res['notes'] && jQuery.trim(res['notes'])!='')
 		{
 			jQuery(res['notes']).each(function(index){
-				var msgg='Me: '+res['notes'][index]['note'];
+				/*var msgg='Me: '+res['notes'][index]['note'];
 				if(jQuery.trim(res['notes'][index]['company'])!=''){
 					msgg=res['notes'][index]['company']+': '+res['notes'][index]['note'];
 				}
@@ -426,7 +443,24 @@ function notes(){
 						msgg=res['notes'][index]['manager']+': '+res['notes'][index]['note'];
 					}
 				}
-				jQuery('.notelists').append('<div class="note-content">'+msgg+'</div>');
+				jQuery('.notelists').append('<div class="note-content">'+msgg+'</div>');*/
+				
+				var clsas='clinicnote';
+				var msgg=res['notes'][index]['note'];
+				if(jQuery.trim(res['notes'][index]['company'])!=''){
+					msgg=res['notes'][index]['note']+' :'+res['notes'][index]['company'];
+					clsas='managernote';
+				}
+				else{
+					if(uid==res['notes'][index]['manager_id']){
+						msgg=res['notes'][index]['note'];
+					}
+					else{
+						msgg=res['notes'][index]['note']+' :'+res['notes'][index]['manager'];
+						clsas='managernote';
+					}
+				}
+				jQuery('.notelists').append('<div class="note-content"><span class="'+clsas+'">'+msgg+'</span></div>');
 			});
 			jQuery('#emergency').modal();
 		
@@ -760,7 +794,7 @@ jQuery(document).ready(function(){
 			 success: function(res) { 
 				if(res['msg'])
 				{
-					jQuery('.notelists').append('<div class="note-content">Me: '+msg+'<span class="seen_'+res['emergency_id']+' notseen"></span></div>');
+					jQuery('.notelists').append('<div class="note-content"><span class="clinicnote">'+msg+'<span class="seen_'+res['emergency_id']+' notseen"></span></span></div>');
 					jQuery('body .showmessage').remove();
 					var html='<div class="showmessage">'+res['msg']+'</div>';
 					jQuery('body').append(html);
