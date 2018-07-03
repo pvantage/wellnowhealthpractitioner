@@ -142,11 +142,16 @@ function onDeviceReady2(){
 	}
 }*/
 
-function playnotification(audioElement){
+function playnotification(audioElement,isplay){
    //audioElement.play();
    var audiop = document.getElementById(audioElement);
-   audiop.play();
-   setTimeout(function(){playnotification(audioElement);},10000);
+   if(isplay){
+	   audiop.play();
+   }
+   else{
+	audiop.pause();   
+   }
+   setTimeout(function(){playnotification(audioElement,isplay);},10000);
 }
 function checkNotification(audioElement) {
 	
@@ -200,8 +205,9 @@ function checkNotification(audioElement) {
 							if(parseInt(totalnoti)<=0){
 								jQuery('.showpopmessage').remove();
 							}
+							playnotification(audioElement,false);
 						});
-						playnotification(audioElement);
+						playnotification(audioElement,true);
 				   }
 			   
 		 },  

@@ -64,3 +64,47 @@
 .video-wrape i{color:#FFFFFF;}
 .trip-notification .video-wrape a, .justify-content-center .video-wrape a{color:#0056b3; padding-left:10px;}
 .trip-notification .video-wrape i, .justify-content-center .video-wrape i{color:#0056b3;}
+.note-content {
+    float: left;
+    width: 100%;
+	position:relative;
+	margin-bottom:10px;
+}
+.clinicnote:before{position: absolute;
+    top: -2px;
+    left: -12px;
+    width: 0;
+    height: 0;
+    content: '';
+    border: 6px solid transparent;
+    border-right-color: transparent;
+    border-right-color: transparent;
+    border-right-color: transparent;
+    border-right-color: #0e58ab;
+}
+.managernote:before{position: absolute;
+    top: 0px;
+    right: -12px;
+    width: 0;
+    height: 0;
+    content: '';
+    border: 6px solid transparent;
+    border-left-color: transparent;
+    border-left-color: transparent;
+    border-left-color: transparent;
+    border-left-color: #4B7B15;
+
+}
+.managernote {
+border: 1px solid #4B7B15;
+padding: 3px 8px;
+border-radius: 3px 0px 3px 3px;
+float: right;
+background: #70a003;
+}
+.clinicnote {
+border: 1px solid #0e58ab;
+padding: 3px 8px;
+border-radius: 0px 3px 3px 3px;
+background: #046cbf;
+}
