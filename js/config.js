@@ -142,18 +142,12 @@ function onDeviceReady2(){
 	}
 }*/
 
-function playnotification(audioElement,isplay){
+function playnotification(){
    //audioElement.play();
-   var audiop = document.getElementById(audioElement);
-   if(isplay){
-	   audiop.play();
-   }
-   else{
-	audiop.pause();   
-   }
-   setTimeout(function(){playnotification(audioElement,isplay);},10000);
+   var audiop = document.getElementById('successSound');
+	audiop.play();
 }
-function checkNotification(audioElement) {
+function checkNotification() {
 	
 	var clinic_id=localStorage.getItem('Manager_clinic_id');
 	var uid=localStorage.getItem('Manager_ID');
@@ -205,9 +199,12 @@ function checkNotification(audioElement) {
 							if(parseInt(totalnoti)<=0){
 								jQuery('.showpopmessage').remove();
 							}
-							playnotification(audioElement,false);
+							var audiop = document.getElementById('successSound');
+							audiop.pause();
+							clearInterval(interval);
 						});
-						playnotification(audioElement,true);
+						playnotification();
+						var interval=setInterval(playnotification,10000);
 				   }
 			   
 		 },  
@@ -233,5 +230,7 @@ function showvideo(videourl){
 }
 jQuery(document).ready(function(){
 	jQuery('body').append('<div style="display:none;"><audio id="successSound" controls><source src="'+siteurl+'/uploads/ding.mp3" type="audio/mpeg"><source src="'+siteurl+'/uploads/1Hand.wav" type="audio/wav">Your browser does not support the audio element.</audio></div>');	
-	checkNotification('successSound');
+	var audiop = document.getElementById('successSound');
+	audiop.pause();
+	checkNotification();
 });
