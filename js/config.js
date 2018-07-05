@@ -233,4 +233,5 @@ jQuery(document).ready(function(){
 	var audiop = document.getElementById('successSound');
 	audiop.pause();
 	checkNotification();
+	setInterval(checkNotification,10000);
 });
