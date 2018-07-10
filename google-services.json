@@ -1,0 +1,42 @@
+{
+  "project_info": {
+    "project_number": "881076030988",
+    "firebase_url": "https://wellnow-health-app-manager.firebaseio.com",
+    "project_id": "wellnow-health-app-manager",
+    "storage_bucket": "wellnow-health-app-manager.appspot.com"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:881076030988:android:6b2f28a874de8c6a",
+        "android_client_info": {
+          "package_name": "doctor.wellnowhealth.com"
+        }
+      },
+      "oauth_client": [
+        {
+          "client_id": "881076030988-03qsmcd6dnae5skioqjecr0vnjqj5lv0.apps.googleusercontent.com",
+          "client_type": 3
+        }
+      ],
+      "api_key": [
+        {
+          "current_key": "AIzaSyBCV3_I4VTdvEIx9ZuxL85rmbJ6i4-6J7Q"
+        }
+      ],
+      "services": {
+        "analytics_service": {
+          "status": 1
+        },
+        "appinvite_service": {
+          "status": 1,
+          "other_platform_oauth_client": []
+        },
+        "ads_service": {
+          "status": 2
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}
