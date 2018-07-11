@@ -63,13 +63,6 @@ function checkloggedin(uid)
 }
 
 
-document.addEventListener("deviceready", Deviceinfo, false);
-function Deviceinfo(){
-	var deviceuuid=device.uuid;
-	localStorage.setItem('deviceuuid',deviceuuid);
-	var deviceplatform=device.platform;
-	localStorage.setItem('deviceplatform',deviceplatform);
-}
 
 
 

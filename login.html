@@ -82,7 +82,16 @@
 	<script type="text/javascript" src="js/config.js"></script>
 	<script type="text/javascript" src="js/validate.js"></script>
 <script type="text/javascript">
-
+document.addEventListener("deviceready", Deviceinfo, false);
+function Deviceinfo(){
+	var deviceplatform=device.platform;
+	localStorage.setItem('deviceplatform',deviceplatform);
+	var push = PushNotification.init({ "android": {"senderID": "881076030988"}, "ios": {"alert": "true", "badge": "true", "sound": "true"}, "windows": {} } );
+	push.on('registration', function(data)
+	{						
+		localStorage.setItem('deviceuuid',data.registrationId);
+	});
+}
 jQuery(document).ready(function(){
 	jQuery( document ).on( "mobileinit", function() {
 		jQuery.mobile.allowCrossDomainPages = true;
