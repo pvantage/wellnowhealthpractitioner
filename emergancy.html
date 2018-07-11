@@ -90,6 +90,8 @@
             
             <div class="modal-body">
                 <form id="loginuser" action="" method="post">
+					<input type="hidden" name="company_id" value="0">
+					<input type="hidden" name="clinic_id" value="0">
 					<input type="hidden" name="manager_id" value="0">
 					<input type="hidden" name="emergency_id" value="0">
 					<input type="hidden" name="add_by" value="manager">
@@ -669,6 +671,8 @@ jQuery(document).ready(function(){
 			var html='';
 			jQuery(res['data']).each(function(index){
 				//jQuery('.main-wrapper').append('<div class="text-center mb-3"><a href="tel:'+res['data'][index]['emergency_phone']+'" class="btn btn-primary">CONTACT EMERGENCY</a></div>');
+				jQuery('input[name="company_id"]').val(res['data'][index]['company_id']);
+			  	jQuery('input[name="clinic_id"]').val(res['data'][index]['clinic_id']);
 				if(res['data'][index]['status']=='completed')
 				{
 					window.location='emergancy-detail.html?id='+id;
