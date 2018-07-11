@@ -166,6 +166,7 @@ function checkNotification() {
 						   }
 						}
 					   var htm='';
+					   var playbeep=false;
 						jQuery(res['data']).each(function(index){
 							htm+='<div class="trip-notification">';
 							htm+='<div class="trip-content">';
@@ -174,6 +175,7 @@ function checkNotification() {
 								htm+='<div class="trip-title">Note: '+res['data'][index]['note']+'</div>';
 							}
 							htm+='</div><div class="trip-link"><a class="closenotification" href="javascript:;">CLOSE</a> <a class="viewnotification" href="emergancy.html?id='+res['data'][index]['emergency_id']+'">VIEW</a></div></div>';
+							playbeep=true;
 						});
 						jQuery('.showpopmessage').append(htm);
 						jQuery('a.closenotification').click(function(){
@@ -186,8 +188,10 @@ function checkNotification() {
 							audiop.pause();
 							clearInterval(interval);
 						});
-						playnotification();
-						var interval=setInterval(playnotification,10000);
+						if(playbeep){
+							playnotification();
+							var interval=setInterval(playnotification,10000);
+						}
 				   }
 			   
 		 },  
