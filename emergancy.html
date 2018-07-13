@@ -35,18 +35,7 @@
 </head>
 
 <body>
-<!--<div class="sidenav" id="mySidenav" >
-  <div  class="navigation"> <a  class="closebtn" href="javascript:void(0)" onClick="closeNav()">×</a>
-    <div class="menu_section">
-      <ul class="nav side-menu">
-        <li><a href="my-account.html">Update Info </a> </li>
-        <li><a href="pending-emergencies.html">Current Emergencies </a> </li>
-		<li><a href="past-emergencies.html">Past Emergencies </a> </li>
-		<li><a href="logout.html">Logout </a> </li>
-      </ul>
-    </div>
-  </div>
-</div>-->
+
 
 
 
@@ -54,13 +43,7 @@
 
 <div class="full-height background-layer"> 
     
-    <!-----Header Start------->
-    <!--<header class="header container-fluid">
-        <div class="container">
-        <div class="nav-icon" onClick="openNav()"> <a id="menu_toggle"><img src="images/hamburger.png" alt=""></a> </div>
-            <div class="logo"><a href="your-location.html"><img src="images/logo.png"  alt=""></a></div>
-        </div>
-    </header>-->
+   
 	<header class="header container-fluid">
         <div class="container"> <a href="pending-emergencies.html" class="header-back-btn"><i  class="fa fa-angle-left"></i> </a>
             <div class="logo"><a href="your-location.html"><img src="images/logo.png"  alt=""></a></div>
@@ -361,17 +344,17 @@ function opennotes(showmsg){
 			jQuery('.notelists').html('');
 			jQuery(res['notes']).each(function(index){
 				var clsas='clinicnote';
-				var msgg=res['notes'][index]['note'];
+				var msgg=res['notes'][index]['note']+' <span class="seen_'+res['notes'][index]['id']+' notseenmsg"></span>';
 				if(jQuery.trim(res['notes'][index]['company'])!=''){
 					msgg=res['notes'][index]['note']+' :'+res['notes'][index]['company'];
 					clsas='managernote';
 				}
 				else{
 					if(uid==res['notes'][index]['manager_id']){
-						msgg=res['notes'][index]['note'];
+						msgg=res['notes'][index]['note']+' <span class="seen_'+res['notes'][index]['id']+' notseenmsg"></span>';
 					}
 					else{
-						msgg=res['notes'][index]['note']+' :'+res['notes'][index]['manager'];
+						msgg=res['notes'][index]['note']+' <span class="seen_'+res['notes'][index]['id']+' notseenmsg"></span>';
 						clsas='managernote';
 					}
 				}
@@ -448,17 +431,17 @@ function notes(){
 				jQuery('.notelists').append('<div class="note-content">'+msgg+'</div>');*/
 				
 				var clsas='clinicnote';
-				var msgg=res['notes'][index]['note'];
+				var msgg=res['notes'][index]['note']+' <span class="seen_'+res['notes'][index]['id']+' notseenmsg"></span>';
 				if(jQuery.trim(res['notes'][index]['company'])!=''){
-					msgg=res['notes'][index]['note']+' :'+res['notes'][index]['company'];
+					msgg=res['notes'][index]['note']+' <span class="seen_'+res['notes'][index]['id']+' notseenmsg"></span>';
 					clsas='managernote';
 				}
 				else{
 					if(uid==res['notes'][index]['manager_id']){
-						msgg=res['notes'][index]['note'];
+						msgg=res['notes'][index]['note']+' <span class="seen_'+res['notes'][index]['id']+' notseenmsg"></span>';
 					}
 					else{
-						msgg=res['notes'][index]['note']+' :'+res['notes'][index]['manager'];
+						msgg=res['notes'][index]['note']+' <span class="seen_'+res['notes'][index]['id']+' notseenmsg"></span>';
 						clsas='managernote';
 					}
 				}

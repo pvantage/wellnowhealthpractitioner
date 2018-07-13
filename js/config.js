@@ -203,7 +203,7 @@ function checkNotification() {
 			
 		 } 
 	   });
-		setTimeout(function(){checkNotification(audioElement)},10000);
+		setTimeout(checkNotification,10000);
 	}
     
 }
