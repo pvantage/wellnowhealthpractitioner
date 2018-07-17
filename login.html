@@ -100,9 +100,9 @@ jQuery(document).ready(function(){
     if(window.XDomainRequest){contentType = "text/plain";}
 	jQuery.support.cors = true;
 	jQuery('#loginuser').validate();
-	/*if(localStorage.getItem('UserRedirect')!=null){
-		window.location=localStorage.getItem('UserRedirect');
-	}*/
+	if(typeof uid!='undefined' && uid!='' && uid!=null){
+		window.location='your-location.html';
+	}
 	
 	jQuery('#loginuser').submit( function(){	
 		var error=false;
