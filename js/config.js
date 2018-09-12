@@ -190,7 +190,7 @@ function checkNotification() {
 						});
 						if(playbeep){
 							playnotification();
-							var interval=setInterval(playnotification,10000);
+							var interval=setInterval(playnotification,3000);
 						}
 				   }
 			   
