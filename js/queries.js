@@ -493,11 +493,11 @@ function downloadfiles(table,filepath,id,$this){
 	//alert(filename);
 	var fileTransfer = new FileTransfer();
 	var uri = encodeURI(filepath);
-	var fileURL='/'+filename;
+	//var fileURL='/'+filename;
 	 
 	fileTransfer.download(
 		uri,
-		fileURL,
+		cordova.file.externalApplicationStorageDirectory+filename,
 		function(entry) {
 			var mobilepath=entry.toURL();
 			alert(mobilepath);
