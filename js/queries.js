@@ -489,6 +489,7 @@ function downloadfiles(table,filepath,id,$this){
 		fileURL,
 		function(entry) {
 			var mobilepath=entry.toURL();
+			alert(mobilepath);
 			Updatefiletables(table,mobilepath,id);
 			var filetype=jQuery($this).attr('data-filetype');
 			if(filetype=='video'){
@@ -499,9 +500,9 @@ function downloadfiles(table,filepath,id,$this){
 			}
 		},
 		function(error) {
-			console.log("download error source " + error.source);
-			console.log("download error target " + error.target);
-			console.log("download error code" + error.code);
+			alert("download error source " + error.source);
+			alert("download error target " + error.target);
+			alert("download error code" + error.code);
 		},
 		false,
 		{
