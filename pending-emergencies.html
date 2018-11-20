@@ -72,57 +72,12 @@ if(typeof uid=='undefined' || uid=='' || uid=='undefined' || uid==null){
 		window.location='login.html';
 	},1000);
 }
-/*jQuery(document).ready(function(){
-	var url=siteurl+'/api/emergencies/clinicemergencies';
-	jQuery.ajax({  
-	 type: 'POST',  
-	 url: url,           
-	 dataType: 'json',  
-	 data: {clinic_id:clinic_id, emtype:'pending'}, 
-	 beforeSend: function() {
-		
-	 },		
-	 complete: function() {
-	 }, 
-	 crossDomain: true,  
-	 success: function(res) { 
-	 	if(res['data'])
-		{
-			var html='';
-			jQuery(res['data']).each(function(index){
-				html+='<div class="row mb-3"><div class="col-4"><div class="meta-date h-100 justify-content-center flex-column"><div class="date-circle">'+res['data'][index]['showdate']+'</div></div></div>';
-              
-				html+='<div class="col-8"><div class="past-detail h-100 justify-content-center flex-column"><ul><li><a href="emergancy.html?id='+res['data'][index]['id']+'">Company: <strong>'+res['data'][index]['company']+' ('+res['data'][index]['companyaddress']+')</strong></a></li>';
-				if(jQuery.trim(res['data'][index]['note'])!=''){
-					html+='<li>Note: <strong>'+res['data'][index]['note']+'</strong></li>';
-				}
-				html+='</ul></div></div></div>';
-			});
-			jQuery('.past-amrgncy').html(html);
-		}
-		else if(res['nodata'])
-		{
-			jQuery('.past-amrgncy').html(res['nodata']);
-		}
-		return false; 
-	 },  
-	 error: function(response, d, a){
-		
-		jQuery('body .showmessage').remove();
-		var html='<div class="showmessage">Server Error.</div>';
-		jQuery('body').append(html);
-		setTimeout(function(){jQuery('.showmessage').slideUp();},1000);
-		return false; 
-	 }
-			
-   });
-   //getLocation();
-});*/
+
 function loademergencies(){
 	db.transaction(showlistjobs, errorDB, successDB);
 	function showlistjobs(tx){
-		var q="SELECT e.*, c.address as caddress, c.name as cname FROM wnh_emergencies as e,wnh_company as c where e.company_id=c.company_id AND e.status=? AND e.deletebymanager=? AND e.manager_id=? ORDER BY e.id DESC";
-		var cond=['pending', '0', uid];
+		var q="SELECT e.*, c.address as caddress, c.name as cname FROM wnh_emergencies as e, wnh_emergency_notifications as em,wnh_company as c where em.company_id=c.company_id AND e.emergency_id=em.emergency_id AND em.status=? AND e.deletebymanager=? ORDER BY e.id DESC";
+		var cond=['pending', '0'];
 		tx.executeSql(q, cond, function(tx, res){
 			if(parseInt(res.rows.length)>0){
 				var html='';

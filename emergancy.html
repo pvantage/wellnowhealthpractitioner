@@ -45,7 +45,7 @@
     
    
 	<header class="header container-fluid">
-        <div class="container"> <a href="pending-emergencies.html" class="header-back-btn"><i  class="fa fa-angle-left"></i> </a>
+        <div class="container"> <a href="current-emergencies.html" class="header-back-btn"><i  class="fa fa-angle-left"></i> </a>
             <div class="logo"><a href="your-location.html"><img src="images/logo.png"  alt=""></a></div>
         </div>
     </header>
@@ -130,8 +130,8 @@ function checkseenmsg(){
 	}
 	var emergency_id=gup('id');
 	if(emergency_id!='' && emergency_id!='0'){
-		db.transaction(showlistjobs, errorDB, successDB);
-		function showlistjobs(tx){
+		db.transaction(showlistjobs3, errorDB, successDB);
+		function showlistjobs3(tx){
 			var q="SELECT * FROM wnh_emergency_notes where emergency_id=? AND readbycompany=?";
 			var cond=[emergency_id,'1'];
 			tx.executeSql(q, cond, function(tx, res){
@@ -329,8 +329,8 @@ function completethis(){
 function opennotes(showmsg){
 	var emergency_id=gup('id');
 	jQuery('.notelists').html('');
-	db.transaction(showlistjobs, errorDB, successDB);
-	function showlistjobs(tx){
+	db.transaction(showlistjobs1, errorDB, successDB);
+	function showlistjobs1(tx){
 		var q="SELECT * FROM wnh_emergencies where emergency_id=?";
 		var cond=[emergency_id];
 		tx.executeSql(q, cond, function(tx, res){
@@ -610,8 +610,8 @@ jQuery(document).ready(function(){
       }
 	
 	function loademergency(id){
-		db.transaction(showlistjobs, errorDB, successDB);
-		function showlistjobs(tx){
+		db.transaction(showlistjobs2, errorDB, successDB);
+		function showlistjobs2(tx){
 			var q="SELECT cm.phone,m.image, c.address_lati as caddress_lati, c.address_longi as caddress_longi, c.address as caddress, cm.*, e.manager_id, e.clinic_id, e.company_id, e.status, e.measurement, cm.address as cmaddress, cm.current_lati as cmcurrent_lati, cm.current_longi as cmcurrent_longi, cm.current_address as cmcurrent_address, cm.address_lati	 as cmaddress_lati, cm.address_longi as cmaddress_longi, m.current_lati as mcurrent_lati, m.current_longi as mcurrent_longi, m.current_address as mcurrent_address FROM wnh_emergencies as e, wnh_managers as m, wnh_clinics as c, wnh_company as cm where e.manager_id=m.manager_id AND e.clinic_id=c.clinic_id AND e.company_id=cm.company_id AND e.emergency_id=?";
 			var cond=[id];
 			tx.executeSql(q, cond, function(tx, res){

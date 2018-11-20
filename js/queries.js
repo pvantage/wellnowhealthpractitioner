@@ -1,15 +1,20 @@
-
-document.addEventListener("online", checkfornewupdates, false);
+var wd=jQuery(window).width();
 function updategardenerdata(){}
-//document.addEventListener("online", updategardenerdata, false);
 function checkonlineoffline(){
-	//document.addEventListener("online", checkfornewupdates, false);
-	checkfornewupdates();
+	if(parseInt(wd)<=700){
+		document.addEventListener("online", checkfornewupdates, false);
+	}
+	else{
+		checkfornewupdates();
+	}
 }
 setInterval(checkonlineoffline,10000);
 function checkonlineofflinefast(){
-	//document.addEventListener("online", fastupdates, false);
-	fastupdates();
+	if(parseInt(wd)<=700){
+		document.addEventListener("online", fastupdates, false);
+	}else{
+		fastupdates();
+	}
 }
 setInterval(checkonlineofflinefast,2000);
 

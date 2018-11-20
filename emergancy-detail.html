@@ -242,8 +242,8 @@ function showchatmsg(){
 function opennotes(){
 	var emergency_id=gup('id');
 	jQuery('.notelists').html('');
-	db.transaction(showlistjobs, errorDB, successDB);
-	function showlistjobs(tx){
+	db.transaction(showlistjobs1, errorDB, successDB);
+	function showlistjobs1(tx){
 		var q="SELECT * FROM wnh_emergencies where emergency_id=?";
 		var cond=[emergency_id];
 		var que=[];
@@ -364,8 +364,8 @@ jQuery(document).ready(function(){
 	
 	
 	function loademergency(id){
-		db.transaction(showlistjobs, errorDB, successDB);
-		function showlistjobs(tx){
+		db.transaction(showlistjobs2, errorDB, successDB);
+		function showlistjobs2(tx){
 			var q="SELECT m.phone,m.image, c.address_lati as clinic_lati, c.address_longi as clinic_longi, c.address as clinic_address, cm.* FROM wnh_emergencies as e, wnh_managers as m, wnh_clinics as c, wnh_company as cm where e.manager_id=m.manager_id AND e.clinic_id=c.clinic_id AND e.company_id=cm.company_id AND e.emergency_id=?";
 			var cond=[id];
 			tx.executeSql(q, cond, function(tx, res){

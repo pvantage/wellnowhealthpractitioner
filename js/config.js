@@ -291,6 +291,26 @@ function checkNotification() {
 						var qr="UPDATE wnh_emergency_notifications SET deletenotification='1' WHERE emergency_id='"+emid+"'";
 						tx.executeSql(qr);
 					},  function(){}, function(){});
+					var url=siteurl+'/api/updates/companyemergencies';
+					jQuery.ajax({  
+						type: 'POST',  
+						url: url,           
+						dataType: 'json',  
+						crossDomain: true,
+						data: {emid:emid}, 
+						beforeSend: function() {
+						
+						},		
+						complete: function() {
+							setTimeout(function(){window.location='';},4000);
+						}, 
+						crossDomain: true,  
+						success: Updateemergencydata,  
+						error: function(response, d, a){
+					
+						return false; 
+						}
+					});
 					//clearInterval(interval);
 				});
 			});
