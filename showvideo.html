@@ -1,0 +1,47 @@
+<!doctype html>
+<html lang="en">
+<head>
+<title>Wllnow Health App</title>
+<!-- Required meta tags -->
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
+
+<!-- Bootstrap CSS -->
+<link rel="stylesheet" href="css/bootstrap.min.css" >
+<link rel="stylesheet" href="css/style.css" >
+<link rel="stylesheet" href="css/mycss.css" >
+</head>
+<body>
+<div class="container">
+	
+</div>
+</div>
+
+<!-- Optional JavaScript --> 
+<!-- jQuery first, then Popper.js, then Bootstrap JS --> 
+<script src="js/jquery-3.2.1.min.js" ></script> 
+<script src="js/popper.min.js" ></script> 
+<script src="js/bootstrap.min.js" ></script>
+<script type="text/javascript" charset="utf-8" src="cordova.js"></script>
+<script type="text/javascript" src="js/config.js"></script>
+<script type="text/javascript" src="js/queries.js"></script>
+<script type="text/javascript">
+
+jQuery(document).ready(function(){
+	
+	jQuery( document ).on( "mobileinit", function() {
+		jQuery.mobile.allowCrossDomainPages = true;
+	});
+	var contentType ="application/x-www-form-urlencoded; charset=utf-8";
+    if(window.XDomainRequest){contentType = "text/plain";}
+	jQuery.support.cors = true;
+	var wh=jQuery(window).height();
+	var ww=jQuery(window).width();
+	var file=gup('file');
+	var vd='<video width="'+ww+'" height="'+wh+'" controls><source src="'+file+'" type="video/mp4"><source src="'+file+'" type="video/webm"><source src="'+file+'" type="video/ogg">Your browser does not support the video tag.</video>';
+	jQuery('.container').html(vd);
+});
+
+</script>
+</body>
+</html>

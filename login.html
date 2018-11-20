@@ -81,7 +81,17 @@
 	<script type="text/javascript" charset="utf-8" src="cordova.js"></script>
 	<script type="text/javascript" src="js/config.js"></script>
 	<script type="text/javascript" src="js/validate.js"></script>
+	<script type="text/javascript" src="js/queries.js"></script>
 <script type="text/javascript">
+db.transaction(logintable, errormg, successmg);
+
+function logintable(tx){
+	tx.executeSql('DROP TABLE IF EXISTS userlogin');
+	tx.executeSql('CREATE TABLE IF NOT EXISTS userlogin (id integer primary key autoincrement, user_id integer, lastlogin_time datetime, loggedin integer, name text, remberme text, uname text, pwd text)');
+	 
+}
+function errormg(){}
+function successmg(){}
 document.addEventListener("deviceready", Deviceinfo, false);
 function Deviceinfo(){
 	var deviceplatform=device.platform;
@@ -148,7 +158,36 @@ jQuery(document).ready(function(){
 						localStorage.setItem('Manager_clinic_lati', res['checklogin']['udetail']['clinic_lati']);
 						localStorage.setItem('Manager_clinic_longi', res['checklogin']['udetail']['clinic_longi']);
 					}
-					window.location ='your-location.html';
+					//window.location ='your-location.html';
+					db.transaction(loginguser, function errorCB(err) {
+        					//alert("Error processing SQL1: "+err);
+							//alert("Error processing SQL2: "+err.code);
+							//alert("Error processing SQL3: "+err.message);
+						}, successDB);
+					function loginguser(tx){
+						
+						var user_id=res['checklogin']['udetail']['userid'];
+						var name=res['checklogin']['udetail']['fname'];
+						var user_type='manager';
+						var cdate=getdatetime();
+						var remberme='yes';
+						
+						var qd="DELETE FROM userlogin";
+						tx.executeSql(qd);
+						var q="SELECT * FROM userlogin WHERE user_id=?";
+						var cond=[user_id];
+						tx.executeSql(q, cond, function(tx, res){
+							if(parseInt(res.rows.length)>0){
+								tx.executeSql("UPDATE userlogin set lastlogin_time='"+cdate+"', loggedin='1', name='"+name+"', user_id='"+user_id+"', remberme='"+remberme+"', uname='"+email+"', pwd='"+pwd+"' WHERE id='"+res.rows.item(0).id+"'");
+							}
+							else{
+								tx.executeSql('INSERT INTO userlogin (user_id, lastlogin_time, loggedin,name,remberme,uname,pwd) VALUES ("'+user_id+'", "'+cdate+'", "1", "'+name+'", "yes", "'+email+'", "'+pwd+'")');
+								//setTimeout(function(){
+								window.location ='loading.html';
+								//},2000);
+							}
+						});
+					}
 				
 				}else if(res['checklogin']['error']){				
 					jQuery('body .showmessage').remove();

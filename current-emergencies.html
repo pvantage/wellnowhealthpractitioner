@@ -39,8 +39,8 @@
     
     <!-----Header Start------->
     <header class="header container-fluid">
-        <div class="container"> <a href="your-location.html" class="header-back-btn"><i  class="fa fa-angle-left"></i> </a>
-            <div class="logo"><a href="your-location.html"><img src="images/logo.png"  alt=""></a></div>
+        <div class="container"> <a href="dashboard.html" class="header-back-btn"><i  class="fa fa-angle-left"></i> </a>
+            <div class="logo"><a href="dashboard.html"><img src="images/logo.png"  alt=""></a></div>
         </div>
     </header>
     <!-----Header End-------> 
@@ -48,7 +48,7 @@
     <!-----Main wrapper Start------->
     <div class="title-wrap">
         <div class="container">
-            <h1 class="entry-title text-center">Pending Emergencies</h1>
+            <h1 class="entry-title text-center">Current Emergencies</h1>
         </div>
     </div>
     <div class="main-wrapper mt-4">
@@ -61,24 +61,24 @@
 </div>
 <script src="js/jquery-3.2.1.min.js" ></script>
 <script src="js/popper.min.js" ></script>
+<script type="text/javascript" charset="utf-8" src="cordova.js"></script>
 <script type="text/javascript" src="js/config.js"></script>
 <script type="text/javascript" src="js/queries.js"></script>
 <script src="js/bootstrap.min.js"></script> 
 <script>
-  var uid=localStorage.getItem('Manager_ID');
-  var clinic_id=localStorage.getItem('Manager_clinic_id');
+  var uid=localStorage.getItem('Company_ID');
 if(typeof uid=='undefined' || uid=='' || uid=='undefined' || uid==null){
 	setTimeout(function(){
 		window.location='login.html';
 	},1000);
 }
-/*jQuery(document).ready(function(){
-	var url=siteurl+'/api/emergencies/clinicemergencies';
+jQuery(document).ready(function(){
+	/*var url=siteurl+'/api/emergencies/companyemergencies';
 	jQuery.ajax({  
 	 type: 'POST',  
 	 url: url,           
 	 dataType: 'json',  
-	 data: {clinic_id:clinic_id, emtype:'pending'}, 
+	 data: {company_id:uid,status:'pending'}, 
 	 beforeSend: function() {
 		
 	 },		
@@ -91,8 +91,8 @@ if(typeof uid=='undefined' || uid=='' || uid=='undefined' || uid==null){
 			var html='';
 			jQuery(res['data']).each(function(index){
 				html+='<div class="row mb-3"><div class="col-4"><div class="meta-date h-100 justify-content-center flex-column"><div class="date-circle">'+res['data'][index]['showdate']+'</div></div></div>';
-              
-				html+='<div class="col-8"><div class="past-detail h-100 justify-content-center flex-column"><ul><li><a href="emergancy.html?id='+res['data'][index]['id']+'">Company: <strong>'+res['data'][index]['company']+' ('+res['data'][index]['companyaddress']+')</strong></a></li>';
+                
+				html+='<div class="col-8"><div class="past-detail h-100 justify-content-center flex-column"><ul><li><a href="current-emergancy-detail.html?id='+res['data'][index]['id']+'">Clinic: <strong>'+res['data'][index]['clinic']+' ('+res['data'][index]['clinicaddress']+')</strong></a></li>';
 				if(jQuery.trim(res['data'][index]['note'])!=''){
 					html+='<li>Note: <strong>'+res['data'][index]['note']+'</strong></li>';
 				}
@@ -115,13 +115,13 @@ if(typeof uid=='undefined' || uid=='' || uid=='undefined' || uid==null){
 		return false; 
 	 }
 			
-   });
+   });*/
    //getLocation();
-});*/
+});
 function loademergencies(){
 	db.transaction(showlistjobs, errorDB, successDB);
 	function showlistjobs(tx){
-		var q="SELECT e.*, c.address as caddress, c.name as cname FROM wnh_emergencies as e,wnh_company as c where e.company_id=c.company_id AND e.status=? AND e.deletebymanager=? AND e.manager_id=?";
+		var q="SELECT * FROM wnh_emergencies where status=? AND deletebycaompany=? AND company_id=?";
 		var cond=['pending', '0', uid];
 		tx.executeSql(q, cond, function(tx, res){
 			if(parseInt(res.rows.length)>0){
@@ -131,7 +131,7 @@ function loademergencies(){
 					var note=res.rows.item(i).note;
 					if(res.rows.item(i).filetype=='video' || res.rows.item(i).filetype=='image'){note='please click message';}
 					html+='<div class="row mb-3 emglist"><div class="col-4"><div class="meta-date h-100 justify-content-center flex-column"><div class="date-circle">'+res.rows.item(i).showdate+'</div></div></div>';
-					html+='<div class="col-8"><div class="past-detail h-100 justify-content-center flex-column"><ul><li><a href="emergancy.html?id='+res.rows.item(i).emergency_id+'">Company: <strong>'+res.rows.item(i).cname+' ('+res.rows.item(i).caddress+')</strong></a></li>';
+					html+='<div class="col-8"><div class="past-detail h-100 justify-content-center flex-column"><ul><li><a href="current-emergancy-detail.html?id='+res.rows.item(i).emergency_id+'">Clinic: <strong>'+res.rows.item(i).clinic+' ('+res.rows.item(i).clinicaddress+')</strong></a></li>';
 					if(jQuery.trim(note)!=''){
 						html+='<li>Note: <strong>'+note+'</strong></li>';
 					}
@@ -143,7 +143,6 @@ function loademergencies(){
 	}
 }
 loademergencies();
-
 </script>
 </body>
 </html>

@@ -1,0 +1,115 @@
+<!doctype html>
+<html lang="en">
+<head>
+<title>Well Now health</title>
+<!-- Required meta tags -->
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
+
+<!-- Bootstrap CSS -->
+<link rel="stylesheet" href="css/bootstrap.min.css">
+<link rel="stylesheet" href="css/font-awesome.min.css">
+<link rel="stylesheet" href="css/style.css">
+<link rel="stylesheet" href="css/mycss.css">
+</head>
+<body class="light-grey-bg after-login schlbody">
+<!----- Header Top ----->
+<div class="container mysch-fix-hdr">
+  <div class="header-top">
+    <div class="row  align-items-center">
+	<img src="images/logo.png" alt="header-logo" />
+    </div>
+  </div>
+</div>
+<!----- /Header Top ----->
+<div class="clearfix"></div>
+<div class="container cntbox tab-content">
+  <div id="home" class="tab-pane fade in active show">
+    <h1 class="myschle">Database Tables</h1>
+   
+	<ul class="starttodayjob_times">
+		<li style="float:left; list-style:none;"><a href="database.html?table=userlogin">userlogin</a></li>
+		<li style="float:left; margin-left:10px; list-style:none;"><a href="database.html?table=wnh_clinics">clinics</a></li>
+		<li style="float:left; margin-left:10px; list-style:none;"><a href="database.html?table=wnh_company">company</a></li>
+		<li style="float:left; margin-left:10px; list-style:none;"><a href="database.html?table=wnh_emergencies">emergencies</a></li>
+		<li style="float:left; margin-left:10px; list-style:none;"><a href="database.html?table=wnh_emergency_notes">emergency notes</a></li>
+		<li style="float:left; margin-left:10px; list-style:none;"><a href="database.html?table=wnh_emergency_notifications">emergency notifications</a></li>
+		<li style="float:left; margin-left:10px; list-style:none;"><a href="database.html?table=wnh_emergency_phone">emergency phone</a></li>
+		<li style="float:left; margin-left:10px; list-style:none;"><a href="database.html?table=wnh_managers">managers</a></li>
+	</ul>
+  </div>
+  <div class="clearfix"></div>
+  <h2 class="tablename"></h2>
+  <table class="dbtable" border="1" style="display:none;"></table>
+</div>
+<!----- Bottom Nav Bar ----->
+<div class="bottom-nav-bar"></div>
+<script src="js/jquery-3.2.1.min.js" ></script> 
+<script src="js/popper.min.js" ></script>
+<script src="js/bootstrap.min.js" ></script>
+
+<script type="text/javascript" charset="utf-8" src="cordova.js"></script>
+<script type="text/javascript">
+rebute=false;
+</script>
+<script type="text/javascript" src="js/config.js"></script>
+<script type="text/javascript" src="js/database.js"></script>
+<script type="text/javascript" src="js/queries.js"></script>
+<script type="text/javascript">
+//localStorage.clear();
+updategardenerdata();
+checkfornewupdates();
+jQuery(document).ready(function(){
+	
+	jQuery( document ).on( "mobileinit", function() {
+		jQuery.mobile.allowCrossDomainPages = true;
+	});
+	var contentType ="application/x-www-form-urlencoded; charset=utf-8";
+    if(window.XDomainRequest){contentType = "text/plain";}
+	
+	jQuery.support.cors = true;
+	var table=gup('table');
+	var truncat=gup('truncat');
+	if(table!='' && typeof table!='undefined'){
+		jQuery('.tablename').html(table);
+		db.transaction(startdaytime2, errorDB, successDB);
+			function startdaytime2(tx){
+				if(truncat=='1'){
+					var q="DELETE FROM "+table;
+					tx.executeSql(q);
+				}
+				var q="SELECT * FROM "+table+"";
+				var cond=[];
+				tx.executeSql(q, cond, function(tx, res){
+					if(parseInt(res.rows.length)>0){
+						var html='<tr>';
+						var object=res.rows.item(0);
+						for (var property in object) {
+						  html+='<th>'+property+'</th>';
+						}
+						html+='</tr>';
+						for(var i = 0; i < res.rows.length; i++)
+						{
+							html+='<tr>';
+							object=res.rows.item(i);
+							for (var property in object) {
+							  html+='<td>'+object[property]+'</td>';
+							}
+							html+='</tr>';
+						}
+						html+='<tr><td><a href="database.html?table='+table+'&truncat=1">Empty this</a></td></tr>';
+						jQuery('table.dbtable').html(html);
+						
+						jQuery('table.dbtable').show();
+					}
+				});
+			}
+	}
+	
+	
+	
+});
+
+</script>
+</body>
+</html>
