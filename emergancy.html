@@ -713,7 +713,7 @@ jQuery(document).ready(function(){
           if (status == 'OK') {
             directionsDisplay.setDirections(response);
           } else {
-            //window.location='';
+            window.location='';
           }
         });
         
@@ -867,6 +867,9 @@ jQuery(document).ready(function(){
 						},1000);
 						
 					}
+				}
+				else{
+					//setTimeout(function(){window.location='';},4000);
 				}
 				
 			});

@@ -1,98 +1,18 @@
 
 document.addEventListener("online", checkfornewupdates, false);
+function updategardenerdata(){}
 //document.addEventListener("online", updategardenerdata, false);
 function checkonlineoffline(){
-	document.addEventListener("online", checkfornewupdates, false);
-	document.addEventListener("online", updategardenerdata, false);
+	//document.addEventListener("online", checkfornewupdates, false);
 	checkfornewupdates();
-	updategardenerdata();
 }
-setInterval(checkonlineoffline,5000);
-function updategardenerdata(){
-	//var networkState = navigator.connection.type;
-	//alert('Connection type: ' + networkState);
-	var uid=localStorage.getItem('Manager_ID');
-	if(typeof uid!='undefine' && uid!='' && uid!=null){
-		db.transaction(checkupdateforjobs, updateerrorDB, successDB);
-		function checkupdateforjobs(tx){
-			var q="SELECT * FROM wnh_emergencies WHERE manager_id=?";
-			var cond=[uid];
-			tx.executeSql(q, cond, function(tx, res2){
-				if(parseInt(res2.rows.length)>0){
-					
-					for(var i = 0; i < res2.rows.length; i++)
-					{
-						var id=res2.rows.item(i).id;
-						var emergency_id=res2.rows.item(i).emergency_id;
-						var url=siteurl+'/api/updates/getmsgs';
-						jQuery.ajax({  
-						 type: 'POST',  
-						 url: url,  
-						 dataType: 'json',
-						 data: {id:id, emergency_id:emergency_id},  
-						 crossDomain: true,  
-						 beforeSend: function() {
-										
-						 },		
-						 complete: function() {
-									
-						 },
-						 success: Updateemergencynotedata,  
-						 error: function(response, d, a){
-							/*jQuery('body .showmessage').remove();
-							var html='<div class="showmessage">Server Error in update data5.</div>';
-							jQuery('body').append(html);
-							setTimeout(function(){jQuery('.showmessage').slideUp();},1000);*/
-							
-						 } 
-					   });
-							
-					}
-					
-				}
-			});
-			
-			/*var q="SELECT * FROM wnh_emergencies WHERE manager_id=?";
-			var cond=[uid];
-			tx.executeSql(q, cond, function(tx, res2){
-				if(parseInt(res2.rows.length)>0){
-					
-					for(var i = 0; i < res2.rows.length; i++)
-					{*/
-						//var id=res2.rows.item(i).id;
-						//var emergency_id=res2.rows.item(i).emergency_id;
-						//alert(emergency_id);
-						var url=siteurl+'/api/updates/getnotifications';
-						jQuery.ajax({  
-						 type: 'POST',  
-						 url: url,  
-						 dataType: 'json',
-						 data: {manager_id:uid},  
-						 crossDomain: true,  
-						 beforeSend: function() {
-						 },		
-						 complete: function() {
-									
-						 },
-						 success: Updateemergencynotificationdata,  
-						 error: function(response, d, a){
-							/*jQuery('body .showmessage').remove();
-							var html='<div class="showmessage">Server Error in update data5.</div>';
-							jQuery('body').append(html);
-							setTimeout(function(){jQuery('.showmessage').slideUp();},1000);*/
-							
-						 } 
-					   });
-							
-					/*}
-					
-				}
-			});*/
-			
-			
-		}
-	}
+setInterval(checkonlineoffline,10000);
+function checkonlineofflinefast(){
+	//document.addEventListener("online", fastupdates, false);
+	fastupdates();
 }
+setInterval(checkonlineofflinefast,2000);
+
 //updategardenerdata();
 function updatejobdata8(res){
 	var id=res['id'];
@@ -144,7 +64,28 @@ function checkfornewupdates(){
 	
 	var uid=localStorage.getItem('Manager_ID');
 	if(typeof uid!='undefine' && uid!='' && uid!=null){
+		
+		var url=siteurl+'/api/updates/getnotifications';
+		jQuery.ajax({  
+		 type: 'POST',  
+		 url: url,  
+		 dataType: 'json',
+		 data: {manager_id:uid},  
+		 crossDomain: true,  
+		 beforeSend: function() {
+		 },		
+		 complete: function() {
+					
+		 },
+		 success: Updateemergencynotificationdata,  
+		 error: function(response, d, a){
+			/*jQuery('body .showmessage').remove();
+			var html='<div class="showmessage">Server Error in update data5.</div>';
+			jQuery('body').append(html);
+			setTimeout(function(){jQuery('.showmessage').slideUp();},1000);*/
 			
+		 } 
+	   });
 		var url=siteurl+'/api/updates/clinics';
 		jQuery.ajax({  
 			type: 'POST',  
@@ -184,25 +125,7 @@ function checkfornewupdates(){
 			return false; 
 			}
 		});
-		var url=siteurl+'/api/updates/companyemergencies';
-		jQuery.ajax({  
-			type: 'POST',  
-			url: url,           
-			dataType: 'json',  
-			crossDomain: true,
-			data: {manager_id:uid}, 
-			beforeSend: function() {
-			
-			},		
-			complete: function() {
-			}, 
-			crossDomain: true,  
-			success: Updateemergencydata,  
-			error: function(response, d, a){
 		
-			return false; 
-			}
-		});
 		
 		var url=siteurl+'/api/updates/getphones';
 		jQuery.ajax({  
@@ -249,6 +172,75 @@ function checkfornewupdates(){
 			
 		 } 
 	   });
+	}
+}
+function fastupdates(){
+	
+	var uid=localStorage.getItem('Manager_ID');
+	if(typeof uid!='undefine' && uid!='' && uid!=null){
+			
+		db.transaction(checkupdatefornotes, updateerrorDB, successDB);
+		function checkupdatefornotes(tx){
+			var q="SELECT * FROM wnh_emergencies WHERE manager_id=?";
+			var cond=[uid];
+			tx.executeSql(q, cond, function(tx, res2){
+				if(parseInt(res2.rows.length)>0){
+					
+					for(var i = 0; i < res2.rows.length; i++)
+					{
+						var id=res2.rows.item(i).id;
+						var emergency_id=res2.rows.item(i).emergency_id;
+						var url=siteurl+'/api/updates/getmsgs';
+						jQuery.ajax({  
+						 type: 'POST',  
+						 url: url,  
+						 dataType: 'json',
+						 data: {id:id, emergency_id:emergency_id},  
+						 crossDomain: true,  
+						 beforeSend: function() {
+										
+						 },		
+						 complete: function() {
+									
+						 },
+						 success: Updateemergencynotedata,  
+						 error: function(response, d, a){
+							/*jQuery('body .showmessage').remove();
+							var html='<div class="showmessage">Server Error in update data5.</div>';
+							jQuery('body').append(html);
+							setTimeout(function(){jQuery('.showmessage').slideUp();},1000);*/
+							
+						 } 
+					   });
+							
+					}
+					
+				}
+			});
+			
+		}
+		
+		var url=siteurl+'/api/updates/companyemergencies';
+		jQuery.ajax({  
+			type: 'POST',  
+			url: url,           
+			dataType: 'json',  
+			crossDomain: true,
+			data: {manager_id:uid}, 
+			beforeSend: function() {
+			
+			},		
+			complete: function() {
+			}, 
+			crossDomain: true,  
+			success: Updateemergencydata,  
+			error: function(response, d, a){
+		
+			return false; 
+			}
+		});
+		
+		
 	}
 }
 function Updatemanagerdata(res){
@@ -379,22 +371,22 @@ function Updateemergencydata(res){
      db.transaction(function(tx){
 		if(typeof res['data']!='undefined')
 		{
-			
 			jQuery(res['data']).each(function(index){
 				if(typeof res['data'][index]!='undefined'){
 					var q="SELECT * FROM wnh_emergencies WHERE emergency_id=?";
 					tx.executeSql(q, [res['data'][index]['id']], function(tx, rest){
-																		  //alert(res['data'][index]['measurement']);
+																		 //alert(res['data'][index]['id']);
 						if(parseInt(rest.rows.length)>0){
-							var qr="UPDATE wnh_emergencies SET company_id='"+res['data'][index]['company_id']+"', clinic_id='"+res['data'][index]['clinic_id']+"', manager_id='"+res['data'][index]['manager_id']+"', note='"+res['data'][index]['note']+"', status='"+res['data'][index]['status']+"', filepath='"+res['data'][index]['filepath']+"', filetype='"+res['data'][index]['filetype']+"', readbycompany='"+res['data'][index]['readbycompany']+"', deletebymanager='"+res['data'][index]['deletebymanager']+"', deletebycaompany='"+res['data'][index]['deletebycaompany']+"', showdate='"+res['data'][index]['showdate']+"', clinic='"+res['data'][index]['clinic']+"', clinicaddress='"+res['data'][index]['clinicaddress']+"', companyname='"+res['data'][index]['companyname']+"' WHERE emergency_id='"+res['data'][index]['id']+"'";
-							//alert(qr);
-							tx.executeSql(qr);	
+							var qr2="UPDATE wnh_emergencies SET company_id='"+res['data'][index]['company_id']+"', clinic_id='"+res['data'][index]['clinic_id']+"', manager_id='"+res['data'][index]['manager_id']+"', note='"+res['data'][index]['note']+"', status='"+res['data'][index]['status']+"', filepath='"+res['data'][index]['filepath']+"', filetype='"+res['data'][index]['filetype']+"', readbycompany='"+res['data'][index]['readbymanager']+"', deletebymanager='"+res['data'][index]['deletebymanager']+"', deletebycaompany='"+res['data'][index]['deletebycaompany']+"', showdate='"+res['data'][index]['showdate']+"', clinic='"+res['data'][index]['clinic']+"', clinicaddress='"+res['data'][index]['clinicaddress']+"', companyname='"+res['data'][index]['companyname']+"' WHERE emergency_id='"+res['data'][index]['id']+"'";
+							//alert(qr2);
+							tx.executeSql(qr2);	
 						}
 						else{
-							var qr='INSERT INTO wnh_emergencies (emergency_id, company_id, clinic_id, manager_id, note, status, filepath, mobilefilepath, filetype, cdate, readbymanager, deletebymanager, deletebycaompany, showdate, clinic, clinicaddress, measurement,companyname) VALUES ("'+res['data'][index]['id']+'", "'+res['data'][index]['company_id']+'", "'+res['data'][index]['clinic_id']+'", "'+res['data'][index]['manager_id']+'", "'+res['data'][index]['note']+'", "'+res['data'][index]['status']+'", "'+res['data'][index]['filepath']+'", "", "'+res['data'][index]['filetype']+'", "'+res['data'][index]['cdate']+'", "'+res['data'][index]['readbymanager']+'", "'+res['data'][index]['deletebymanager']+'", "'+res['data'][index]['deletebycaompany']+'", "'+res['data'][index]['showdate']+'", "'+res['data'][index]['clinic']+'", "'+res['data'][index]['clinicaddress']+'", "'+res['data'][index]['measurement']+'", "'+res['data'][index]['companyname']+'")';
+							var qr2='INSERT INTO wnh_emergencies (emergency_id, company_id, clinic_id, manager_id, note, status, filepath, mobilefilepath, filetype, cdate, readbymanager, deletebymanager, deletebycaompany, showdate, clinic, clinicaddress, measurement,companyname) VALUES ("'+res['data'][index]['id']+'", "'+res['data'][index]['company_id']+'", "'+res['data'][index]['clinic_id']+'", "'+res['data'][index]['manager_id']+'", "'+res['data'][index]['note']+'", "'+res['data'][index]['status']+'", "'+res['data'][index]['filepath']+'", "", "'+res['data'][index]['filetype']+'", "'+res['data'][index]['cdate']+'", "'+res['data'][index]['readbymanager']+'", "'+res['data'][index]['deletebymanager']+'", "'+res['data'][index]['deletebycaompany']+'", "'+res['data'][index]['showdate']+'", "'+res['data'][index]['clinic']+'", "'+res['data'][index]['clinicaddress']+'", "'+res['data'][index]['measurement']+'", "'+res['data'][index]['companyname']+'")';
 							//jQuery('body').append(qr);
-							//alert(qr);
-							tx.executeSql(qr);	
+							//alert(qr2);
+							
+							tx.executeSql(qr2);	
 						}
 						
 					});
