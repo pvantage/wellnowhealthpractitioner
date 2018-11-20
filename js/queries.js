@@ -500,15 +500,9 @@ function downloadfiles(table,filepath,id,$this){
 		cordova.file.externalApplicationStorageDirectory+filename,
 		function(entry) {
 			var mobilepath=entry.toURL();
-			alert(mobilepath);
 			Updatefiletables(table,mobilepath,id);
-			var filetype=jQuery($this).attr('data-filetype');
-			if(filetype=='video'){
-				jQuery($this).attr('onclick','return showvideo(\''+mobilepath+'\');');
-			}
-			else if(filetype=='image'){
-				jQuery($this).attr('onclick','return showimg(\''+mobilepath+'\');');
-			}
+			jQuery($this).attr('data-src',mobilepath);
+			
 		},
 		function(error) {
 			alert("download error source " + error.source);

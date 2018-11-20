@@ -492,10 +492,10 @@ function showchatmsg(){
 								}
 							}
 							if(jQuery.trim(res2.rows.item(i).filetype)=='video'){
-								note='<span class="video-wrape"><a href="javascript:;" class=".replacepath-'+res2.rows.item(i).emergency_note_id+'" data-filetype="video" onclick="return showvideo(\''+filepath+'\');"><img src="images/video1.png" alt="video" /> Click to view</a></span>';
+								note='<span class="video-wrape"><a href="javascript:;" class="palyopenvideo .replacepath-'+res2.rows.item(i).emergency_note_id+'" data-filetype="video" data-src="'+filepath+'"><img src="images/video1.png" alt="video" /> Click to view</a></span>';
 							}
 							else if(jQuery.trim(res2.rows.item(i).filetype)=='image'){
-								note='<span class="img-wrape"><a href="javascript:;" class=".replacepath-'+res2.rows.item(i).emergency_note_id+'" data-filetype="image" onclick="return showimg(\''+filepath+'\');"><i class="fa fa-picture-o" style="font-size:18px;"></i> Click to zoom</a></span>';
+								note='<span class="img-wrape"><a href="javascript:;" class="palyopenimage .replacepath-'+res2.rows.item(i).emergency_note_id+'" data-filetype="image" data-src="'+filepath+'"><i class="fa fa-picture-o" style="font-size:18px;"></i> Click to zoom</a></span>';
 							}
 						}
 						var msgg=note+' <span class="seen_'+res2.rows.item(i).emergency_note_id+' notseenmsg"></span>';
@@ -511,6 +511,14 @@ function showchatmsg(){
 				}
 				
 			}
+			jQuery('.palyopenvideo').click(function(){
+				var filep=jQuery(this).attr('data-src');
+				showvideo(''+filep+'');
+			});
+			jQuery('.palyopenimage').click(function(){
+				var filep=jQuery(this).attr('data-src');
+				showimg(''+filep+'');
+			});
 			if(showpopup){
 				jQuery('#emergency').modal();
 			}
