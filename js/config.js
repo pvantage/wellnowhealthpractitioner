@@ -186,6 +186,22 @@ function playnotification(){
    var audiop = document.getElementById('successSound');
 	audiop.play();
 }
+function checknotistatus(id){
+	db.transaction(chknotificationstatus, errorDB, successDB);
+	function chknotificationstatus(tx){
+		var q="SELECT * FROM wnh_emergency_notifications where emergency_notification_id=?";
+		var cond=[id,'pending'];
+		tx.executeSql(q, cond, function(tx, res){
+			var shownotification=false;
+			if(parseInt(res.rows.length)>0){
+				if(res.rows.item(i).status!='pending'){
+					var emergency_id=res.rows.item(i).emergency_id;
+					jQuery('.notification-'+emergency_id).remove();
+				}
+			}
+		});
+	}
+}
 function checkNotification() {
 	
 	var clinic_id=localStorage.getItem('Manager_clinic_id');
@@ -248,20 +264,8 @@ function checkNotification() {
 							}
 							htm+='</div><div class="trip-link"><a class="closenotification" href="javascript:;">CLOSE</a> <a class="viewnotification" href="emergancy.html?id='+emergency_id+'">VIEW</a></div></div>';
 							jQuery('.showpopmessage').append(htm);
-							//playbeep=true;
+							checknotistatus(id);
 							
-										
-									
-							
-							//jQuery(res['data']).each(function(index){
-								
-							//});
-							
-							
-							/*if(playbeep){
-								playnotification();
-								var interval=setInterval(playnotification,3000);
-							}*/
 						}
 					}
 				}

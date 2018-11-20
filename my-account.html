@@ -86,7 +86,7 @@
                     </div>
 					<div class="mb-3 photosbox">
 						<label class="text-white">Photo</label>
-						<a class="phone-anch" href="javascript:;" id="transuploadphoto"><i class="fa fa-camera" style="font-size:24px;"></i></a>
+						<a class="phone-anch" href="javascript:;" id="transuploadphoto" style="display:none;"><i class="fa fa-camera" style="font-size:24px;"></i></a>
 						<!--<a class="phone-anch" href="javascript:;" id="transuploadphoto2"><i class="fa fa-picture-o" style="font-size:24px;"></i></a>-->
 						<input type="hidden" name="photo" id="photo" />
 						<img id="edit_image_trans_material" class="showuploadphoto" style="display:none;" />
@@ -94,7 +94,7 @@
                     <div  class="submitwrap">
                         <div class="pull-left">
 							<img src="images/ajax-loader.gif" class="uploadloader" style="display:none;" />
-                            <button type="submit" class="btn btn-primary">Submit</button>
+                            <button type="submit" class="btn btn-primary updatebtn" style="display:none;">Submit</button>
                         </div>
                         <!--<div class="pull-right"> <a href="#" class="btn btn-dark">REGISTER</a></div>-->
                     </div>
@@ -356,7 +356,11 @@ if(typeof uid=='undefined' || uid=='' || uid=='undefined' || uid==null){
 		window.location='login.html';
 	},1000);
 }
-	
+document.addEventListener("online", showupdatebtn, false);
+function showupdatebtn(){
+	jQuery('.updatebtn').show();
+	jQuery('#transuploadphoto').show();
+}
 </script>
 </body>
 </html>

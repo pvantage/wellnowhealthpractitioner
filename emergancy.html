@@ -122,46 +122,6 @@ var que=[];
 var quenotes=[];
 var map_icon=localStorage.getItem('Manager_photo_map');
 
-/*function checkseenmsg2(){
-	var seenmsgs=localStorage.getItem('seenmsgs');
-	var seenmsgs_ids='';
-	if(typeof seenmsgs!='undefined' && seenmsgs!='' && seenmsgs!=null){
-		seenmsgs_ids=seenmsgs;
-	}
-	var emergency_id=gup('id');
-	if(emergency_id!='' && emergency_id!='0'){
-		var url=siteurl+'/api/emergencies/checkseenmsgs';
-		jQuery.ajax({  
-		 type: 'POST',  
-		 url: url,           
-		 dataType: 'json',  
-		 data: {seenmsgs_ids:seenmsgs_ids,emergency_id:emergency_id,seeby:'manager'}, 
-		 beforeSend: function() {
-			
-		 },		
-		 complete: function() {
-		 }, 
-		 crossDomain: true,  
-		 success: function(res) { 
-			if(res['seenids']){
-				jQuery(res['seenids']).each(function(index){
-					jQuery('.seen_'+res['seenids'][index]['em_msg_id']).removeClass('notseenmsg');
-					jQuery('.seen_'+res['seenids'][index]['em_msg_id']).addClass('seenmsg');
-				});
-			}
-		 },  
-		 error: function(response, d, a){
-			
-			jQuery('body .showmessage').remove();
-			var html='<div class="showmessage">Server Error.</div>';
-			jQuery('body').append(html);
-			setTimeout(function(){jQuery('.showmessage').slideUp();},1000);
-			return false; 
-		 }
-				
-	   });
-	 }
-}*/
 function checkseenmsg(){
 	var seenmsgs=localStorage.getItem('seenmsgs');
 	var seenmsgs_ids='';
@@ -365,70 +325,7 @@ function completethis(){
 		}
 	});
 }
-/*function opennotes2(showmsg){
-	var emergency_id=gup('id');
-	var url=siteurl+'/api/emergencies/getmsgs';
-	var uid= localStorage.getItem('Manager_ID');
-	 jQuery.ajax({  
-	 type: 'POST',  
-	 url: url,           
-	 dataType: 'json',  
-	 data: {emergency_id:emergency_id,seeby:'manager'}, 
-	 beforeSend: function() {
-	 	if(showmsg=='yes'){
-			jQuery('#emergency').modal();
-		}
-	 },		
-	 complete: function() {
-	 }, 
-	 crossDomain: true,  
-	 success: function(res) { 
-		if(res['notes'])
-		{
-			jQuery('.notelists').html('');
-			jQuery(res['notes']).each(function(index){
-				var clsas='clinicnote';
-				var msgg=res['notes'][index]['note']+' <span class="seen_'+res['notes'][index]['id']+' notseenmsg"></span>';
-				if(jQuery.trim(res['notes'][index]['company'])!=''){
-					msgg=res['notes'][index]['note']+' :'+res['notes'][index]['company'];
-					clsas='managernote';
-				}
-				else{
-					if(uid==res['notes'][index]['manager_id']){
-						msgg=res['notes'][index]['note']+' <span class="seen_'+res['notes'][index]['id']+' notseenmsg"></span>';
-					}
-					else{
-						msgg=res['notes'][index]['note']+' <span class="seen_'+res['notes'][index]['id']+' notseenmsg"></span>';
-						clsas='managernote';
-					}
-				}
-				jQuery('.notelists').append('<div class="note-content"><span class="'+clsas+'">'+msgg+'</span></div>');
-				
-			});
-			
-		
-		}
-		if(typeof res['measurement']!='undefined' && typeof res['measurement']['distance']!='undefined'){
-			jQuery('.displaydistance').html('Estimated Distance : '+res['measurement']['distance']+'<br>Estimated Time: '+res['measurement']['duration']);
-		}
-		setInterval(checkseenmsg,6000);
-		return false; 
-	 },  
-	 error: function(response, d, a){
-		
-		jQuery('body .showmessage').remove();
-		var html='<div class="showmessage">Server Error.</div>';
-		jQuery('body').append(html);
-		setTimeout(function(){jQuery('.showmessage').slideUp();},1000);
-		return false; 
-	 }
-			
-   });
-   if(typeof inter!='undefined'){
-		clearInterval(inter);
-	}
-	var inter=setInterval(notes,10000);
-}*/
+
 function opennotes(showmsg){
 	var emergency_id=gup('id');
 	jQuery('.notelists').html('');
@@ -443,7 +340,33 @@ function opennotes(showmsg){
 					var clsas='managernote';
 					var msgg=res.rows.item(i).note;
 					var companyname=res.rows.item(i).companyname;
-					jQuery('.notelists').append('<div class="note-content"><span class="'+clsas+'">'+msgg+' : '+companyname+'</span></div>');
+					var note=res.rows.item(i).note;
+					if(jQuery.trim(note)=='' && jQuery.trim(res.rows.item(i).filetype)!=''){
+						var filepath=res.rows.item(i).mobilefilepath;
+						if(jQuery.trim(filepath)==''){
+							filepath=res.rows.item(i).filepath;
+							var chkque=que.indexOf(res.rows.item(i).id);
+							if(chkque==-1){
+								downloadfiles('wnh_emergency_notes',filepath,res.rows.item(i).id,'.replacepathem-'+res.rows.item(i).emergency_id);
+								que.push(res.rows.item(i).id)
+							}
+						}
+						if(jQuery.trim(res.rows.item(i).filetype)=='video'){
+							note='<span class="video-wrape"><a href="javascript:;" class="palyopenvideo replacepathem-'+res.rows.item(i).emergency_note_id+'" data-filetype="video" data-src="'+filepath+'"><img src="images/video1.png" alt="video" /> Click to view</a></span>';
+						}
+						else if(jQuery.trim(res.rows.item(i).filetype)=='image'){
+							note='<span class="img-wrape"><a href="javascript:;" class="palyopenimage replacepathem-'+res.rows.item(i).emergency_note_id+'" data-filetype="image" data-src="'+filepath+'"><i class="fa fa-picture-o" style="font-size:18px;"></i> Click to zoom</a></span>';
+						}
+					}
+					jQuery('.notelists').append('<div class="note-content"><span class="'+clsas+'">'+note+' : '+companyname+'</span></div>');
+					jQuery('.palyopenvideo').click(function(){
+						var filep=jQuery(this).attr('data-src');
+						showvideo(''+filep+'');
+					});
+					jQuery('.palyopenimage').click(function(){
+						var filep=jQuery(this).attr('data-src');
+						showimg(''+filep+'');
+					});
 					showchatmsg();
 				}
 			}
@@ -561,47 +484,6 @@ function notes(){
    showchatmsg();
    
 }
-/*function getemdetail(){
-	var url=siteurl+'/api/emergencies/ergencydetail';
-	var id=gup('id');
-	var uid= localStorage.getItem('Manager_ID');
-	jQuery.ajax({  
-		type: 'POST',  
-		url: url,           
-		dataType: 'json',  
-		crossDomain: true,
-		data: {id:id,from:'doctor',doctor_id:uid}, 
-		beforeSend: function() {
-		
-		},		
-		complete: function() {
-		}, 
-		crossDomain: true,  
-		success: function(res) { 
-		if(res['data'])
-		{
-			var html='';
-			jQuery(res['data']).each(function(index){
-				if(res['data'][index]['status']=='completed')
-				{
-					window.location='emergancy-detail.html?id='+id;
-				}
-			});
-			
-		}else if(res['nodata']){				
-			//jQuery('.activity-map-wrap').append(res['nodata']);
-		}
-		
-		},  
-		error: function(response, d, a){
-			jQuery('body .showmessage').remove();
-			var html='<div class="showmessage">Server Error.</div>';
-			jQuery('body').append(html);
-			setTimeout(function(){jQuery('.showmessage').slideUp();},1000);
-			return false; 
-		}
-	});
-}*/
 jQuery(document).ready(function(){
 	jQuery( document ).on( "mobileinit", function() {
 		jQuery.mobile.allowCrossDomainPages = true;
@@ -727,82 +609,6 @@ jQuery(document).ready(function(){
         
       }
 	
-	/*var url=siteurl+'/api/emergencies/ergencydetail';
-	jQuery.ajax({  
-		type: 'POST',  
-		url: url,           
-		dataType: 'json',  
-		crossDomain: true,
-		data: {id:id,from:'doctor',doctor_id:uid}, 
-		beforeSend: function() {
-		
-		},		
-		complete: function() {
-		}, 
-		crossDomain: true,  
-		success: function(res) { 
-		if(res['data'])
-		{
-			var html='';
-			jQuery(res['data']).each(function(index){
-				//jQuery('.main-wrapper').append('<div class="text-center mb-3"><a href="tel:'+res['data'][index]['emergency_phone']+'" class="btn btn-primary">CONTACT EMERGENCY</a></div>');
-				jQuery('input[name="company_id"]').val(res['data'][index]['company_id']);
-			  	jQuery('input[name="clinic_id"]').val(res['data'][index]['clinic_id']);
-				if(res['data'][index]['status']=='completed')
-				{
-					window.location='emergancy-detail.html?id='+id;
-				}
-				var btnhtm='<div class="btm-btn-sctn">';
-				btnhtm+='<div class="text-center mb-3"><a href="tel:'+res['data'][index]['emergency_phone']+'" class="btn btn-primary">CONTACT EMERGENCY</a></div>';
-				if(res['data'][index]['emergency_phone']!=''){
-					jQuery('.submitwrap').append('<div class="pull-right"><a href="tel:'+res['data'][index]['emergency_phone']+'" class="btn btn-primary">CALL COMPANY</a></div>');
-				}
-				if(res['data'][index]['status']=='pending'){
-				btnhtm+='<div class="text-center mb-3"><a href="javascript:;" onclick="return completethis();" class="btn btn-primary">COMPLETE</a></div>';
-				}
-				btnhtm+='<div class="text-center mb-3"><a href="javascript:;" onclick="return opennotes(\'yes\');" class="btn btn-primary">MESSAGES</a></div>';
-				btnhtm+='</div>';
-				jQuery('.main-wrapper').append(btnhtm);
-				setTimeout(function(){
-				var lati=res['data'][index]['address_lati'], 
-				longi=res['data'][index]['address_longi'],
-				address=res['data'][index]['companyaddress'],
-				our_address=res['data'][index]['manager_address'], 
-				mapid='ourgmap';
-				if(jQuery.trim(res['data'][index]['manager_address'])!=''){
-					var our_address=res['data'][index]['manager_address'];
-				}
-				localStorage.setItem('Driver_Lat',res['data'][index]['current_lati']);
-				localStorage.setItem('Driver_Long',res['data'][index]['current_longi']);
-				crrentdata=res['data'][index]['otherstff'];
-				activedata['stff_lati']=res['data'][index]['active_staff_lati'];
-				activedata['staff_longi']=res['data'][index]['active_staff_longi'];
-				activedata['company_lati']=res['data'][index]['current_lati'];
-				activedata['company_longi']=res['data'][index]['current_longi'];
-				setgooglepath(lati,longi, address,our_address, mapid);
-				if(typeof res['data'][index]['measurement']!='undefined'){
-					jQuery('.displaydistance').html('Estimated Distance : '+res['data'][index]['measurement']['distance']+'<br>Estimated Time: '+res['data'][index]['measurement']['duration']);
-				}
-				setTimeout(function(){checkcurrentpostion(res['data'][index]['company_id']);},10000);
-				
-				opennotes('no');
-				},1000);
-			});
-			
-		}else if(res['nodata']){				
-			//jQuery('.activity-map-wrap').append(res['nodata']);
-		}
-		
-		},  
-		error: function(response, d, a){
-		
-		jQuery('body .showmessage').remove();
-		var html='<div class="showmessage">Server Error.</div>';
-		jQuery('body').append(html);
-		setTimeout(function(){jQuery('.showmessage').slideUp();},1000);
-		return false; 
-		}
-	});*/
 	function loademergency(id){
 		db.transaction(showlistjobs, errorDB, successDB);
 		function showlistjobs(tx){
