@@ -210,13 +210,14 @@ function checkNotification() {
 	var page = path.split("/").pop();
 	//alert(page);
 	//alert(uid);
+	var shownotification=false;
 	if(typeof uid!='undefine' && uid!='' && uid!=null){
 		db.transaction(shownotification, errorDB, successDB);
 		function shownotification(tx){
 			var q="SELECT * FROM wnh_emergency_notifications where clinic_id=? AND manager_id=? AND status=?";
 			var cond=[clinic_id,uid,'pending'];
 			tx.executeSql(q, cond, function(tx, res){
-				var shownotification=false;
+				
 				if(parseInt(res.rows.length)>0){
 					
 					for(var i = 0; i < res.rows.length; i++)
