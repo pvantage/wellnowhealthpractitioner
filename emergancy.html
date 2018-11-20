@@ -487,7 +487,7 @@ function showchatmsg(){
 								filepath=res2.rows.item(i).filepath;
 								var chkque=que.indexOf(res2.rows.item(i).id);
 								if(chkque==-1){
-									Updatefiletables('wnh_emergency_notes',filepath,res2.rows.item(i).id,'.replacepath-'+res2.rows.item(i).emergency_note_id);
+									downloadfiles('wnh_emergency_notes',filepath,res2.rows.item(i).id,'.replacepath-'+res2.rows.item(i).emergency_note_id);
 									que.push(res2.rows.item(i).id)
 								}
 							}
