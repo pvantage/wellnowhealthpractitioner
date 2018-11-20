@@ -505,9 +505,9 @@ function downloadfiles(table,filepath,id,$this){
 			
 		},
 		function(error) {
-			alert("download error source " + error.source);
-			alert("download error target " + error.target);
-			alert("download error code" + error.code);
+			//alert("download error source " + error.source);
+			//alert("download error target " + error.target);
+			//alert("download error code" + error.code);
 		},
 		null,
 		{
