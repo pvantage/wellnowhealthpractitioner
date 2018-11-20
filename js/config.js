@@ -279,9 +279,6 @@ function checkNotification() {
 					setTimeout(playnotification,500);
 				}
 				jQuery('a.closenotification').click(function(){
-					var emid=jQuery(this).attr('data-id');
-					var qr="UPDATE wnh_emergency_notifications SET deletenotification='1' WHERE emergency_id='"+emid+"'";
-					tx.executeSql(qr);
 					jQuery(this).parents('.trip-notification').remove();
 					var totalnoti=jQuery('.trip-notification').length;
 					if(parseInt(totalnoti)<=0){
@@ -289,6 +286,11 @@ function checkNotification() {
 					}
 					var audiop = document.getElementById('successSound');
 					audiop.pause();
+					var emid=jQuery(this).attr('data-id');
+					db.transaction(function(tx){
+						var qr="UPDATE wnh_emergency_notifications SET deletenotification='1' WHERE emergency_id='"+emid+"'";
+						tx.executeSql(qr);
+					},  function(){}, function(){});
 					//clearInterval(interval);
 				});
 			});
