@@ -869,7 +869,27 @@ jQuery(document).ready(function(){
 					}
 				}
 				else{
-					//setTimeout(function(){window.location='';},4000);
+					
+					var url=siteurl+'/api/updates/companyemergencies';
+					jQuery.ajax({  
+						type: 'POST',  
+						url: url,           
+						dataType: 'json',  
+						crossDomain: true,
+						data: {emid:id}, 
+						beforeSend: function() {
+						
+						},		
+						complete: function() {
+							setTimeout(function(){window.location='';},4000);
+						}, 
+						crossDomain: true,  
+						success: Updateemergencydata,  
+						error: function(response, d, a){
+					
+						return false; 
+						}
+					});
 				}
 				
 			});
