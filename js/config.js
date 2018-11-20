@@ -216,8 +216,8 @@ function checkNotification() {
 	if(typeof uid!='undefine' && uid!='' && uid!=null){
 		db.transaction(shownotification, errorDB, successDB);
 		function shownotification(tx){
-			var q="SELECT * FROM wnh_emergency_notifications where clinic_id=? AND manager_id=? AND status=?";
-			var cond=[clinic_id,uid,'pending'];
+			var q="SELECT * FROM wnh_emergency_notifications where clinic_id=? AND manager_id=? AND status=? AND deletenotification=?";
+			var cond=[clinic_id,uid,'pending','0'];
 			tx.executeSql(q, cond, function(tx, res){
 				var audiop = document.getElementById('successSound');
 				audiop.pause();
@@ -267,7 +267,7 @@ function checkNotification() {
 							if(jQuery.trim(res.rows.item(i).notification_text)!=''){
 								htm+='<div class="trip-title">Note: '+res.rows.item(i).notification_text+'</div>';
 							}
-							htm+='</div><div class="trip-link"><a class="closenotification" href="javascript:;">CLOSE</a> <a class="viewnotification" href="emergancy.html?id='+emergency_id+'">VIEW</a></div></div>';
+							htm+='</div><div class="trip-link"><a class="closenotification" data-id="'+emergency_id+'" href="javascript:;">CLOSE</a> <a class="viewnotification" href="emergancy.html?id='+emergency_id+'">VIEW</a></div></div>';
 							jQuery('.showpopmessage').append(htm);
 							checknotistatus(id);
 							
@@ -279,6 +279,9 @@ function checkNotification() {
 					setTimeout(playnotification,500);
 				}
 				jQuery('a.closenotification').click(function(){
+					var emid=jQuery(this).attr('data-id');
+					var qr="UPDATE wnh_emergency_notifications SET deletenotification='1' WHERE emergency_id='"+emid+"'";
+					tx.executeSql(qr);
 					jQuery(this).parents('.trip-notification').remove();
 					var totalnoti=jQuery('.trip-notification').length;
 					if(parseInt(totalnoti)<=0){
