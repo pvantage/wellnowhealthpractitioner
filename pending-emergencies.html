@@ -121,7 +121,7 @@ if(typeof uid=='undefined' || uid=='' || uid=='undefined' || uid==null){
 function loademergencies(){
 	db.transaction(showlistjobs, errorDB, successDB);
 	function showlistjobs(tx){
-		var q="SELECT e.*, c.address as caddress, c.name as cname FROM wnh_emergencies as e,wnh_company as c where e.company_id=c.company_id AND e.status=? AND e.deletebymanager=? AND e.manager_id=?";
+		var q="SELECT e.*, c.address as caddress, c.name as cname FROM wnh_emergencies as e,wnh_company as c where e.company_id=c.company_id AND e.status=? AND e.deletebymanager=? AND e.manager_id=? ORDER BY e.id DESC";
 		var cond=['pending', '0', uid];
 		tx.executeSql(q, cond, function(tx, res){
 			if(parseInt(res.rows.length)>0){
