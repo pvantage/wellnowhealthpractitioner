@@ -480,9 +480,20 @@ function Updatefiletables(table,mobilepath,id){
 		}
 	},  importerrorDB, successDB);
 }
+document.addEventListener("deviceready", onDeviceReady, false);
+var fileTransfer;
+// use file transfer after onDeviceReady() was called         
+function onDeviceReady() {
+    fileTransfer = new FileTransfer();
+   
+}
 function downloadfiles(table,filepath,id,$this){
+	var filepaths=filepath.split('/');
+	var filename=filepaths[filepaths.length-1];
+	//alert(filename);
 	var fileTransfer = new FileTransfer();
 	var uri = encodeURI(filepath);
+	var fileURL='/'+filename;
 	 
 	fileTransfer.download(
 		uri,
@@ -504,11 +515,11 @@ function downloadfiles(table,filepath,id,$this){
 			alert("download error target " + error.target);
 			alert("download error code" + error.code);
 		},
-		false,
+		null,
 		{
-			headers: {
-				"Authorization": "Basic dGVzdHVzZXJuYW1lOnRlc3RwYXNzd29yZA=="
-			}
+			//headers: {
+				//"Authorization": "Basic dGVzdHVzZXJuYW1lOnRlc3RwYXNzd29yZA=="
+			//}
 		}
 	);
 }
