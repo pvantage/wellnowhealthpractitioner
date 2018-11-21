@@ -1,20 +1,11 @@
 var wd=jQuery(window).width();
 function updategardenerdata(){}
 function checkonlineoffline(){
-	if(parseInt(wd)<=700){
-		document.addEventListener("online", checkfornewupdates, false);
-	}
-	else{
-		checkfornewupdates();
-	}
+	checkfornewupdates();
 }
 setInterval(checkonlineoffline,10000);
 function checkonlineofflinefast(){
-	if(parseInt(wd)<=700){
-		document.addEventListener("online", fastupdates, false);
-	}else{
-		fastupdates();
-	}
+	fastupdates();
 }
 setInterval(checkonlineofflinefast,2000);
 
