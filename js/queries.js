@@ -471,8 +471,13 @@ function Updatefiletables(table,mobilepath,id){
 		if(mobilepath!='' && table!='' && id!='')
 		{
 			var qr="UPDATE "+table+" SET mobilefilepath='"+mobilepath+"' WHERE id='"+id+"'";
-			//alert(qr);
 			tx.executeSql(qr);	
+			if(filetype=='video'){
+				jQuery('.notelists .video-wrape-'+id).html('<a href="javascript:;" onclick="return showvideo(\''+mobilepath+'\');"><img src="images/video1.png" alt="video" /> Click to view</a>');	
+			}
+			else if(filetype=='image'){
+				jQuery('.notelists .img-wrape-'+id).html('<a href="javascript:;" onclick="return showimg(\''+mobilepath+'\');"><i class="fa fa-picture-o" style="font-size:18px;"></i> Click to zoom</a>');	
+			}
 		}
 	},  importerrorDB, successDB);
 }
@@ -504,13 +509,6 @@ function downloadfiles(table,filepath,id,filetype){
 		function(entry) {
 			var mobilepath=entry.toURL();
 			Updatefiletables(table,mobilepath,id);
-			jQuery($this).attr('data-src',mobilepath);
-			if(filetype=='video'){
-				jQuery('.notelists .video-wrape-'+id).html('<a href="javascript:;" onclick="return showvideo(\''+mobilepath+'\');"><img src="images/video1.png" alt="video" /> Click to view</a>');	
-			}
-			else if(filetype=='image'){
-				jQuery('.notelists .img-wrape-'+id).html('<a href="javascript:;" onclick="return showimg(\''+mobilepath+'\');"><i class="fa fa-picture-o" style="font-size:18px;"></i> Click to zoom</a>');	
-			}
 		},
 		function(error) {
 			//alert("download error source " + error.source);
