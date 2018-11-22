@@ -466,7 +466,7 @@ function successDB() {
    // alert("success!");
 }
 
-function Updatefiletables(table,mobilepath,id){
+function Updatefiletables(table,mobilepath,id,filetype){
      db.transaction(function(tx){
 		if(mobilepath!='' && table!='' && id!='')
 		{
@@ -508,7 +508,7 @@ function downloadfiles(table,filepath,id,filetype){
 		cordova.file.externalApplicationStorageDirectory+filename,
 		function(entry) {
 			var mobilepath=entry.toURL();
-			Updatefiletables(table,mobilepath,id);
+			Updatefiletables(table,mobilepath,id,filetype);
 		},
 		function(error) {
 			//alert("download error source " + error.source);
