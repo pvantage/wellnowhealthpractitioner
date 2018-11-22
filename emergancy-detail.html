@@ -186,7 +186,7 @@ function showchatmsg(){
 	var showpopup=false;
 	db.transaction(pushnote, updateerrorDB, successDB);
    function pushnote(tx){
-   		var q="SELECT n.*, m.name as company FROM wnh_emergency_notes as n, wnh_company as m, wnh_emergencies as e where e.emergency_id=n.emergency_id and e.company_id=m.company_id and n.emergency_id=?";
+   		var q="SELECT n.*, m.name as company FROM wnh_emergency_notes as n, wnh_company as m, wnh_emergencies as e where e.emergency_id=n.emergency_id and e.company_id=m.company_id and n.emergency_id=? GROUP BY n.emergency_note_id";
 		var cond=[emergency_id];
 		tx.executeSql(q, cond, function(tx, res2){
 			if(parseInt(res2.rows.length)>0){

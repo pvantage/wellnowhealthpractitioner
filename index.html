@@ -43,7 +43,7 @@
 	<script type="text/javascript">
 	rebute=false;
 	</script>
-	<script type="text/javascript" src="js/database.js"></script>
+	
 	<script type="text/javascript">
 	jQuery(document).ready(function(){
 		//jQuery('.logobox img').css({'min-height':jQuery(window).height()+'px'});
@@ -51,15 +51,17 @@
 	
 	var uid=localStorage.getItem('Manager_ID');
 	if(typeof uid!='undefine' && uid!='' && uid!=null){
-		checkloggedin(uid);
+		window.location='your-location.html';
 	}
 	else
 	{
+		rebute=true;
 		setTimeout(function(){
 			window.location='login.html';
 		},1000);
 	}
 		
 	</script>
+	<script type="text/javascript" src="js/database.js"></script>
 </body>
 </html>
