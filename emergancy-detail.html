@@ -121,11 +121,13 @@ function getdistance(fromlati,fromlongi,fromaddress,tolati,tolongi,toaddress){
 				console.log(results);
 				for (var j = 0; j < results.length; j++) {
 					var element = results[j];
-					var distance = element.distance.text;
-					var duration = element.duration.text;
-					jQuery('.displaydistance').html('Estimated Distance : '+distance+'<br>Estimated Time: '+duration);
-					var from = origins[i];
-					var to = destinations[j];
+					if(typeof element.distance.text!='undefined'){
+						var distance = element.distance.text;
+						var duration = element.duration.text;
+						jQuery('.displaydistance').html('Estimated Distance : '+distance+'<br>Estimated Time: '+duration);
+						var from = origins[i];
+						var to = destinations[j];
+					}
 				}
 			}
 		}
@@ -198,19 +200,35 @@ function showchatmsg(){
 					var note=res2.rows.item(i).note;
 					if(jQuery.trim(note)=='' && jQuery.trim(res2.rows.item(i).filetype)!=''){
 						var filepath=res2.rows.item(i).mobilefilepath;
+						var mobilefilepath=res2.rows.item(i).mobilefilepath;
 						if(jQuery.trim(filepath)==''){
 							filepath=res2.rows.item(i).filepath;
-							var chkque=que.indexOf(res2.rows.item(i).id);
+							/*var chkque=que.indexOf(res2.rows.item(i).id);
 							if(chkque==-1){
-								Updatefiletables('wnh_emergency_notes',filepath,res2.rows.item(i).id,'.replacepath-'+res2.rows.item(i).emergency_note_id);
+								downloadfiles('wnh_emergency_notes',filepath,res2.rows.item(i).id,'.replacepath-'+res2.rows.item(i).emergency_note_id);
 								que.push(res2.rows.item(i).id)
-							}
+							}*/
 						}
+						var emnotid=res2.rows.item(i).id;
+						var filetype=res2.rows.item(i).filetype;
+						var table='wnh_emergency_notes';
 						if(jQuery.trim(res2.rows.item(i).filetype)=='video'){
-							note='<span class="video-wrape"><a href="javascript:;" class="palyopenvideo replacepath-'+res2.rows.item(i).emergency_note_id+'" data-filetype="video" data-src="'+filepath+'"><img src="images/video1.png" alt="video" /> Click to view</a></span>';
+							if(jQuery.trim(mobilefilepath)==''){
+								note='<span class="video-wrape video-wrape-'+emnotid+'"><a href="javascript:;" onclick="return downloadfiles(\''+table+'\', \''+filepath+'\', \''+emnotid+'\', \''+filetype+'\')"><img src="images/video1.png" alt="video" /> Click to download</a></span>';
+							}
+							else{
+								note='<span class="video-wrape"><a href="javascript:;" onclick="return showvideo(\''+filepath+'\');"><img src="images/video1.png" alt="video" /> Click to view</a></span>';
+							}
+							
 						}
 						else if(jQuery.trim(res2.rows.item(i).filetype)=='image'){
-							note='<span class="img-wrape"><a href="javascript:;" class="palyopenimage replacepath-'+res2.rows.item(i).emergency_note_id+'" data-filetype="image" data-src="'+filepath+'"><i class="fa fa-picture-o" style="font-size:18px;"></i> Click to zoom</a></span>';
+							
+							if(jQuery.trim(mobilefilepath)==''){
+								note='<span class="img-wrape img-wrape-'+emnotid+'"><a href="javascript:;" onclick="return downloadfiles(\''+table+'\', \''+filepath+'\', \''+emnotid+'\', \''+filetype+'\')"><i class="fa fa-picture-o" style="font-size:18px;"></i> Click to download</a></span>';
+							}
+							else{
+								note='<span class="img-wrape"><a href="javascript:;" onclick="return showimg(\''+filepath+'\');"><i class="fa fa-picture-o" style="font-size:18px;"></i> Click to zoom</a></span>';
+							}
 						}
 					}
 					var msgg=note+' <span class="seen_'+res2.rows.item(i).emergency_note_id+' notseenmsg"></span>';
@@ -225,14 +243,14 @@ function showchatmsg(){
 									
 				
 			}
-			jQuery('.palyopenvideo').click(function(){
+			/*jQuery('.palyopenvideo').click(function(){
 				var filep=jQuery(this).attr('data-src');
 				showvideo(''+filep+'');
 			});
 			jQuery('.palyopenimage').click(function(){
 				var filep=jQuery(this).attr('data-src');
 				showimg(''+filep+'');
-			});
+			});*/
 			if(showpopup){
 				//jQuery('#emergency').modal();
 			}
@@ -256,31 +274,42 @@ function opennotes(){
 					var note=res.rows.item(i).note;
 					if(jQuery.trim(note)=='' && jQuery.trim(res.rows.item(i).filetype)!=''){
 						var filepath=res.rows.item(i).mobilefilepath;
+						var mobilefilepath=res.rows.item(i).mobilefilepath;
 						if(jQuery.trim(filepath)==''){
 							filepath=res.rows.item(i).filepath;
-							var chkque=que.indexOf(res.rows.item(i).id);
-							if(chkque==-1){
-								downloadfiles('wnh_emergency_notes',filepath,res.rows.item(i).id,'.replacepathem-'+res.rows.item(i).emergency_id);
-								que.push(res.rows.item(i).id)
-							}
 						}
+						var emnotid=res.rows.item(i).id;
+						var filetype=res.rows.item(i).filetype;
+						var table='wnh_emergency_notes';
 						if(jQuery.trim(res.rows.item(i).filetype)=='video'){
-							note='<span class="video-wrape"><a href="javascript:;" class="palyopenvideo replacepathem-'+res.rows.item(i).emergency_note_id+'" data-filetype="video" data-src="'+filepath+'"><img src="images/video1.png" alt="video" /> Click to view</a></span>';
+							if(jQuery.trim(mobilefilepath)==''){
+								note='<span class="video-wrape video-wrape-'+emnotid+'"><a href="javascript:;" onclick="return downloadfiles(\''+table+'\', \''+filepath+'\', \''+emnotid+'\', \''+filetype+'\')"><img src="images/video1.png" alt="video" /> Click to download</a></span>';
+							}
+							else{
+								note='<span class="video-wrape"><a href="javascript:;" onclick="return showvideo(\''+filepath+'\');"><img src="images/video1.png" alt="video" /> Click to view</a></span>';
+							}
+							
 						}
 						else if(jQuery.trim(res.rows.item(i).filetype)=='image'){
-							note='<span class="img-wrape"><a href="javascript:;" class="palyopenimage replacepathem-'+res.rows.item(i).emergency_note_id+'" data-filetype="image" data-src="'+filepath+'"><i class="fa fa-picture-o" style="font-size:18px;"></i> Click to zoom</a></span>';
+							
+							if(jQuery.trim(mobilefilepath)==''){
+								note='<span class="img-wrape img-wrape-'+emnotid+'"><a href="javascript:;" onclick="return downloadfiles(\''+table+'\', \''+filepath+'\', \''+emnotid+'\', \''+filetype+'\')"><i class="fa fa-picture-o" style="font-size:18px;"></i> Click to download</a></span>';
+							}
+							else{
+								note='<span class="img-wrape"><a href="javascript:;" onclick="return showimg(\''+filepath+'\');"><i class="fa fa-picture-o" style="font-size:18px;"></i> Click to view</a></span>';
+							}
 						}
 					}
 					jQuery('.notelists').append('<div class="note-content"><span class="'+clsas+'">'+note+' : '+companyname+'</span></div>');
-					jQuery('.palyopenvideo').click(function(){
+					/*jQuery('.palyopenvideo').click(function(){
 						var filep=jQuery(this).attr('data-src');
 						showvideo(''+filep+'');
 					});
 					jQuery('.palyopenimage').click(function(){
 						var filep=jQuery(this).attr('data-src');
 						showimg(''+filep+'');
-					});
-					showchatmsg();
+					});*/
+					//showchatmsg();
 				}
 			}
 		});

@@ -483,7 +483,14 @@ function onDeviceReady() {
     fileTransfer = new FileTransfer();
    
 }
-function downloadfiles(table,filepath,id,$this){
+function downloadfiles(table,filepath,id,filetype){
+	
+	if(filetype=='video'){
+		jQuery('.notelists .video-wrape-'+id+' a').html('<img src="images/video1.png" alt="video" /> Downloading...');	
+	}
+	else if(filetype=='image'){
+		jQuery('.notelists .img-wrape-'+id+' a').html('<i class="fa fa-picture-o" style="font-size:18px;"></i> Downloading...');	
+	}
 	var filepaths=filepath.split('/');
 	var filename=filepaths[filepaths.length-1];
 	//alert(filename);
@@ -498,7 +505,12 @@ function downloadfiles(table,filepath,id,$this){
 			var mobilepath=entry.toURL();
 			Updatefiletables(table,mobilepath,id);
 			jQuery($this).attr('data-src',mobilepath);
-			
+			if(filetype=='video'){
+				jQuery('.notelists .video-wrape-'+id).html('<a href="javascript:;" onclick="return showvideo(\''+mobilepath+'\');"><img src="images/video1.png" alt="video" /> Click to view</a>');	
+			}
+			else if(filetype=='image'){
+				jQuery('.notelists .img-wrape-'+id).html('<a href="javascript:;" onclick="return showimg(\''+mobilepath+'\');"><i class="fa fa-picture-o" style="font-size:18px;"></i> Click to zoom</a>');	
+			}
 		},
 		function(error) {
 			//alert("download error source " + error.source);
