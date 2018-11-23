@@ -333,6 +333,7 @@ function showimg(imgurl){
 	//var url=siteurl+'/api/emergencies/showmdeiafile/?file='+imgurl+'&ftype=image';
 	//cordova.InAppBrowser.open('showimg.html?file='+imgurl, '_blank', 'location=yes');	
 	//cordova.InAppBrowser.open(url, '_blank', 'location=yes');	
+	//showimg('http://vantageappspro.com/wellnowhealth/uploads/emergencies/1_1542974538.jpg')
 	
 	var vd='<img src="'+imgurl+'" class="loadimage" />';
 	jQuery('#playvideos .modal-body').html(vd);

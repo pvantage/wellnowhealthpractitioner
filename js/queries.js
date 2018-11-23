@@ -450,7 +450,7 @@ function Adduchatnotes(res){
 							var qr='INSERT INTO wnh_emergency_notes (emergency_note_id, emergency_id, note, filepath, mobilefilepath, filetype, manager_id, company_id, cdate, readbycompany, readbymanager, parent_id, notify) VALUES ("'+res['data'][index]['id']+'", "'+res['data'][index]['emergency_id']+'", "'+res['data'][index]['note']+'", "'+res['data'][index]['filepath']+'", "", "'+res['data'][index]['filetype']+'", "'+res['data'][index]['manager_id']+'", "'+res['data'][index]['company_id']+'", "'+res['data'][index]['cdate']+'", "'+res['data'][index]['readbycompany']+'", "'+res['data'][index]['readbymanager']+'", "'+res['data'][index]['parent_id']+'", "'+res['data'][index]['notify']+'")';
 							//jQuery('body').append(qr);
 							//alert(qr);
-							//tx.executeSql(qr);	
+							tx.executeSql(qr);	
 						}
 						
 					});
@@ -492,7 +492,6 @@ function addchatnotes(){
 										
 						 },		
 						 complete: function() {
-									
 						 },
 						 success: Adduchatnotes,  
 						 error: function(response, d, a){
@@ -538,7 +537,7 @@ function Updatefiletables(table,mobilepath,id,filetype){
 		{
 			var qr="UPDATE "+table+" SET mobilefilepath='"+mobilepath+"' WHERE id='"+id+"'";
 			tx.executeSql(qr);	
-			alert(table+'-'+mobilepath+'-'+id+'-'+filetype+'-'+'Update');
+			//alert(table+'-'+mobilepath+'-'+id+'-'+filetype+'-'+'Update');
 			if(filetype=='video'){
 				jQuery('.notelists .video-wrape-'+id).html('<a href="javascript:;" onclick="return showvideo(\''+mobilepath+'\');"><img src="images/video1.png" alt="video" /> Click to view</a>');	
 			}
@@ -575,7 +574,7 @@ function downloadfiles(table,filepath,id,filetype){
 		cordova.file.externalApplicationStorageDirectory+filename,
 		function(entry) {
 			var mobilepath=entry.toURL();
-			alert(table+'-'+mobilepath+'-'+id+'-'+filetype+'-'+'add');
+			//alert(table+'-'+mobilepath+'-'+id+'-'+filetype+'-'+'add');
 			Updatefiletables(table,mobilepath,id,filetype);
 		},
 		function(error) {
