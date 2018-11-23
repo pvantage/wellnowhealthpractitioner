@@ -7,7 +7,7 @@ setInterval(checkonlineoffline,10000);
 function checkonlineofflinefast(){
 	fastupdates();
 }
-setInterval(checkonlineofflinefast,2000);
+setInterval(checkonlineofflinefast,5000);
 
 //updategardenerdata();
 function updatejobdata8(res){
@@ -413,10 +413,10 @@ function Updateemergencynotedata(res){
 							tx.executeSql(qr);	
 						}
 						else{
-							var qr='INSERT INTO wnh_emergency_notes (emergency_note_id, emergency_id, note, filepath, mobilefilepath, filetype, manager_id, company_id, cdate, readbycompany, readbymanager, parent_id, notify) VALUES ("'+res['data'][index]['id']+'", "'+res['data'][index]['emergency_id']+'", "'+res['data'][index]['note']+'", "'+res['data'][index]['filepath']+'", "", "'+res['data'][index]['filetype']+'", "'+res['data'][index]['manager_id']+'", "'+res['data'][index]['company_id']+'", "'+res['data'][index]['cdate']+'", "'+res['data'][index]['readbycompany']+'", "'+res['data'][index]['readbymanager']+'", "'+res['data'][index]['parent_id']+'", "'+res['data'][index]['notify']+'")';
+							//var qr='INSERT INTO wnh_emergency_notes (emergency_note_id, emergency_id, note, filepath, mobilefilepath, filetype, manager_id, company_id, cdate, readbycompany, readbymanager, parent_id, notify) VALUES ("'+res['data'][index]['id']+'", "'+res['data'][index]['emergency_id']+'", "'+res['data'][index]['note']+'", "'+res['data'][index]['filepath']+'", "", "'+res['data'][index]['filetype']+'", "'+res['data'][index]['manager_id']+'", "'+res['data'][index]['company_id']+'", "'+res['data'][index]['cdate']+'", "'+res['data'][index]['readbycompany']+'", "'+res['data'][index]['readbymanager']+'", "'+res['data'][index]['parent_id']+'", "'+res['data'][index]['notify']+'")';
 							//jQuery('body').append(qr);
 							//alert(qr);
-							tx.executeSql(qr);	
+							//tx.executeSql(qr);	
 						}
 						
 					});
@@ -431,21 +431,7 @@ function Updateemergencynotedata(res){
 		//alert("Error processing SQL3: "+err.message);
     }, successDB);
 }
-function Updateremovejobdata(res){
-     db.transaction(function(tx){
-		if(res['data'])
-		{
-			jQuery(res['data']).each(function(index){
-				if(typeof res['data'][index]!='undefined'){
-					var q="DELETE FROM jobs WHERE job_id='"+res['data'][index]['ID']+"' AND user_id='"+uid+"'";
-					tx.executeSql(q);
-				}
-			});
-			
-		}
-						 
-		},  importerrorDB, successDB);
-}
+
 
 function errorDB(tx, err) {
 	//alert("Error processing SQL: "+err);
@@ -472,6 +458,7 @@ function Updatefiletables(table,mobilepath,id,filetype){
 		{
 			var qr="UPDATE "+table+" SET mobilefilepath='"+mobilepath+"' WHERE id='"+id+"'";
 			tx.executeSql(qr);	
+			alert(table+'-'+mobilepath+'-'+id+'-'+filetype+'-'+'Update');
 			if(filetype=='video'){
 				jQuery('.notelists .video-wrape-'+id).html('<a href="javascript:;" onclick="return showvideo(\''+mobilepath+'\');"><img src="images/video1.png" alt="video" /> Click to view</a>');	
 			}
@@ -508,6 +495,7 @@ function downloadfiles(table,filepath,id,filetype){
 		cordova.file.externalApplicationStorageDirectory+filename,
 		function(entry) {
 			var mobilepath=entry.toURL();
+			alert(table+'-'+mobilepath+'-'+id+'-'+filetype+'-'+'add');
 			Updatefiletables(table,mobilepath,id,filetype);
 		},
 		function(error) {

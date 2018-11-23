@@ -505,6 +505,31 @@ function notes(){
 	 }, 
 	 crossDomain: true,  
 	 success: function(res) { 
+	 	if(res['notes'] && jQuery.trim(res['notes'])!='')
+		{
+			jQuery(res['notes']).each(function(index){
+				/*var clsas='clinicnote';
+				var msgg=res['notes'][index]['note'];
+				if(jQuery.trim(res['notes'][index]['manager'])!=''){
+					msgg=res['notes'][index]['note']+' :'+res['notes'][index]['manager'];
+					clsas='managernote';
+				}
+				else{
+					msgg=res['notes'][index]['note'];
+				}
+				jQuery('.notelists').append('<div class="note-content"><span class="'+clsas+'">'+msgg+'</div>');*/
+				
+				db.transaction(function(tx){
+					var qr='INSERT INTO wnh_emergency_notes (emergency_note_id, emergency_id, note, filepath, filetype, manager_id, company_id, cdate, readbycompany, readbymanager, parent_id, notify,mobilefilepath) VALUES ("'+res['notes'][index]['emergency_note_id']+'", "'+emergency_id+'", "'+res['notes'][index]['note']+'", "'+res['notes'][index]['filepath']+'", "'+res['notes'][index]['filetype']+'", "'+res['notes'][index]['manager_id']+'", "'+res['notes'][index]['company_id']+'", "'+res['notes'][index]['cdate']+'", "'+res['notes'][index]['readbycompany']+'", "'+res['notes'][index]['readbymanager']+'", "'+res['notes'][index]['parent_id']+'", "'+res['notes'][index]['notify']+'","")';
+					tx.executeSql(qr);
+					//opennotes('yes');
+					
+					jQuery('#emergency').modal();
+				});
+			});
+			
+		
+		}
 		if(typeof res['emstatus']!='undefined' && res['emstatus']!=''){
 			if(res['emstatus']=='completed')
 			{
@@ -835,7 +860,7 @@ jQuery(document).ready(function(){
 						db.transaction(function(tx){
 							var qr='INSERT INTO wnh_emergency_notes (emergency_note_id, emergency_id, note, filepath, mobilefilepath, filetype, manager_id, company_id, cdate, readbycompany, readbymanager, parent_id, notify) VALUES ("'+res['emnotes'][index]['id']+'", "'+res['emnotes'][index]['emergency_id']+'", "'+res['emnotes'][index]['note']+'", "'+res['emnotes'][index]['filepath']+'", "", "'+res['emnotes'][index]['filetype']+'", "'+res['emnotes'][index]['manager_id']+'", "'+res['emnotes'][index]['company_id']+'", "'+res['emnotes'][index]['cdate']+'", "0", "'+res['emnotes'][index]['readbymanager']+'", "'+res['emnotes'][index]['parent_id']+'", "'+res['emnotes'][index]['notify']+'")';
 							tx.executeSql(qr);
-							
+							quenotes.push(res['emnotes'][index]['id']);
 						});
 					});
 					showchatmsg();
