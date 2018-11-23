@@ -72,7 +72,7 @@ if(typeof uid=='undefined' || uid=='' || uid=='undefined' || uid==null){
 		window.location='login.html';
 	},1000);
 }
-
+addchatnotes();
 function loademergencies(){
 	db.transaction(showlistjobs, errorDB, successDB);
 	function showlistjobs(tx){

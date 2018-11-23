@@ -431,8 +431,88 @@ function Updateemergencynotedata(res){
 		//alert("Error processing SQL3: "+err.message);
     }, successDB);
 }
-
-
+function Adduchatnotes(res){
+     db.transaction(function(tx){
+		if(typeof res['data']!='undefined')
+		{
+			
+			jQuery(res['data']).each(function(index){
+				if(typeof res['data'][index]!='undefined'){
+					
+					var q="SELECT * FROM wnh_emergency_notes WHERE emergency_note_id=?";
+					tx.executeSql(q, [res['data'][index]['id']], function(tx, rest){
+						if(parseInt(rest.rows.length)>0){
+							//var qr="UPDATE wnh_emergency_notes SET emergency_id='"+res['data'][index]['emergency_id']+"', note='"+res['data'][index]['note']+"', filepath='"+res['data'][index]['filepath']+"', filetype='"+res['data'][index]['filetype']+"', manager_id='"+res['data'][index]['manager_id']+"', company_id='"+res['data'][index]['company_id']+"', readbycompany='"+res['data'][index]['readbycompany']+"', readbymanager='"+res['data'][index]['readbymanager']+"', parent_id='"+res['data'][index]['parent_id']+"', notify='"+res['data'][index]['notify']+"' WHERE emergency_note_id='"+res['data'][index]['id']+"'";
+							//alert(qr);
+							//tx.executeSql(qr);	
+						}
+						else{
+							var qr='INSERT INTO wnh_emergency_notes (emergency_note_id, emergency_id, note, filepath, mobilefilepath, filetype, manager_id, company_id, cdate, readbycompany, readbymanager, parent_id, notify) VALUES ("'+res['data'][index]['id']+'", "'+res['data'][index]['emergency_id']+'", "'+res['data'][index]['note']+'", "'+res['data'][index]['filepath']+'", "", "'+res['data'][index]['filetype']+'", "'+res['data'][index]['manager_id']+'", "'+res['data'][index]['company_id']+'", "'+res['data'][index]['cdate']+'", "'+res['data'][index]['readbycompany']+'", "'+res['data'][index]['readbymanager']+'", "'+res['data'][index]['parent_id']+'", "'+res['data'][index]['notify']+'")';
+							//jQuery('body').append(qr);
+							//alert(qr);
+							//tx.executeSql(qr);	
+						}
+						
+					});
+				}
+			});
+			
+		}
+						 
+		},  function errorCB(err) {
+        //alert("Error processing SQL1: "+err);
+		//alert("Error processing SQL2: "+err.code);
+		//alert("Error processing SQL3: "+err.message);
+    }, successDB);
+}
+function addchatnotes(){
+	
+	var uid=localStorage.getItem('Manager_ID');
+	if(typeof uid!='undefine' && uid!='' && uid!=null){
+			
+		db.transaction(checkupdatefornotes, updateerrorDB, successDB);
+		function checkupdatefornotes(tx){
+			var q="SELECT * FROM wnh_emergencies WHERE manager_id=?";
+			var cond=[uid];
+			tx.executeSql(q, cond, function(tx, res2){
+				if(parseInt(res2.rows.length)>0){
+					
+					for(var i = 0; i < res2.rows.length; i++)
+					{
+						var id=res2.rows.item(i).id;
+						var emergency_id=res2.rows.item(i).emergency_id;
+						var url=siteurl+'/api/updates/getmsgs';
+						jQuery.ajax({  
+						 type: 'POST',  
+						 url: url,  
+						 dataType: 'json',
+						 data: {id:id, emergency_id:emergency_id},  
+						 crossDomain: true,  
+						 beforeSend: function() {
+										
+						 },		
+						 complete: function() {
+									
+						 },
+						 success: Adduchatnotes,  
+						 error: function(response, d, a){
+							/*jQuery('body .showmessage').remove();
+							var html='<div class="showmessage">Server Error in update data5.</div>';
+							jQuery('body').append(html);
+							setTimeout(function(){jQuery('.showmessage').slideUp();},1000);*/
+							
+						 } 
+					   });
+							
+					}
+					
+				}
+			});
+			
+		}
+		
+	}
+}
 function errorDB(tx, err) {
 	//alert("Error processing SQL: "+err);
 	//alert("Error processing SQL: "+err.message);
