@@ -330,9 +330,14 @@ function showvideo(videourl){
 	cordova.InAppBrowser.open(url, '_blank', 'location=yes');	
 }*/
 function showimg(imgurl){
-	var url=siteurl+'/api/emergencies/showmdeiafile/?file='+imgurl+'&ftype=image';
-	cordova.InAppBrowser.open('showimg.html?file='+imgurl, '_blank', 'location=yes');	
+	//var url=siteurl+'/api/emergencies/showmdeiafile/?file='+imgurl+'&ftype=image';
+	//cordova.InAppBrowser.open('showimg.html?file='+imgurl, '_blank', 'location=yes');	
 	//cordova.InAppBrowser.open(url, '_blank', 'location=yes');	
+	
+	var vd='<img src="'+imgurl+'" class="loadimage" />';
+	jQuery('#playvideos .modal-body').html(vd);
+	jQuery('#emergency').modal('hide');
+	jQuery('#playvideos').modal();
 }
 function showvideo(videourl){
 	//showvideo('http://vantageappspro.com/wellnowhealth/uploads/emergencies/1_1542891378.mp4')
@@ -341,14 +346,19 @@ function showvideo(videourl){
 	//cordova.InAppBrowser.open('showvideo.html?file='+videourl, '_blank', 'location=yes');	
 	var wh=jQuery(window).height()-20;
 	var ww=jQuery(window).width();
-	var vd='<video style="width:100%; height:100%; margin:0px;" controls><source src="'+videourl+'" type="video/mp4"><source src="'+videourl+'" type="video/webm"><source src="'+videourl+'" type="video/ogg">Your browser does not support the video tag.</video>';
+	var vd='<video id="videoplayer" style="width:100%; height:100%; margin:0px;" controls><source src="'+videourl+'" type="video/mp4"><source src="'+videourl+'" type="video/webm"><source src="'+videourl+'" type="video/ogg">Your browser does not support the video tag.</video>';
 	jQuery('#playvideos .modal-body').html(vd);
 	jQuery('#emergency').modal('hide');
 	jQuery('#playvideos').modal();
 }
 function closevideo(){
+	
 	jQuery('#playvideos').modal('hide');
 	jQuery('#emergency').modal();
+	var myVideo=document.getElementById("videoplayer"); 
+	if(typeof myVideo!='undefined'){
+		 myVideo.pause(); 
+	}
 		
 }
 jQuery(document).ready(function(){
