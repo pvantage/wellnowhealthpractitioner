@@ -393,7 +393,7 @@ function opennotes(showmsg){
 						var filep=jQuery(this).attr('data-src');
 						showimg(''+filep+'');
 					});*/
-					showchatmsg();
+					showchatallmsg();
 				}
 			}
 		});
@@ -411,6 +411,74 @@ function opennotes(showmsg){
 		clearInterval(inter);
 	}
 	var inter=setInterval(notes,5000);
+}
+function showchatallmsg(){
+	var emergency_id=gup('id');
+	//alert(emergency_id);
+	var showpopup=false;
+	db.transaction(pushnote, updateerrorDB, successDB);
+   function pushnote(tx){
+   		var q="SELECT n.*, m.name as company FROM wnh_emergency_notes as n, wnh_company as m, wnh_emergencies as e where e.emergency_id=n.emergency_id and e.company_id=m.company_id and n.emergency_id=?";
+		var cond=[emergency_id];
+		tx.executeSql(q, cond, function(tx, res2){
+			if(parseInt(res2.rows.length)>0){
+				
+				for(var i = 0; i < res2.rows.length; i++)
+				{
+					
+					var clsas='clinicnote';
+					var note=res2.rows.item(i).note;
+					if(jQuery.trim(note)=='' && jQuery.trim(res2.rows.item(i).filetype)!=''){
+						var filepath=res2.rows.item(i).mobilefilepath;
+						var mobilefilepath=res2.rows.item(i).mobilefilepath;
+						if(jQuery.trim(filepath)==''){
+							filepath=res2.rows.item(i).filepath;
+							/*var chkque=que.indexOf(res2.rows.item(i).id);
+							if(chkque==-1){
+								downloadfiles('wnh_emergency_notes',filepath,res2.rows.item(i).id,'.replacepath-'+res2.rows.item(i).emergency_note_id);
+								que.push(res2.rows.item(i).id)
+							}*/
+						}
+						var emnotid=res2.rows.item(i).id;
+						var filetype=res2.rows.item(i).filetype;
+						var table='wnh_emergency_notes';
+						if(jQuery.trim(res2.rows.item(i).filetype)=='video'){
+							if(jQuery.trim(mobilefilepath)==''){
+								note='<span class="video-wrape video-wrape-'+emnotid+'"><a href="javascript:;" onclick="return downloadfiles(\''+table+'\', \''+filepath+'\', \''+emnotid+'\', \''+filetype+'\')"><img src="images/video1.png" alt="video" /> Click to download</a></span>';
+							}
+							else{
+								note='<span class="video-wrape"><a href="javascript:;" onclick="return showvideo(\''+filepath+'\');"><img src="images/video1.png" alt="video" /> Click to view</a></span>';
+							}
+							
+						}
+						else if(jQuery.trim(res2.rows.item(i).filetype)=='image'){
+							
+							if(jQuery.trim(mobilefilepath)==''){
+								note='<span class="img-wrape img-wrape-'+emnotid+'"><a href="javascript:;" onclick="return downloadfiles(\''+table+'\', \''+filepath+'\', \''+emnotid+'\', \''+filetype+'\')"><i class="fa fa-picture-o" style="font-size:18px;"></i> Click to download</a></span>';
+							}
+							else{
+								note='<span class="img-wrape"><a href="javascript:;" onclick="return showimg(\''+filepath+'\');"><i class="fa fa-picture-o" style="font-size:18px;"></i> Click to zoom</a></span>';
+							}
+						}
+					}
+					
+					var msgg=note+' <span class="seen_'+res2.rows.item(i).emergency_note_id+' notseenmsg"></span>';
+					if(res2.rows.item(i).company_id!='0'){
+						msgg=note+' :'+res2.rows.item(i).company;
+						clsas='managernote';
+					}
+					
+					jQuery('.notelists').append('<div class="note-content"><span class="'+clsas+'">'+msgg+'</span></div>');
+					showpopup=true;
+									
+				}
+				
+			}
+			if(showpopup){
+				jQuery('#emergency').modal();
+			}
+		});
+   }
 }
 function showchatmsg(){
 	var emergency_id=gup('id');
