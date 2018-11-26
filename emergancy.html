@@ -700,9 +700,9 @@ jQuery(document).ready(function(){
 						/*if(res['data'][index]['emergency_phone']!=''){
 							jQuery('.submitwrap').append('<div class="pull-right"><a href="tel:'+res['data'][index]['emergency_phone']+'" class="btn btn-primary">CALL COMPANY</a></div>');
 						}*/
-						if(status=='pending'){
+						//if(status=='pending'){
 						btnhtm+='<div class="text-center mb-3"><a href="javascript:;" onclick="return completethis();" class="btn btn-primary">COMPLETE</a></div>';
-						}
+						//}
 						btnhtm+='<div class="text-center mb-3"><a href="javascript:;" onclick="return opennotes(\'yes\');" class="btn btn-primary">MESSAGES</a></div>';
 						btnhtm+='</div>';
 						jQuery('.main-wrapper').append(btnhtm);
