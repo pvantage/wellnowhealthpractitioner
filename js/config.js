@@ -273,11 +273,12 @@ function checkNotification() {
 							
 						}
 					}
+					if(shownotification){
+						setTimeout(playnotification,200);
+					}
 				}
 				
-				if(shownotification){
-					setTimeout(playnotification,500);
-				}
+				
 				jQuery('a.closenotification').click(function(){
 					jQuery(this).parents('.trip-notification').remove();
 					var totalnoti=jQuery('.trip-notification').length;
@@ -291,27 +292,7 @@ function checkNotification() {
 						var qr="UPDATE wnh_emergency_notifications SET deletenotification='1' WHERE emergency_id='"+emid+"'";
 						tx.executeSql(qr);
 					},  function(){}, function(){});
-					var url=siteurl+'/api/updates/companyemergencies';
-					jQuery.ajax({  
-						type: 'POST',  
-						url: url,           
-						dataType: 'json',  
-						crossDomain: true,
-						data: {emid:emid}, 
-						beforeSend: function() {
-						
-						},		
-						complete: function() {
-							setTimeout(function(){window.location='';},4000);
-						}, 
-						crossDomain: true,  
-						success: Updateemergencydata,  
-						error: function(response, d, a){
 					
-						return false; 
-						}
-					});
-					//clearInterval(interval);
 				});
 			});
 			
@@ -319,7 +300,7 @@ function checkNotification() {
 		}
 		
 	}
-	setTimeout(checkNotification,2000);
+	setTimeout(checkNotification,3000);
 }
 /*function showimg(imgurl){
 	var url=siteurl+'/api/emergencies/showmdeiafile/?file='+imgurl+'&ftype=image';
