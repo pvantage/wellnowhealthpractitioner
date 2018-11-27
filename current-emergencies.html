@@ -32,6 +32,25 @@
       <script src="https://oss.maxcdn.com/html5shiv/3.7.3/html5shiv.min.js"></script>
       <script src="https://oss.maxcdn.com/respond/1.4.2/respond.min.js"></script>
     <![endif]-->
+<style type="text/css">
+.removefromsrch {
+    position: relative;
+    height: 0px;
+    width: 0px;
+    float: right;
+}
+.removefromsrch a {
+    position: absolute;
+    right: -9px;
+    top: -14px;
+    border: 1px solid #FF0000;
+    border-radius: 50%;
+    padding: 1px 5px;
+    color: #FF0000;
+    background: #ffffff;
+}
+</style>
+
 </head>
 
 <body>
@@ -73,26 +92,44 @@ if(typeof uid=='undefined' || uid=='' || uid=='undefined' || uid==null){
 	},1000);
 }
 addchatnotes();
+function showunreadmsg(id){
+	db.transaction(showlistjobs3, errorDB, successDB);
+	function showlistjobs3(tx){
+		var q="SELECT count(*) as total FROM wnh_emergency_notes where emergency_id=? AND readbymanager=?";
+		var cond=[id,'0'];
+		tx.executeSql(q, cond, function(tx, res){
+			if(parseInt(res.rows.length)>0){
+				if(parseInt(res.rows.item(0).total)>0){
+					jQuery('.emglist-'+id+' .col-8').prepend('<div class="removefromsrch"><a href="javascript:;">'+res.rows.item(0).total+'</a></div>');
+				}
+			}
+		});
+	}
+}
 function loademergencies(){
+	jQuery('.past-amrgncy').html('');
 	db.transaction(showlistjobs, errorDB, successDB);
 	function showlistjobs(tx){
 		var q="SELECT e.*, c.address as caddress, c.name as cname FROM wnh_emergencies as e,wnh_company as c where e.company_id=c.company_id AND e.status=? AND e.deletebymanager=? AND e.manager_id=? ORDER BY e.id DESC";
 		var cond=['pending', '0', uid];
 		tx.executeSql(q, cond, function(tx, res){
 			if(parseInt(res.rows.length)>0){
-				var html='';
+				
 				for(var i = 0; i < res.rows.length; i++)
 				{
+					var html='';
 					var note=res.rows.item(i).note;
 					if(res.rows.item(i).filetype=='video' || res.rows.item(i).filetype=='image'){note='please click message';}
-					html+='<div class="row mb-3 emglist"><div class="col-4"><div class="meta-date h-100 justify-content-center flex-column"><div class="date-circle">'+res.rows.item(i).showdate+'</div></div></div>';
+					html+='<div class="row mb-3 emglist emglist-'+res.rows.item(i).emergency_id+'"><div class="col-4"><div class="meta-date h-100 justify-content-center flex-column"><div class="date-circle">'+res.rows.item(i).showdate+'</div></div></div>';
 					html+='<div class="col-8"><div class="past-detail h-100 justify-content-center flex-column"><ul><li><a href="emergancy.html?id='+res.rows.item(i).emergency_id+'">Company: <strong>'+res.rows.item(i).cname+' ('+res.rows.item(i).caddress+')</strong></a></li>';
 					if(jQuery.trim(note)!=''){
 						html+='<li>Note: <strong>'+note+'</strong></li>';
 					}
 					html+='</ul></div></div></div>';
+					jQuery('.past-amrgncy').append(html);
+					showunreadmsg(res.rows.item(i).emergency_id);
 				}
-				jQuery('.past-amrgncy').html(html);
+				
 			}
 		});
 	}

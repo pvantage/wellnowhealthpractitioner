@@ -232,13 +232,13 @@ function checkNotification() {
 						
 						if(next_notify=='0'){
 							shownotification=true;
-							var next_notify2=parseInt(previous_notify)+10;
+							var next_notify2=parseInt(previous_notify)+5;
 						}
 						else{
 							var dif=parseInt(next_notify)-previous_notify;
 							if(dif<=0){
 								shownotification=true;
-								var next_notify2=parseInt(previous_notify)+5;
+								var next_notify2=parseInt(previous_notify)+3;
 							}
 						}
 						if(page=='emergancy.html'){shownotification=false;}
