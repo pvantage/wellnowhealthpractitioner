@@ -360,7 +360,9 @@ function showvideo(videourl){
 function closevideo(){
 	
 	jQuery('#playvideos').modal('hide');
-	jQuery('#emergency').modal();
+	if(!jQuery('#emergency').hasClass('show')){
+		setTimeout(function(){jQuery('#emergency').modal();},1000);
+	}
 	var myVideo=document.getElementById("videoplayer"); 
 	if(typeof myVideo!='undefined'){
 		 myVideo.pause(); 
