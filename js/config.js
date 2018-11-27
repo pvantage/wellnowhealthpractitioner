@@ -275,7 +275,10 @@ function checkNotification() {
 					}
 					if(shownotification){
 						var audiop = document.getElementById('successSound');
-						audiop.play();
+						if (audiop.duration > 0 && !audiop.paused) {
+						} else {
+							audiop.play();
+						}
 					}
 					else{
 						var audiop = document.getElementById('successSound');
