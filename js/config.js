@@ -324,7 +324,7 @@ function checkNotification() {
 		}
 		
 	}
-	setTimeout(checkNotification,3000);
+	setTimeout(checkNotification,1000);
 }
 /*function showimg(imgurl){
 	var url=siteurl+'/api/emergencies/showmdeiafile/?file='+imgurl+'&ftype=image';
@@ -340,10 +340,28 @@ function showimg(imgurl){
 	//cordova.InAppBrowser.open(url, '_blank', 'location=yes');	
 	//showimg('http://vantageappspro.com/wellnowhealth/uploads/emergencies/1_1542974538.jpg')
 	
-	var vd='<img src="'+imgurl+'" class="loadimage" />';
+	/*var vd='<img src="'+imgurl+'" class="loadimage" />';
+	jQuery('#playvideos .modal-body').html(vd);
+	jQuery('#emergency').modal('hide');
+	jQuery('#playvideos').modal();*/
+	var vd='<canvas id="mycanvas" style="width: 100%; height: 100%"></canvas>';
 	jQuery('#playvideos .modal-body').html(vd);
 	jQuery('#emergency').modal('hide');
 	jQuery('#playvideos').modal();
+	var pinchZoom = new PinchZoomCanvas({
+    canvas: document.getElementById('mycanvas'),
+    path: imgurl,
+    momentum: true,
+    zoomMax: 2,
+    doubletap: true,
+    onZoomEnd: function (zoom, zoomed) {
+        console.log("---> is zoomed: %s", zoomed);
+        console.log("---> zoom end at %s", zoom);
+    },
+    onZoom: function (zoom) {
+        console.log("---> zoom is %s", zoom);
+    }
+    });
 }
 function showvideo(videourl){
 	//showvideo('http://vantageappspro.com/wellnowhealth/uploads/emergencies/1_1542891378.mp4')
