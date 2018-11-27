@@ -219,8 +219,8 @@ function checkNotification() {
 			var q="SELECT * FROM wnh_emergency_notifications where clinic_id=? AND manager_id=? AND status=? AND deletenotification=?";
 			var cond=[clinic_id,uid,'pending','0'];
 			tx.executeSql(q, cond, function(tx, res){
-				var audiop = document.getElementById('successSound');
-				audiop.pause();
+				//var audiop = document.getElementById('successSound');
+				//audiop.pause();
 				var shownotification=false;
 				if(parseInt(res.rows.length)>0){
 					
@@ -274,7 +274,12 @@ function checkNotification() {
 						}
 					}
 					if(shownotification){
-						setTimeout(playnotification,200);
+						var audiop = document.getElementById('successSound');
+						audiop.play();
+					}
+					else{
+						var audiop = document.getElementById('successSound');
+						audiop.pause();
 					}
 				}
 				
@@ -293,6 +298,25 @@ function checkNotification() {
 						tx.executeSql(qr);
 					},  function(){}, function(){});
 					
+					var url=siteurl+'/api/updates/companyemergencies';
+					jQuery.ajax({  
+						type: 'POST',  
+						url: url,           
+						dataType: 'json',  
+						crossDomain: true,
+						data: {emid:emid}, 
+						beforeSend: function() {
+						
+						},		
+						complete: function() {
+							setTimeout(function(){window.location='';},3000);
+						}, 
+						crossDomain: true,  
+						success: Updateemergencydata,  
+						error: function(response, d, a){
+					
+						}
+					});
 				});
 			});
 			
