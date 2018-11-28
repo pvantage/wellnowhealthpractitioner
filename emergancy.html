@@ -238,7 +238,7 @@ function mylocation(map,old_lati,old_longi,marker,mapicon,geocoder,infowindow){
 		});
 	}*/
 	
-   setTimeout(function(){mylocation(map,old_lati,old_longi,marker,mapicon,geocoder,infowindow)},3000);
+   setTimeout(function(){mylocation(map,old_lati,old_longi,marker,mapicon,geocoder,infowindow)},10000);
 }
 function updateMarker(geocoder,infowindow,marker, latitude, longitude,mapicon) {
   var latlng3 = {lat: parseFloat(latitude), lng: parseFloat(longitude)};
@@ -716,7 +716,6 @@ jQuery(document).ready(function(){
 	  var latlng = {lat: parseFloat(joblati), lng: parseFloat(joblongi)};
         geocoder.geocode({'location': latlng}, function(results, status) {
           if (status === 'OK') {
-		  	alert('loop2');
             if (results[0]) {
               var marker = new google.maps.Marker({
                 position: latlng,
