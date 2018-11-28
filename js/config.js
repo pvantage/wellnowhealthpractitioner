@@ -384,8 +384,7 @@ function showvideo(videourl){
 	//var url=siteurl+'/api/emergencies/showmdeiafile/?file='+videourl+'&ftype=video';
 	//cordova.InAppBrowser.open(url, '_blank', 'location=yes');	
 	//cordova.InAppBrowser.open('showvideo.html?file='+videourl, '_blank', 'location=yes');	
-	var wh=jQuery(window).height()-20;
-	var ww=jQuery(window).width();
+	
 	var vd='<video id="videoplayer" style="width:100%; height:100%; margin:0px;" controls><source src="'+videourl+'" type="video/mp4"><source src="'+videourl+'" type="video/webm"><source src="'+videourl+'" type="video/ogg">Your browser does not support the video tag.</video>';
 	jQuery('#playvideos .modal-body').html(vd);
 	jQuery('#emergency').modal('hide');
