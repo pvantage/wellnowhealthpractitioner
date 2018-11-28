@@ -84,7 +84,9 @@ function gup2(sParam,url) {
 var uid=localStorage.getItem('Manager_ID');
 function checkloggedin(uid)
 {
-	
+	var path = window.location.pathname;
+	var page = path.split("/").pop();
+	if(page!='logout.html'){
 	var url=siteurl+'/api/managerlogin/checkloggedin';
 	
 	jQuery.ajax({  
@@ -116,6 +118,7 @@ function checkloggedin(uid)
 		setTimeout(function(){jQuery('.showmessage').slideUp();},1000);
 	 } 
    });
+	}
 }
 
 
@@ -126,9 +129,10 @@ function showPosition(position) {
 	localStorage.setItem('Manager_Lat',position.coords.latitude);
 	localStorage.setItem('Manager_Long',position.coords.longitude);
 	var uid=localStorage.getItem('Manager_ID');
-	
+	var path = window.location.pathname;
+	var page = path.split("/").pop();
 	//alert(uid);
-	if(typeof uid!='undefined' && uid!='' && uid!=null && (position.coords.latitude!='' || position.coords.longitude!='')){
+	if(typeof uid!='undefined' && uid!='' && uid!=null && (position.coords.latitude!='' || position.coords.longitude!='') && page!='logout.html'){
 		var url=siteurl+'/api/account/updatelatilongi';
 		var deviceuuid=localStorage.getItem('deviceuuid');
 		var deviceplatform=localStorage.getItem('deviceplatform');
@@ -213,7 +217,7 @@ function checkNotification() {
 	//alert(page);
 	//alert(uid);
 	
-	if(typeof uid!='undefine' && uid!='' && uid!=null){
+	if(typeof uid!='undefined' && uid!='' && uid!=null){
 		db.transaction(shownotification, errorDB, successDB);
 		function shownotification(tx){
 			var q="SELECT * FROM wnh_emergency_notifications where clinic_id=? AND manager_id=? AND status=? AND deletenotification=?";
