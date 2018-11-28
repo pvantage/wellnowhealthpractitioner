@@ -836,6 +836,10 @@ jQuery(document).ready(function(){
 						
 						},		
 						complete: function() {
+							db.transaction(function(tx){
+								var qr='UPDATE wnh_emergency_notifications set status="assigned" WHERE emergency_id="'+id+'" AND manager_id="'+uid+'"';
+								tx.executeSql(qr);
+							});
 							setTimeout(function(){window.location='';},4000);
 						}, 
 						crossDomain: true,  
