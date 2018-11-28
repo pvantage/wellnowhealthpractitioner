@@ -200,8 +200,6 @@ function checkcurrentpostion(company_id){
 		},  
 		error: function(response, d, a){
 		
-		
-		return false; 
 		}
 	});
 	setTimeout(function(){checkcurrentpostion(company_id);},15000);
@@ -238,7 +236,7 @@ function mylocation(map,old_lati,old_longi,marker,mapicon,geocoder,infowindow){
 		});
 	}*/
 	
-   setTimeout(function(){mylocation(map,old_lati,old_longi,marker,mapicon,geocoder,infowindow)},10000);
+   setTimeout(function(){mylocation(map,old_lati,old_longi,marker,mapicon,geocoder,infowindow)},5000);
 }
 function updateMarker(geocoder,infowindow,marker, latitude, longitude,mapicon) {
   var latlng3 = {lat: parseFloat(latitude), lng: parseFloat(longitude)};
@@ -726,7 +724,7 @@ jQuery(document).ready(function(){
               });
 			 
               infowindow.setContent(results[0].formatted_address);
-			  mylocation(map,joblati,joblongi,marker,mapicon,geocoder,infowindow);
+			  //mylocation(map,joblati,joblongi,marker,mapicon,geocoder,infowindow);
             } else {
               window.alert('No results found');
             }
