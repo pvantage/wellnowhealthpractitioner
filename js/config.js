@@ -351,14 +351,17 @@ function showimg(imgurl){
 	//cordova.InAppBrowser.open(url, '_blank', 'location=yes');	
 	//showimg('http://vantageappspro.com/wellnowhealth/uploads/emergencies/1_1542974538.jpg')
 	
-	var vd='<img src="'+imgurl+'" class="loadimage" />';
+	/*var vd='<img src="'+imgurl+'" class="loadimage" />';
+	jQuery('#playvideos .modal-body').html(vd);
+	jQuery('#emergency').modal('hide');
+	jQuery('#playvideos').modal();*/
+	var wh=jQuery(window).height();
+	var ww=jQuery(window).width()-50;
+	var vd='<div id="mycontainer" style="width: '+ww+'px; height: '+wh+'px"><canvas id="mycanvas" style="width: 100%; height: 100%"></canvas></div>';
 	jQuery('#playvideos .modal-body').html(vd);
 	jQuery('#emergency').modal('hide');
 	jQuery('#playvideos').modal();
-	/*var vd='<canvas id="mycanvas" style="width: 100%; height: 100%"></canvas>';
-	jQuery('#playvideos .modal-body').html(vd);
-	jQuery('#emergency').modal('hide');
-	jQuery('#playvideos').modal();
+	setTimeout(function(){
 	var pinchZoom = new PinchZoomCanvas({
     canvas: document.getElementById('mycanvas'),
     path: imgurl,
@@ -372,7 +375,9 @@ function showimg(imgurl){
     onZoom: function (zoom) {
         console.log("---> zoom is %s", zoom);
     }
-    });*/
+    });
+						},1000);
+	
 }
 function showvideo(videourl){
 	//showvideo('http://vantageappspro.com/wellnowhealth/uploads/emergencies/1_1542891378.mp4')
