@@ -511,7 +511,7 @@ function gotolocation(){
 	var Staff_Lat= localStorage.getItem('Manager_clinic_lati');
 	var Staff_Long= localStorage.getItem('Manager_clinic_longi');
 	var our_address=localStorage.getItem('Manager_clinicaddress');
-	var url='emergancy-map.html?id='+id+'&map_icon='+map_icon+'&Staff_Lat='+Staff_Lat+'&Staff_Long='+Staff_Long+'&our_address='+our_address;
+	var url='emergancy-map.html?id='+emid+'&map_icon='+map_icon+'&Staff_Lat='+Staff_Lat+'&Staff_Long='+Staff_Long+'&our_address='+our_address;
 	cordova.InAppBrowser.open(url, '_blank', 'location=yes');	
 }
 jQuery(document).ready(function(){
