@@ -57,32 +57,44 @@
          <h1 class="entry-title text-center text-white">Emergency Location</h1>
 		 <p class="displaydistance" style="margin-top:-15px;"></p>
         </div>
-     <div class="current-emergency mb-4">
-	 	<div class="notelists"></div>
-		<form id="loginuser" action="" method="post">
-			<input type="hidden" name="company_id" value="0">
-			<input type="hidden" name="clinic_id" value="0">
-			<input type="hidden" name="manager_id" value="0">
-			<input type="hidden" name="emergency_id" value="0">
-			<input type="hidden" name="add_by" value="manager">
-			<div class="mb-3">
-			   <div>
-				<textarea name="note" rows="4" cols="50" class="form-control required"></textarea>
-			  </div>
-			</div>
-			<div  class="submitwrap">
-				<div class="pull-left">
-					<button type="submit" class="btn btn-primary">SEND</button>
-				</div>
-			</div>
-		</form>
-		</div>   
+     <div class="location-map mb-4"><div id="ourgmap"></div></div>   
         
     </div>
     <!-----Main wrapper End-------> 
     
 </div>
-
+<div class="modal fade" id="emergency" tabindex="-1" role="dialog" aria-labelledby="exampleModalCenterTitle" aria-hidden="true">
+    <div class="modal-dialog modal-dialog-centered" role="document">
+        <div class="modal-content bg-primary text-white"> 
+            
+             <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+          <span aria-hidden="true">&times;</span>
+        </button>
+            
+            <div class="modal-body">
+                <form id="loginuser" action="" method="post">
+					<input type="hidden" name="company_id" value="0">
+					<input type="hidden" name="clinic_id" value="0">
+					<input type="hidden" name="manager_id" value="0">
+					<input type="hidden" name="emergency_id" value="0">
+					<input type="hidden" name="add_by" value="manager">
+					<div class="notelists"></div>
+                    <div class="mb-3">
+					   <div>
+						<textarea name="note" rows="4" cols="50" class="form-control required"></textarea>
+					  </div>
+                    </div>
+                    <div  class="submitwrap">
+                        <div class="pull-left">
+                            <button type="submit" class="btn btn-primary">SEND</button>
+                        </div>
+                        <!--<div class="pull-right"> <a href="#" class="btn btn-dark">REGISTER</a></div>-->
+                    </div>
+                </form>  
+            </div>
+        </div>
+    </div>
+</div>
 <div class="modal fade" id="playvideos" tabindex="-1" role="dialog" aria-labelledby="exampleModalCenterTitle" aria-hidden="true">
     <div class="modal-dialog modal-dialog-centered" role="document">
         <div class="modal-content bg-primary text-white"> 
@@ -155,7 +167,11 @@ function checkseenmsg(){
 			});
 		}
 	}
-	
+	/*var emergencyht=jQuery('#emergency .modal-body .notelists').height();
+	if(parseInt(emergencyht)>400 && !jQuery('#emergency .modal-body .notelists').hasClass('extrascroll')){
+		jQuery('#emergency .modal-body .notelists').css({'height':'400px','overflow-y':'auto'});
+		jQuery('#emergency .modal-body .notelists').addClass('extrascroll');
+	}*/
 }
 function checkcurrentpostion(company_id){
 	var url=siteurl+'/api/emergencies/companydetail';
@@ -196,7 +212,92 @@ var mapicon='images/refspot.png';
 var Staff_Lat= localStorage.getItem('Manager_clinic_lati');
 var Staff_Long= localStorage.getItem('Manager_clinic_longi');
 var our_address=localStorage.getItem('Manager_clinicaddress');
-
+function mylocation(map,old_lati,old_longi,marker,mapicon,geocoder,infowindow){
+	
+	var new_lati=localStorage.getItem('Driver_Lat');
+	var new_longi=localStorage.getItem('Driver_Long');
+	updateMarker(geocoder,infowindow,marker, new_lati, new_longi,mapicon);
+	if(old_lati!=new_lati && old_longi!=new_longi){
+		old_lati=new_lati;
+		old_longi=new_longi;
+		google.maps.event.addListenerOnce(map, 'idle', function()
+		{
+			animateMarker(marker, [
+				[new_lati, new_longi]
+			], speed);
+		});
+	}
+	/*else{
+		google.maps.event.addListenerOnce(map, 'idle', function()
+		{
+			animateMarker(marker, [
+				[new_lati, new_longi]
+			], speed);
+		});
+	}*/
+	
+   setTimeout(function(){mylocation(map,old_lati,old_longi,marker,mapicon,geocoder,infowindow)},5000);
+}
+function updateMarker(geocoder,infowindow,marker, latitude, longitude,mapicon) {
+  var latlng3 = {lat: parseFloat(latitude), lng: parseFloat(longitude)};
+        geocoder.geocode({'location': latlng3}, function(results, status) {
+          if (status === 'OK') {
+            if (results[0]) {
+              infowindow.setContent(results[0].formatted_address);
+			  //getdistance(latitude,longitude,results[0].formatted_address,Staff_Lat,Staff_Long,our_address);
+            } 
+          }
+        });
+ 
+  
+}
+function animateMarker(marker, coords, km_h)
+{
+    var target = 0;
+    var km_h = km_h || 50;
+    coords.push([startPos[0], startPos[1]]);
+    function goToPoint()
+    {
+        var lat = marker.position.lat();
+        var lng = marker.position.lng();
+        var step = (km_h * 1000 * delay) / 3600000; // in meters
+        
+        var dest = new google.maps.LatLng(
+        coords[target][0], coords[target][1]);
+        
+        var distance =
+        google.maps.geometry.spherical.computeDistanceBetween(
+        dest, marker.position); // in meters
+        
+        var numStep = distance / step;
+        var i = 0;
+        var deltaLat = (coords[target][0] - lat) / numStep;
+        var deltaLng = (coords[target][1] - lng) / numStep;
+        
+        function moveMarker()
+        {
+            lat += deltaLat;
+            lng += deltaLng;
+            i += step;
+            
+            if (i < distance)
+            {
+                marker.setPosition(new google.maps.LatLng(lat, lng));
+                setTimeout(moveMarker, delay);
+            }
+            else
+            {   
+				marker.setPosition(dest);
+                target++;
+                if (target == coords.length){ target = 0; }
+                
+                //setTimeout(goToPoint, delay);
+            }
+        }
+        moveMarker();
+    }
+    goToPoint();
+}
 function completethis(){
 	var id=gup('id');
 	var uid= localStorage.getItem('Manager_ID');
@@ -294,7 +395,10 @@ function opennotes(showmsg){
 				}
 			}
 		});
-		
+		if(showmsg=='yes' && !jQuery('#emergency').hasClass('show')){
+			
+			jQuery('#emergency').modal();
+		}
 		if(typeof inter2!='undefined'){
 			clearInterval(inter2);
 		}
@@ -442,7 +546,17 @@ function showchatmsg(){
 				}
 				
 			}
-			
+			/*jQuery('.palyopenvideo').click(function(){
+				var filep=jQuery(this).attr('data-src');
+				showvideo(''+filep+'');
+			});
+			jQuery('.palyopenimage').click(function(){
+				var filep=jQuery(this).attr('data-src');
+				showimg(''+filep+'');
+			});*/
+			if(showpopup && !jQuery('#emergency').hasClass('show')){
+				jQuery('#emergency').modal();
+			}
 		});
    }
 }
@@ -478,7 +592,10 @@ function notes(){
 				db.transaction(function(tx){
 					var qr='INSERT INTO wnh_emergency_notes (emergency_note_id, emergency_id, note, filepath, filetype, manager_id, company_id, cdate, readbycompany, readbymanager, parent_id, notify,mobilefilepath) VALUES ("'+res['notes'][index]['emergency_note_id']+'", "'+emergency_id+'", "'+res['notes'][index]['note']+'", "'+res['notes'][index]['filepath']+'", "'+res['notes'][index]['filetype']+'", "'+res['notes'][index]['manager_id']+'", "'+res['notes'][index]['company_id']+'", "'+res['notes'][index]['cdate']+'", "'+res['notes'][index]['readbycompany']+'", "'+res['notes'][index]['readbymanager']+'", "'+res['notes'][index]['parent_id']+'", "'+res['notes'][index]['notify']+'","")';
 					tx.executeSql(qr);
-					
+					//opennotes('yes');
+					if(!jQuery('#emergency').hasClass('show')){
+						jQuery('#emergency').modal();
+					}
 				});
 			});
 			
@@ -505,10 +622,6 @@ function notes(){
    showchatmsg();
    
 }
-function gotolocation(id){
-	var url='emergancy-map.html?id='+id;
-	cordova.InAppBrowser.open(url, '_blank', 'location=yes');	
-}
 jQuery(document).ready(function(){
 	jQuery( document ).on( "mobileinit", function() {
 		jQuery.mobile.allowCrossDomainPages = true;
@@ -520,6 +633,124 @@ jQuery(document).ready(function(){
 	var uid= localStorage.getItem('Manager_ID');
 	jQuery('input[name="emergency_id"]').val(id);
 	jQuery('input[name="manager_id"]').val(uid);
+	
+	var setgooglepath=function(joblati,joblongi, jobaddress,our_address, mapid) {
+		var showaddress1=jobaddress;
+		var showaddress2=our_address;
+		
+        var directionsDisplay = new google.maps.DirectionsRenderer({suppressMarkers:true});
+        var directionsService = new google.maps.DirectionsService;
+		var latit=parseFloat(Staff_Lat);
+		var longit=parseFloat(Staff_Long);
+		if(jQuery.trim(activedata['company_lati'])!='' && jQuery.trim(activedata['company_longi'])!=''){
+			our_address={lat: parseFloat(activedata['stff_lati']), lng: parseFloat(activedata['staff_longi'])};
+		}
+		if(jQuery.trim(activedata['company_lati'])!='' && jQuery.trim(activedata['company_longi'])!=''){
+			jobaddress={lat: parseFloat(activedata['company_lati']), lng: parseFloat(activedata['company_longi'])};
+			joblati=parseFloat(activedata['company_lati']);
+			joblongi=parseFloat(activedata['company_longi']);
+		}
+        var map = new google.maps.Map(document.getElementById(mapid), {
+          zoom: 12,
+          center: our_address
+        });
+        directionsDisplay.setMap(map);
+		
+		
+		var geocoder = new google.maps.Geocoder;
+		var infowindow = new google.maps.InfoWindow;
+		var latlng = our_address;
+		var ourphoto='images/home.png';
+		if(jQuery.trim(map_icon)!=''){ourphoto=map_icon;}
+		var marker = new google.maps.Marker({
+			position: latlng,
+			map: map,
+			animation: google.maps.Animation.DROP,
+			icon: ourphoto
+		});
+	  marker.setPosition( latlng );
+	   google.maps.event.addListener(marker, "click", function (e) {
+			var infoWindow = new google.maps.InfoWindow();
+			infoWindow.setContent(showaddress2);
+			infoWindow.open(map, marker);
+		});
+		
+		var imgommap='images/mapicon.png';
+		var latlng2=jobaddress;
+		var marker2 = new google.maps.Marker({
+			position: latlng2,
+			map: map,
+			animation: google.maps.Animation.DROP,
+			icon: imgommap
+		});
+	  marker2.setPosition( latlng2 );
+	  google.maps.event.addListener(marker2, "click", function (e) {
+			var infoWindow = new google.maps.InfoWindow();
+			infoWindow.setContent(showaddress1);
+			infoWindow.open(map, marker2);
+		});
+		
+		if(crrentdata.length>0){
+			jQuery(crrentdata).each(function(j){
+				var nlat=crrentdata[j]['current_lati'];
+				var nlong=crrentdata[j]['current_longi'];
+				var nimg=crrentdata[j]['staff_map_photo'];
+				if(jQuery.trim(nlat)!='' && jQuery.trim(nlong)!=''){
+					var imgommap='images/mapicon.png';
+					if(jQuery.trim(nimg)!=''){
+						imgommap=nimg;
+					}
+					var nlatlng={lat: parseFloat(nlat), lng: parseFloat(nlong)};
+					var nmarker= new google.maps.Marker({
+						position: nlatlng,
+						map: map,
+						animation: google.maps.Animation.DROP,
+						icon: imgommap
+					});
+					nmarker.setPosition( nlatlng );
+				}
+			});
+		}
+	  var latlng = {lat: parseFloat(joblati), lng: parseFloat(joblongi)};
+        geocoder.geocode({'location': latlng}, function(results, status) {
+          if (status === 'OK') {
+            if (results[0]) {
+              var marker = new google.maps.Marker({
+                position: latlng,
+                map: map,
+				icon: {
+						url: mapicon
+					}
+              });
+			 
+              infowindow.setContent(results[0].formatted_address);
+			  mylocation(map,joblati,joblongi,marker,mapicon,geocoder,infowindow);
+            } else {
+              window.alert('No results found');
+            }
+          } else {
+            window.alert('Geocoder failed due to: ' + status);
+          }
+        });
+		
+		directionsService.route({
+          origin: our_address,  
+          destination: jobaddress,  
+          travelMode: google.maps.TravelMode.DRIVING
+        }, function(response, status) {
+          if (status == 'OK') {
+            directionsDisplay.setDirections(response);
+          } else {
+            
+			jQuery('body .showmessage').remove();
+				var html='<div class="showmessage">Do not create location.</div>';
+				jQuery('body').append(html);
+				setTimeout(function(){jQuery('.showmessage').slideUp();
+				},1000);
+          }
+        });
+        
+      }
 	
 	function loademergency(id){
 		db.transaction(showlistjobs2, errorDB, successDB);
@@ -547,9 +778,9 @@ jQuery(document).ready(function(){
 						//if(status=='pending'){
 						btnhtm+='<div class="text-center mb-3"><a href="javascript:;" onclick="return completethis();" class="btn btn-primary">COMPLETE</a></div>';
 						//}
-						btnhtm+='<div class="text-center mb-3"><a href="javascript:;" onclick="return gotolocation('+id+');" class="btn btn-primary">Location</a></div>';
+						btnhtm+='<div class="text-center mb-3"><a href="javascript:;" onclick="return opennotes(\'yes\');" class="btn btn-primary">MESSAGES</a></div>';
 						btnhtm+='</div>';
-						jQuery('.submitwrap').append(btnhtm);
+						jQuery('.main-wrapper').append(btnhtm);
 						jQuery('input[name="company_id"]').val(res.rows.item(i).company_id);
 						jQuery('input[name="clinic_id"]').val(res.rows.item(i).clinic_id);
 						if(status=='completed')
@@ -588,6 +819,7 @@ jQuery(document).ready(function(){
 						activedata['company_longi']=res.rows.item(i).cmcurrent_longi;
 						
 						setTimeout(function(){
+							setgooglepath(lati,longi, address,our_address, mapid);
 							opennotes('no');
 						},1000);
 						

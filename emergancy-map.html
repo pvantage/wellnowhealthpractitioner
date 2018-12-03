@@ -1,0 +1,434 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta http-equiv="X-UA-Compatible" content="IE=edge">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<!-- The above 3 meta tags *must* come first in the head; any other head content must come *after* these tags -->
+<meta name="description" content="">
+<meta name="author" content="">
+<title>Wellnowhealth</title>
+
+<!-- Bootstrap CSS -->
+<link rel="stylesheet" href="css/bootstrap.min.css">
+<!-- /Bootstrap CSS -->
+
+<!-- Font Awesome CSS -->
+<link rel="stylesheet" href="css/font-awesome.min.css">
+<!-- /Font Awesome CSS -->
+
+<!-- Custom Style CSS -->
+<link rel="stylesheet" href="css/slidenav.css">
+<!-- /Custom Style CSS -->
+
+<!-- Common Style CSS -->
+<link rel="stylesheet" href="css/style.css">
+<link rel="stylesheet" href="css/mycss.css">
+<!-- /Common Style CSS -->
+
+<!-- HTML5 shim and Respond.js for IE8 support of HTML5 elements and media queries -->
+<!-- WARNING: Respond.js doesn't work if you view the page via file:// -->
+<!--[if lt IE 9]>
+      <script src="https://oss.maxcdn.com/html5shiv/3.7.3/html5shiv.min.js"></script>
+      <script src="https://oss.maxcdn.com/respond/1.4.2/respond.min.js"></script>
+    <![endif]-->
+</head>
+
+<body>
+
+
+
+
+
+
+<div class="full-height background-layer"> 
+    
+   
+    <!-----Header End-------> 
+    
+    <!-----Main wrapper Start------->
+    <div class="main-wrapper mt-5">
+        <div class="container">
+         <h1 class="entry-title text-center text-white">Emergency Location</h1>
+		 <p class="displaydistance" style="margin-top:-15px;"></p>
+        </div>
+     <div class="location-map mb-4"><div id="ourgmap"></div></div>   
+        
+    </div>
+    <!-----Main wrapper End-------> 
+    
+</div>
+
+<script src="js/jquery-3.2.1.min.js" ></script>
+<script src="js/popper.min.js" ></script>
+<script src="js/bootstrap.min.js"></script>
+	<script type="text/javascript" charset="utf-8" src="cordova.js"></script>
+	<script src="js/pinch-zoom-canvas.js"></script>
+	<script type="text/javascript" src="js/config.js"></script>
+	<script type="text/javascript" src="js/queries.js"></script>
+	<script type="text/javascript" src="js/validate.js"></script>
+<script src="https://maps.googleapis.com/maps/api/js?libraries=geometry&key=AIzaSyAdRw4y6QbeCa2AVoQcI_j7NMQZPYDrabU" type="text/javascript"></script>
+
+<script>
+//updategardenerdata();
+//checkfornewupdates();
+//addchatnotes();
+  function openNav() {
+      document.getElementById("mySidenav").style.width = "100%";
+  }
+
+  function closeNav() {
+      document.getElementById("mySidenav").style.width = "0";
+  }
+  
+</script>
+<script type="text/javascript">
+//alert('loop');
+var crrentdata=[];
+var activedata=[];
+var que=[];
+var quenotes=[];
+var map_icon=localStorage.getItem('Manager_photo_map');
+
+
+function checkcurrentpostion(company_id){
+	var url=siteurl+'/api/emergencies/companydetail';
+	jQuery.ajax({  
+		type: 'POST',  
+		url: url,           
+		dataType: 'json',  
+		crossDomain: true,
+		data: {company_id:company_id}, 
+		beforeSend: function() {
+		
+		},		
+		complete: function() {
+		}, 
+		crossDomain: true,  
+		success: function(res) { 
+			if(res['current_lati']){
+				localStorage.setItem('Driver_Lat',res['current_lati']);
+				localStorage.setItem('Driver_Long',res['current_longi']);
+				db.transaction(function(tx){
+					var qr='UPDATE wnh_company set current_lati="'+res['current_lati']+'", current_longi="'+res['current_longi']+'" WHERE company_id="'+company_id+'"';
+					tx.executeSql(qr);
+					
+				});
+			}
+		},  
+		error: function(response, d, a){
+		
+		}
+	});
+	setTimeout(function(){checkcurrentpostion(company_id);},10000);
+}
+checkcurrentpostion();
+var map, marker, old_lati, old_longi;
+	var speed = 50; // km/h
+	var startPos = [];
+var delay = 100;
+var mapicon='images/refspot.png';
+var Staff_Lat= localStorage.getItem('Manager_clinic_lati');
+var Staff_Long= localStorage.getItem('Manager_clinic_longi');
+var our_address=localStorage.getItem('Manager_clinicaddress');
+function mylocation(map,old_lati,old_longi,marker,mapicon,geocoder,infowindow){
+	
+	var new_lati=localStorage.getItem('Driver_Lat');
+	var new_longi=localStorage.getItem('Driver_Long');
+	updateMarker(geocoder,infowindow,marker, new_lati, new_longi,mapicon);
+	if(old_lati!=new_lati && old_longi!=new_longi){
+		old_lati=new_lati;
+		old_longi=new_longi;
+		google.maps.event.addListenerOnce(map, 'idle', function()
+		{
+			animateMarker(marker, [
+				[new_lati, new_longi]
+			], speed);
+		});
+	}
+	/*else{
+		google.maps.event.addListenerOnce(map, 'idle', function()
+		{
+			animateMarker(marker, [
+				[new_lati, new_longi]
+			], speed);
+		});
+	}*/
+	
+   setTimeout(function(){mylocation(map,old_lati,old_longi,marker,mapicon,geocoder,infowindow)},5000);
+}
+function updateMarker(geocoder,infowindow,marker, latitude, longitude,mapicon) {
+  var latlng3 = {lat: parseFloat(latitude), lng: parseFloat(longitude)};
+        geocoder.geocode({'location': latlng3}, function(results, status) {
+          if (status === 'OK') {
+            if (results[0]) {
+              infowindow.setContent(results[0].formatted_address);
+			  //getdistance(latitude,longitude,results[0].formatted_address,Staff_Lat,Staff_Long,our_address);
+            } 
+          }
+        });
+ 
+  
+}
+function animateMarker(marker, coords, km_h)
+{
+    var target = 0;
+    var km_h = km_h || 50;
+    coords.push([startPos[0], startPos[1]]);
+    function goToPoint()
+    {
+        var lat = marker.position.lat();
+        var lng = marker.position.lng();
+        var step = (km_h * 1000 * delay) / 3600000; // in meters
+        
+        var dest = new google.maps.LatLng(
+        coords[target][0], coords[target][1]);
+        
+        var distance =
+        google.maps.geometry.spherical.computeDistanceBetween(
+        dest, marker.position); // in meters
+        
+        var numStep = distance / step;
+        var i = 0;
+        var deltaLat = (coords[target][0] - lat) / numStep;
+        var deltaLng = (coords[target][1] - lng) / numStep;
+        
+        function moveMarker()
+        {
+            lat += deltaLat;
+            lng += deltaLng;
+            i += step;
+            
+            if (i < distance)
+            {
+                marker.setPosition(new google.maps.LatLng(lat, lng));
+                setTimeout(moveMarker, delay);
+            }
+            else
+            {   
+				marker.setPosition(dest);
+                target++;
+                if (target == coords.length){ target = 0; }
+                
+                //setTimeout(goToPoint, delay);
+            }
+        }
+        moveMarker();
+    }
+    goToPoint();
+}
+jQuery(document).ready(function(){
+	jQuery( document ).on( "mobileinit", function() {
+		jQuery.mobile.allowCrossDomainPages = true;
+	});
+	var contentType ="application/x-www-form-urlencoded; charset=utf-8";
+    if(window.XDomainRequest){contentType = "text/plain";}
+	jQuery.support.cors = true;
+	var id=gup('id');
+	var uid= localStorage.getItem('Manager_ID');
+	jQuery('input[name="emergency_id"]').val(id);
+	jQuery('input[name="manager_id"]').val(uid);
+	
+	var setgooglepath=function(joblati,joblongi, jobaddress,our_address, mapid) {
+		var showaddress1=jobaddress;
+		var showaddress2=our_address;
+		
+        var directionsDisplay = new google.maps.DirectionsRenderer({suppressMarkers:true});
+        var directionsService = new google.maps.DirectionsService;
+		var latit=parseFloat(Staff_Lat);
+		var longit=parseFloat(Staff_Long);
+		if(jQuery.trim(activedata['company_lati'])!='' && jQuery.trim(activedata['company_longi'])!=''){
+			our_address={lat: parseFloat(activedata['stff_lati']), lng: parseFloat(activedata['staff_longi'])};
+		}
+		if(jQuery.trim(activedata['company_lati'])!='' && jQuery.trim(activedata['company_longi'])!=''){
+			jobaddress={lat: parseFloat(activedata['company_lati']), lng: parseFloat(activedata['company_longi'])};
+			joblati=parseFloat(activedata['company_lati']);
+			joblongi=parseFloat(activedata['company_longi']);
+		}
+        var map = new google.maps.Map(document.getElementById(mapid), {
+          zoom: 12,
+          center: our_address
+        });
+        directionsDisplay.setMap(map);
+		
+		
+		var geocoder = new google.maps.Geocoder;
+		var infowindow = new google.maps.InfoWindow;
+		var latlng = our_address;
+		var ourphoto='images/home.png';
+		if(jQuery.trim(map_icon)!=''){ourphoto=map_icon;}
+		var marker = new google.maps.Marker({
+			position: latlng,
+			map: map,
+			animation: google.maps.Animation.DROP,
+			icon: ourphoto
+		});
+	  marker.setPosition( latlng );
+	   google.maps.event.addListener(marker, "click", function (e) {
+			var infoWindow = new google.maps.InfoWindow();
+			infoWindow.setContent(showaddress2);
+			infoWindow.open(map, marker);
+		});
+		
+		var imgommap='images/mapicon.png';
+		var latlng2=jobaddress;
+		var marker2 = new google.maps.Marker({
+			position: latlng2,
+			map: map,
+			animation: google.maps.Animation.DROP,
+			icon: imgommap
+		});
+	  marker2.setPosition( latlng2 );
+	  google.maps.event.addListener(marker2, "click", function (e) {
+			var infoWindow = new google.maps.InfoWindow();
+			infoWindow.setContent(showaddress1);
+			infoWindow.open(map, marker2);
+		});
+		
+		if(crrentdata.length>0){
+			jQuery(crrentdata).each(function(j){
+				var nlat=crrentdata[j]['current_lati'];
+				var nlong=crrentdata[j]['current_longi'];
+				var nimg=crrentdata[j]['staff_map_photo'];
+				if(jQuery.trim(nlat)!='' && jQuery.trim(nlong)!=''){
+					var imgommap='images/mapicon.png';
+					if(jQuery.trim(nimg)!=''){
+						imgommap=nimg;
+					}
+					var nlatlng={lat: parseFloat(nlat), lng: parseFloat(nlong)};
+					var nmarker= new google.maps.Marker({
+						position: nlatlng,
+						map: map,
+						animation: google.maps.Animation.DROP,
+						icon: imgommap
+					});
+					nmarker.setPosition( nlatlng );
+				}
+			});
+		}
+	  var latlng = {lat: parseFloat(joblati), lng: parseFloat(joblongi)};
+        geocoder.geocode({'location': latlng}, function(results, status) {
+          if (status === 'OK') {
+            if (results[0]) {
+              var marker = new google.maps.Marker({
+                position: latlng,
+                map: map,
+				icon: {
+						url: mapicon
+					}
+              });
+			 
+              infowindow.setContent(results[0].formatted_address);
+			  mylocation(map,joblati,joblongi,marker,mapicon,geocoder,infowindow);
+            } else {
+              window.alert('No results found');
+            }
+          } else {
+            window.alert('Geocoder failed due to: ' + status);
+          }
+        });
+		
+		directionsService.route({
+          origin: our_address,  
+          destination: jobaddress,  
+          travelMode: google.maps.TravelMode.DRIVING
+        }, function(response, status) {
+          if (status == 'OK') {
+            directionsDisplay.setDirections(response);
+          } else {
+            
+			jQuery('body .showmessage').remove();
+				var html='<div class="showmessage">Do not create location.</div>';
+				jQuery('body').append(html);
+				setTimeout(function(){jQuery('.showmessage').slideUp();
+				},1000);
+          }
+        });
+        
+      }
+	
+	function loademergency(id){
+		db.transaction(showlistjobs2, errorDB, successDB);
+		function showlistjobs2(tx){
+			var q="SELECT cm.phone,m.image, c.address_lati as caddress_lati, c.address_longi as caddress_longi, c.address as caddress, cm.*, e.manager_id, e.clinic_id, e.company_id, e.status, e.measurement, cm.address as cmaddress, cm.current_lati as cmcurrent_lati, cm.current_longi as cmcurrent_longi, cm.current_address as cmcurrent_address, cm.address_lati	 as cmaddress_lati, cm.address_longi as cmaddress_longi, m.current_lati as mcurrent_lati, m.current_longi as mcurrent_longi, m.current_address as mcurrent_address FROM wnh_emergencies as e, wnh_managers as m, wnh_clinics as c, wnh_company as cm where e.manager_id=m.manager_id AND e.clinic_id=c.clinic_id AND e.company_id=cm.company_id AND e.emergency_id=?";
+			var cond=[id];
+			tx.executeSql(q, cond, function(tx, res){
+				if(parseInt(res.rows.length)>0){
+					var html='';
+					for(var i = 0; i < res.rows.length; i++)
+					{
+						
+						if(typeof res.rows.item(i).measurement!='undefined' && res.rows.item(i).measurement!=''){
+							var msrmnt=res.rows.item(i).measurement;
+							var msrmnts=msrmnt.split('|');
+							jQuery('.displaydistance').html('Estimated Distance : '+msrmnts[0]+'<br>Estimated Time: '+msrmnts[1]);
+						}
+						var mapimage=realsiteurl+'uploads/profile/'+res.rows.item(i).image;
+						if(jQuery.trim(res.rows.item(i).image)!=''){ourphoto=mapimage;}
+						
+						
+						var lati=res.rows.item(i).cmaddress_lati, 
+						longi=res.rows.item(i).cmaddress_longi,
+						address=res.rows.item(i).cmaddress,
+						our_address=res.rows.item(i).mcurrent_address, 
+						mapid='ourgmap';
+						if(jQuery.trim(res.rows.item(i).mcurrent_address)!=''){
+							var our_address=res.rows.item(i).mcurrent_address;
+						}
+						localStorage.setItem('Driver_Lat',res.rows.item(i).cmcurrent_lati);
+						localStorage.setItem('Driver_Long',res.rows.item(i).cmcurrent_longi);
+						//crrentdata=res.rows.item(i).otherstff;
+						activedata['stff_lati']=res.rows.item(i).mcurrent_lati;
+						activedata['staff_longi']=res.rows.item(i).mcurrent_longi;
+						activedata['company_lati']=res.rows.item(i).cmcurrent_lati;
+						activedata['company_longi']=res.rows.item(i).cmcurrent_longi;
+						
+						setTimeout(function(){
+							setgooglepath(lati,longi, address,our_address, mapid);
+							opennotes('no');
+						},1000);
+						
+					}
+				}
+				else{
+					
+					var url=siteurl+'/api/updates/companyemergencies';
+					jQuery.ajax({  
+						type: 'POST',  
+						url: url,           
+						dataType: 'json',  
+						crossDomain: true,
+						data: {emid:id}, 
+						beforeSend: function() {
+						
+						},		
+						complete: function() {
+							db.transaction(function(tx){
+								var qr='UPDATE wnh_emergency_notifications set status="assigned" WHERE emergency_id="'+id+'" AND manager_id="'+uid+'"';
+								tx.executeSql(qr);
+							});
+							setTimeout(function(){window.location='';},4000);
+						}, 
+						crossDomain: true,  
+						success: Updateemergencydata,  
+						error: function(response, d, a){
+					
+						return false; 
+						}
+					});
+				}
+				
+			});
+		}
+	}
+	loademergency(id);
+});
+var uid=localStorage.getItem('Manager_ID');
+if(typeof uid=='undefined' || uid=='' || uid=='undefined' || uid==null){
+	setTimeout(function(){
+		window.location='login.html';
+	},1000);
+}
+</script>
+</body>
+</html>
