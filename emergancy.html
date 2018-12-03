@@ -505,8 +505,13 @@ function notes(){
    showchatmsg();
    
 }
-function gotolocation(id){
-	var url='emergancy-map.html?id='+id;
+function gotolocation(){
+	var emid=gup('id');
+	var map_icon=localStorage.getItem('Manager_photo_map');
+	var Staff_Lat= localStorage.getItem('Manager_clinic_lati');
+	var Staff_Long= localStorage.getItem('Manager_clinic_longi');
+	var our_address=localStorage.getItem('Manager_clinicaddress');
+	var url='emergancy-map.html?id='+id+'&map_icon='+map_icon+'&Staff_Lat='+Staff_Lat+'&Staff_Long='+Staff_Long+'&our_address='+our_address;
 	cordova.InAppBrowser.open(url, '_blank', 'location=yes');	
 }
 jQuery(document).ready(function(){
@@ -547,7 +552,7 @@ jQuery(document).ready(function(){
 						//if(status=='pending'){
 						btnhtm+='<div class="text-center mb-3"><a href="javascript:;" onclick="return completethis();" class="btn btn-primary">COMPLETE</a></div>';
 						//}
-						btnhtm+='<div class="text-center mb-3"><a href="javascript:;" onclick="return gotolocation('+id+');" class="btn btn-primary">Location</a></div>';
+						btnhtm+='<div class="text-center mb-3"><a href="javascript:;" onclick="return gotolocation();" class="btn btn-primary">Location</a></div>';
 						btnhtm+='</div>';
 						jQuery('.submitwrap').append(btnhtm);
 						jQuery('input[name="company_id"]').val(res.rows.item(i).company_id);

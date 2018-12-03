@@ -88,7 +88,11 @@ var crrentdata=[];
 var activedata=[];
 var que=[];
 var quenotes=[];
-var map_icon=localStorage.getItem('Manager_photo_map');
+var emid=gup('id');
+var map_icon=gup('map_icon');
+var Staff_Lat= gup('Staff_Lat');
+var Staff_Long= gup('Staff_Long');
+var our_address=gup('our_address');
 
 
 function checkcurrentpostion(company_id){
@@ -128,9 +132,7 @@ var map, marker, old_lati, old_longi;
 	var startPos = [];
 var delay = 100;
 var mapicon='images/refspot.png';
-var Staff_Lat= localStorage.getItem('Manager_clinic_lati');
-var Staff_Long= localStorage.getItem('Manager_clinic_longi');
-var our_address=localStorage.getItem('Manager_clinicaddress');
+
 function mylocation(map,old_lati,old_longi,marker,mapicon,geocoder,infowindow){
 	
 	var new_lati=localStorage.getItem('Driver_Lat');
@@ -146,14 +148,7 @@ function mylocation(map,old_lati,old_longi,marker,mapicon,geocoder,infowindow){
 			], speed);
 		});
 	}
-	/*else{
-		google.maps.event.addListenerOnce(map, 'idle', function()
-		{
-			animateMarker(marker, [
-				[new_lati, new_longi]
-			], speed);
-		});
-	}*/
+	
 	
    setTimeout(function(){mylocation(map,old_lati,old_longi,marker,mapicon,geocoder,infowindow)},5000);
 }
@@ -423,12 +418,7 @@ jQuery(document).ready(function(){
 	}
 	loademergency(id);
 });
-var uid=localStorage.getItem('Manager_ID');
-if(typeof uid=='undefined' || uid=='' || uid=='undefined' || uid==null){
-	setTimeout(function(){
-		window.location='login.html';
-	},1000);
-}
+
 </script>
 </body>
 </html>
