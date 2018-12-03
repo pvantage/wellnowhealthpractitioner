@@ -71,7 +71,7 @@
 			  </div>
 			</div>
 			<div  class="submitwrap">
-				<div class="pull-left">
+				<div class="pull-right">
 					<button type="submit" class="btn btn-primary">SEND</button>
 				</div>
 			</div>
@@ -544,15 +544,10 @@ jQuery(document).ready(function(){
 							jQuery('.displaydistance').html('Estimated Distance : '+msrmnts[0]+'<br>Estimated Time: '+msrmnts[1]);
 						}
 						
-						var btnhtm='<div class="btm-btn-sctn">';
-						btnhtm+='<div class="text-center mb-3"><a href="tel:'+phone+'" class="btn btn-primary">CONTACT EMERGENCY</a></div>';
-						/*if(res['data'][index]['emergency_phone']!=''){
-							jQuery('.submitwrap').append('<div class="pull-right"><a href="tel:'+res['data'][index]['emergency_phone']+'" class="btn btn-primary">CALL COMPANY</a></div>');
-						}*/
-						//if(status=='pending'){
-						btnhtm+='<div class="text-center mb-3"><a href="javascript:;" onclick="return completethis();" class="btn btn-primary">COMPLETE</a></div>';
-						//}
-						btnhtm+='<div class="text-center mb-3"><a href="javascript:;" onclick="return gotolocation();" class="btn btn-primary">Location</a></div>';
+						var btnhtm='<div class="location-btn-sctn pull-left">';
+						btnhtm+='<div class="mb-3 pull-left"><a href="tel:'+phone+'" class="btn btn-primary">CONTACT EMERGENCY</a></div>';
+						btnhtm+='<div class="mb-3 pull-left"><a href="javascript:;" onclick="return completethis();" class="btn btn-primary">COMPLETE</a></div>';
+						btnhtm+='<div class="mb-3 pull-left"><a href="javascript:;" onclick="return gotolocation();" class="btn btn-primary">Location</a></div>';
 						btnhtm+='</div>';
 						jQuery('.submitwrap').append(btnhtm);
 						jQuery('input[name="company_id"]').val(res.rows.item(i).company_id);
