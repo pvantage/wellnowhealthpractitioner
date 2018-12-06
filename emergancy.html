@@ -55,7 +55,7 @@
     <div class="main-wrapper mt-5">
         <div class="container emlocationdetail">
          <h1 class="entry-title text-center text-white">Emergency Location</h1>
-		 <p class="displaydistance" style="margin-top:-15px;"></p>
+		 <p class="displaydistance" style="margin-top:-25px;"></p>
         </div>
 	<div class="chattop">
      <div class="current-emergency mb-4 chatmainpart">
@@ -160,7 +160,7 @@ function checkseenmsg(){
 	var hh=jQuery('header.header').height();
 	var h2=jQuery('.emlocationdetail').height();
 	var h3=jQuery('form#loginuser').height();
-	var hd=wh-hh-h2-h3-50;
+	var hd=wh-hh-h2-h3-70;
 	jQuery('.chattoppart').css({'height':hd+'px','overflow-y':'auto'});
 }
 function checkcurrentpostion(company_id){
@@ -520,6 +520,28 @@ function gotolocation(){
 	var url='emergancy-map.html?id='+emid+'&map_icon='+map_icon+'&Staff_Lat='+Staff_Lat+'&Staff_Long='+Staff_Long+'&our_address='+our_address;
 	cordova.InAppBrowser.open(url, '_blank', 'location=yes');	
 }
+function checkdistance(){
+	var emid=gup('id');
+	var url=siteurl+'/api/emergencies/checkdistance';
+	jQuery.ajax({  
+		type: 'POST',  
+		url: url,           
+		crossDomain: true,
+		data: {emid:emid}, 
+		beforeSend: function() {
+		
+		},		
+		crossDomain: true,  
+		success: function(res) {
+			if(jQuery.trim(res)!=''){
+				jQuery('.displaydistance').html(res);
+			}
+		},  
+		error: function(response, d, a){
+	
+		}
+	});
+}
 jQuery(document).ready(function(){
 	jQuery( document ).on( "mobileinit", function() {
 		jQuery.mobile.allowCrossDomainPages = true;
@@ -599,6 +621,7 @@ jQuery(document).ready(function(){
 						setTimeout(function(){
 							opennotes('no');
 						},1000);
+						setInterval(checkdistance,10000);
 						
 					}
 				}
@@ -718,6 +741,14 @@ jQuery(document).ready(function(){
 							var qr='INSERT INTO wnh_emergency_notes (emergency_note_id, emergency_id, note, filepath, mobilefilepath, filetype, manager_id, company_id, cdate, readbycompany, readbymanager, parent_id, notify) VALUES ("'+res['emnotes'][index]['id']+'", "'+res['emnotes'][index]['emergency_id']+'", "'+res['emnotes'][index]['note']+'", "'+res['emnotes'][index]['filepath']+'", "", "'+res['emnotes'][index]['filetype']+'", "'+res['emnotes'][index]['manager_id']+'", "'+res['emnotes'][index]['company_id']+'", "'+res['emnotes'][index]['cdate']+'", "0", "'+res['emnotes'][index]['readbymanager']+'", "'+res['emnotes'][index]['parent_id']+'", "'+res['emnotes'][index]['notify']+'")';
 							tx.executeSql(qr);
 							quenotes.push(res['emnotes'][index]['id']);
+							setTimeout(function(){
+								var wht=jQuery(window).height();
+								jQuery("html, body").animate({ scrollTop: parseInt(wht)+10 }, 600);
+								
+								var wht=jQuery('.chattoppart').height();
+								jQuery(".chattoppart").animate({ scrollTop: parseInt(wht)+10 }, 600);
+								
+							},1000);
 						});
 					});
 					showchatmsg();

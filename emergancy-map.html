@@ -93,7 +93,28 @@ var map_icon=gup('map_icon');
 var Staff_Lat= gup('Staff_Lat');
 var Staff_Long= gup('Staff_Long');
 var our_address=gup('our_address');
-
+function checkdistance(){
+	var emid=gup('id');
+	var url=siteurl+'/api/emergencies/checkdistance';
+	jQuery.ajax({  
+		type: 'POST',  
+		url: url,           
+		crossDomain: true,
+		data: {emid:emid}, 
+		beforeSend: function() {
+		
+		},		
+		crossDomain: true,  
+		success: function(res) {
+			if(jQuery.trim(res)!=''){
+				jQuery('.displaydistance').html(res);
+			}
+		},  
+		error: function(response, d, a){
+	
+		}
+	});
+}
 
 function checkcurrentpostion(company_id){
 	var url=siteurl+'/api/emergencies/companydetail';
@@ -382,7 +403,7 @@ jQuery(document).ready(function(){
 							setgooglepath(lati,longi, address,our_address, mapid);
 							opennotes('no');
 						},1000);
-						
+						setInterval(checkdistance,10000);
 					}
 				}
 				else{
