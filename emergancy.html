@@ -53,13 +53,14 @@
     
     <!-----Main wrapper Start------->
     <div class="main-wrapper mt-5">
-        <div class="container">
+        <div class="container emlocationdetail">
          <h1 class="entry-title text-center text-white">Emergency Location</h1>
 		 <p class="displaydistance" style="margin-top:-15px;"></p>
         </div>
-     <div class="current-emergency mb-4">
-	 	<div class="notelists"></div>
-		<form id="loginuser" action="" method="post">
+	<div class="chattop">
+     <div class="current-emergency mb-4 chatmainpart">
+	 	<div class="notelists chattoppart"></div>
+		<form id="loginuser" class="chatbtmpart" action="" method="post">
 			<input type="hidden" name="company_id" value="0">
 			<input type="hidden" name="clinic_id" value="0">
 			<input type="hidden" name="manager_id" value="0">
@@ -67,17 +68,17 @@
 			<input type="hidden" name="add_by" value="manager">
 			<div class="mb-3">
 			   <div>
-				<textarea name="note" rows="4" cols="50" class="form-control required"></textarea>
+				<textarea name="note" rows="3" cols="50" class="form-control required"></textarea>
 			  </div>
 			</div>
 			<div  class="submitwrap">
-				<div class="pull-right">
+				<div class="pull-right sendbtnn">
 					<button type="submit" class="btn btn-primary">SEND</button>
 				</div>
 			</div>
 		</form>
 		</div>   
-        
+        	</div> 
     </div>
     <!-----Main wrapper End-------> 
     
@@ -155,7 +156,12 @@ function checkseenmsg(){
 			});
 		}
 	}
-	
+	var wh=jQuery(window).height();
+	var hh=jQuery('header.header').height();
+	var h2=jQuery('.emlocationdetail').height();
+	var h3=jQuery('form#loginuser').height();
+	var hd=wh-hh-h2-h3-50;
+	jQuery('.chattoppart').css({'height':hd+'px','overflow-y':'auto'});
 }
 function checkcurrentpostion(company_id){
 	var url=siteurl+'/api/emergencies/companydetail';
@@ -526,6 +532,9 @@ jQuery(document).ready(function(){
 	jQuery('input[name="emergency_id"]').val(id);
 	jQuery('input[name="manager_id"]').val(uid);
 	
+	
+	
+	
 	function loademergency(id){
 		db.transaction(showlistjobs2, errorDB, successDB);
 		function showlistjobs2(tx){
@@ -545,9 +554,9 @@ jQuery(document).ready(function(){
 						}
 						
 						var btnhtm='<div class="location-btn-sctn pull-left">';
-						btnhtm+='<div class="mb-3 pull-left"><a href="tel:'+phone+'" class="btn btn-primary">CONTACT EMERGENCY</a></div>';
-						btnhtm+='<div class="mb-3 pull-left"><a href="javascript:;" onclick="return completethis();" class="btn btn-primary">COMPLETE</a></div>';
-						btnhtm+='<div class="mb-3 pull-left"><a href="javascript:;" onclick="return gotolocation();" class="btn btn-primary">Location</a></div>';
+						btnhtm+='<div class="mb-3 pull-left comptbox"><a href="javascript:;" onclick="return completethis();" class="btn btn-primary"><img src="images/complete.png"  alt=""><span>Complete</span></a></div>';
+						btnhtm+='<div class="mb-3 pull-left rightblk"><a href="javascript:;" onclick="return gotolocation();" class="btn btn-primary"><img src="images/location.png"  alt=""><span>Location</span></a></div>';
+						btnhtm+='<div class="mb-3 pull-left rightblk"><a href="tel:'+phone+'" class="btn btn-primary"><img src="images/ph.png"  alt=""><span>Contact</span></a></div>';
 						btnhtm+='</div>';
 						jQuery('.submitwrap').append(btnhtm);
 						jQuery('input[name="company_id"]').val(res.rows.item(i).company_id);

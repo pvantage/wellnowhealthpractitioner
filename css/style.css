@@ -1,5 +1,24 @@
 @import url('https://fonts.googleapis.com/css?family=Montserrat:300,300i,400,400i,500,500i,600,600i,700');
 
+.chattop {    background: #fff;}
+.chattop .managernote, .chattop .clinicnote{ color:#fff;}
+.chattoppart {    padding: 16px;    background: #fff;    float: left;    width: 100%;}
+.chatbtmpart {   float: left;    width: 100%;    background: #0593ed;    padding: 10px;}
+.chatbtmpart .submitwrap .sendbtnn .btn.btn-primary {    background-color: #046bbe;    border-color: #046bbe;	    border-radius: 50px;}
+.chatbtmpart .location-btn-sctn a.btn.btn-primary {    background: none;    border: none;    padding: 0;    font-size: 17px;}
+.chatbtmpart .location-btn-sctn a.btn.btn-primary span {    display: block;}
+.chatbtmpart .location-btn-sctn a.btn.btn-primary img {    height: 27px;    margin-bottom: 4px;}
+.chatbtmpart .location-btn-sctn .mb-3 {    margin: 0px !important;}
+.chatbtmpart .location-btn-sctn {   width: 74%;}
+.rightblk {    float: right;    padding: 0px 8px;}
+.chattoppart .clinicnote:before{border-right-color: #046cbf;}
+.chattoppart .clinicnote{border:none;}
+.chatmainpart .managernote{ border:none;}
+.chatmainpart .managernote:before{border-left-color: #70a003;}
+
+
+
+
 
 
 .photosbox label.text-white {
@@ -312,4 +331,23 @@ label.error{ display:none!important;}
 .input-group>.custom-select:not(:first-child), .input-group>.form-control:not(:first-child) {
     border-top-right-radius: .25rem;
     border-bottom-right-radius: .25rem;
+}
+
+
+@media (min-width: 600px) and (max-width: 768px) {
+.chatbtmpart .location-btn-sctn {    width: 85%;}
+}
+@media (min-width: 401px) and (max-width: 640px) {
+.chatbtmpart .location-btn-sctn a.btn.btn-primary {    font-size: 15px;}
+.rightblk {    float: right;	    padding: 0px 17px;}	
+}
+
+@media (min-width: 340px) and (max-width: 400px) {
+.chatbtmpart .location-btn-sctn a.btn.btn-primary {    font-size: 14px;}	
+}
+@media (min-width: 300px) and (max-width: 340px) {
+.chatbtmpart .location-btn-sctn a.btn.btn-primary {    font-size: 12px;}	
+}
+@media (max-width: 768px) {
+.chattoppart {    padding: 16px;    background: #fff; margin:0px auto;   width: 90%;}
 }
