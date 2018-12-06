@@ -2,7 +2,7 @@
 
 .chattop {    background: #fff;}
 .chattop .managernote, .chattop .clinicnote{ color:#fff;}
-.chattoppart {    padding: 16px; background: #fff; margin:0px auto;   width: 98%;}
+.chattoppart {    padding: 16px; background: #fff; margin:0px auto;   width: 100%;}
 .chatbtmpart {   float: left;    width: 100%;    background: #0593ed;    padding: 10px;}
 .chatbtmpart .submitwrap{margin-top:-7px;}
 .chatbtmpart .submitwrap .sendbtnn .btn.btn-primary {    background-color: #046bbe;    border-color: #046bbe;	    border-radius: 50px;}
