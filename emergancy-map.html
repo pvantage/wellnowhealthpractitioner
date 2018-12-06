@@ -48,9 +48,9 @@
     
     <!-----Main wrapper Start------->
     <div class="main-wrapper mt-5">
-        <div class="container">
-         <h1 class="entry-title text-center text-white">Emergency Location</h1>
-		 <p class="displaydistance" style="margin-top:-15px;"></p>
+        <div class="container emdetail">
+         <h1 class="entry-title text-center text-white" style="margin-top:-45px;">Emergency Location</h1>
+		 <p class="displaydistance" style="margin-top:-35px;"></p>
         </div>
      <div class="location-map mb-4"><div id="ourgmap"></div></div>   
         
@@ -234,6 +234,10 @@ function animateMarker(marker, coords, km_h)
     goToPoint();
 }
 jQuery(document).ready(function(){
+	var wh=jQuery(window).height();
+	var h2=jQuery('.emdetail').height();
+	var hd=wh-h2-10;
+	jQuery('#ourgmap').css({'height':hd+'px'});
 	jQuery( document ).on( "mobileinit", function() {
 		jQuery.mobile.allowCrossDomainPages = true;
 	});
