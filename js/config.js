@@ -1,7 +1,7 @@
-//var siteurl = "http://178.128.186.105";
-//var realsiteurl = "http://178.128.186.105/";
-var siteurl = "http://vantageappspro.com/wellnowhealth";
-var realsiteurl = "http://vantageappspro.com/wellnowhealth/";
+var siteurl = "http://178.128.186.105";
+var realsiteurl = "http://178.128.186.105/";
+//var siteurl = "http://vantageappspro.com/wellnowhealth";
+//var realsiteurl = "http://vantageappspro.com/wellnowhealth/";
 var db = window.openDatabase("wnhmanager", "1.0", "Wellnowhealth Manager", 200000);
 var days=['Sunday', 'Monday', 'Tuesday', 'Wednesday', 'Thursday', 'Friday', 'Saturday'];
 var months = ["January", "February", "March", "April", "May", "June", "July", "August", "September", "October", "November", "December"];
