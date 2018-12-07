@@ -1,5 +1,5 @@
 var siteurl = "http://178.128.186.105";
-var realsiteurl = "http://178.128.186.105/";
+var realsiteurl = "http://178.128.186.105/"; 
 //var siteurl = "http://vantageappspro.com/wellnowhealth";
 //var realsiteurl = "http://vantageappspro.com/wellnowhealth/";
 var db = window.openDatabase("wnhmanager", "1.0", "Wellnowhealth Manager", 200000);
