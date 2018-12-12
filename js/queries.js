@@ -544,6 +544,9 @@ function Updatefiletables(table,mobilepath,id,filetype){
 			else if(filetype=='image'){
 				jQuery('.notelists .img-wrape-'+id).html('<a href="javascript:;" onclick="return showimg(\''+mobilepath+'\');"><i class="fa fa-picture-o" style="font-size:18px;"></i> Click to zoom</a>');	
 			}
+			if(filetype=='video'){
+				alert("Download done.");
+			}
 		}
 	},  importerrorDB, successDB);
 }
@@ -573,14 +576,22 @@ function downloadfiles(table,filepath,id,filetype){
 		uri,
 		cordova.file.externalApplicationStorageDirectory+filename,
 		function(entry) {
+			if(filetype=='video'){
+				alert("Start Download ");
+			}
 			var mobilepath=entry.toURL();
+			if(filetype=='video'){
+				alert("downloading to " + mobilepath);
+			}
 			//alert(table+'-'+mobilepath+'-'+id+'-'+filetype+'-'+'add');
 			Updatefiletables(table,mobilepath,id,filetype);
 		},
 		function(error) {
-			//alert("download error source " + error.source);
-			//alert("download error target " + error.target);
-			//alert("download error code" + error.code);
+			if(filetype=='video'){
+				alert("download error source " + error.source);
+				alert("download error target " + error.target);
+				alert("download error code" + error.code);
+			}
 		},
 		null,
 		{

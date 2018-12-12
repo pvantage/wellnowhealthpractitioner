@@ -59,7 +59,7 @@
         </div>
 	<div class="chattop">
      <div class="current-emergency mb-4 chatmainpart">
-	 	<div class="notelists chattoppart"></div>
+	 	<div class="notelists chattoppart" style="min-height:200px;"></div>
 		<form id="loginuser" class="chatbtmpart" action="" method="post">
 			<input type="hidden" name="company_id" value="0">
 			<input type="hidden" name="clinic_id" value="0">
@@ -560,14 +560,14 @@ jQuery(document).ready(function(){
 	function loademergency(id){
 		db.transaction(showlistjobs2, errorDB, successDB);
 		function showlistjobs2(tx){
-			var q="SELECT cm.phone,m.image, c.address_lati as caddress_lati, c.address_longi as caddress_longi, c.address as caddress, cm.*, e.manager_id, e.clinic_id, e.company_id, e.status, e.measurement, cm.address as cmaddress, cm.current_lati as cmcurrent_lati, cm.current_longi as cmcurrent_longi, cm.current_address as cmcurrent_address, cm.address_lati	 as cmaddress_lati, cm.address_longi as cmaddress_longi, m.current_lati as mcurrent_lati, m.current_longi as mcurrent_longi, m.current_address as mcurrent_address FROM wnh_emergencies as e, wnh_managers as m, wnh_clinics as c, wnh_company as cm where e.manager_id=m.manager_id AND e.clinic_id=c.clinic_id AND e.company_id=cm.company_id AND e.emergency_id=?";
+			var q="SELECT cm.phone as telephone,m.image, c.address_lati as caddress_lati, c.address_longi as caddress_longi, c.address as caddress, cm.*, e.manager_id, e.clinic_id, e.company_id, e.status, e.measurement, cm.address as cmaddress, cm.current_lati as cmcurrent_lati, cm.current_longi as cmcurrent_longi, cm.current_address as cmcurrent_address, cm.address_lati	 as cmaddress_lati, cm.address_longi as cmaddress_longi, m.current_lati as mcurrent_lati, m.current_longi as mcurrent_longi, m.current_address as mcurrent_address FROM wnh_emergencies as e, wnh_managers as m, wnh_clinics as c, wnh_company as cm where e.manager_id=m.manager_id AND e.clinic_id=c.clinic_id AND e.company_id=cm.company_id AND e.emergency_id=?";
 			var cond=[id];
 			tx.executeSql(q, cond, function(tx, res){
 				if(parseInt(res.rows.length)>0){
 					var html='';
 					for(var i = 0; i < res.rows.length; i++)
 					{
-						var phone=res.rows.item(i).phone;
+						var phone=res.rows.item(i).telephone;
 						var status=res.rows.item(i).status;
 						if(typeof res.rows.item(i).measurement!='undefined' && res.rows.item(i).measurement!=''){
 							var msrmnt=res.rows.item(i).measurement;
