@@ -360,7 +360,6 @@ function getgallerysinglenote(note_id,mobilefilepath){
 	 dataType: 'json',  
 	 data: {note_id:note_id}, 
 	 beforeSend: function() {
-		quenotes.push(note_id);
 	 },		
 	 complete: function() {
 	 }, 
@@ -430,7 +429,6 @@ function uploadgallerypic() {
 			
 			var t=ft.upload(filetrasfer2, uri, function(r){
 					var cntents=r.response.split('||emg||');
-					jQuery('.notelists').append('<div class="note-content"><span class="clinicnote"><div class="note-content">Me: <span class="img-wrape"><a href="javascript:;" onclick="return showimg(\''+filetrasfer+'\');"><i class="fa fa-picture-o" style="font-size:18px;"></i> Click to zoom</a></span></span></div>');
 					jQuery('body .showmessage').remove();
 					var html='<div class="showmessage">'+cntents[2]+'</div>';
 					getgallerysinglenote(cntents[1],filetrasfer);
@@ -483,8 +481,6 @@ function uploadmyvideo(){
 			var t=ft.upload(filetrasfer2, uri, function(r){
 					//jQuery('.submitwrap img.justloading').remove();
 					var cntents=r.response.split('||emg||');
-					var cls='';
-					jQuery('.notelists').append('<div class="note-content"><span class="clinicnote"><div class="note-content">Me: <span class="img-wrape"><a href="javascript:;" onclick="return showvideo(\''+filetrasfer+'\');"><img src="images/video1.png" alt="video" /> Click to view</a></span></span></div>');
 					jQuery('body .showmessage').remove();
 					var html='<div class="showmessage">'+cntents[2]+'</div>';
 					jQuery('body').append(html);
@@ -542,9 +538,6 @@ function uploadcamerapic() {
 					//jQuery('.submitwrap img.justloading').remove();
 					
 					var cntents=r.response.split('||emg||');
-					var cls='';
-					
-					jQuery('.notelists').append('<div class="note-content"><span class="clinicnote"><div class="note-content">Me: <span class="img-wrape"><a href="javascript:;" onclick="return showimg(\''+filetrasfer+'\');"><i class="fa fa-picture-o" style="font-size:18px;"></i> Click to zoom</a></span></span></div>');
 					jQuery('body .showmessage').remove();
 					var html='<div class="showmessage">'+cntents[2]+'</div>';
 					jQuery('body').append(html);
