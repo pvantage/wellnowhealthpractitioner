@@ -99,6 +99,18 @@
         </div>
     </div>
 </div>
+<div class="modal fade" id="confirmuploadvideo" tabindex="-1" role="dialog" aria-labelledby="exampleModalCenterTitle" aria-hidden="true">
+    <div class="modal-dialog modal-dialog-centered" role="document">
+        <div class="modal-content bg-primary emergency-popup">
+            <div class="modal-body" style="border:1px solid #fff;">
+                <input type="hidden" id="uploadvideopath" value="" />
+				<h2>Do you want to upload this video?</h2>
+				<div style="width:125px; margin:0px auto;">
+                 <h2> <a href="javascript:;" onClick="uploadmyvideo();" style="float:left; border:1px solid #FFFFFF; border-radius:5px; padding:3px 5px;">Yes</a><a href="javascript:;" onClick="uploadgalleryvideo();" style="float:right; border:1px solid #FFFFFF; border-radius:5px; padding:3px 5px;">No</a></h2>   </div>
+            </div> 
+        </div>
+    </div>
+</div>
 <script src="js/jquery-3.2.1.min.js" ></script>
 <script src="js/popper.min.js" ></script>
 <script src="js/bootstrap.min.js"></script>
@@ -348,7 +360,7 @@ function getgallerysinglenote(note_id,mobilefilepath){
 	 dataType: 'json',  
 	 data: {note_id:note_id}, 
 	 beforeSend: function() {
-		
+		quenotes.push(note_id);
 	 },		
 	 complete: function() {
 	 }, 
@@ -359,7 +371,6 @@ function getgallerysinglenote(note_id,mobilefilepath){
 			jQuery(res['emnotes']).each(function(index){
 				db.transaction(function(tx){
 					var qr='INSERT INTO wnh_testnotes (test_note_id,note, filepath, mobilefilepath, filetype, manager_id, company_id, cdate) VALUES ("'+res['emnotes'][index]['id']+'", "'+res['emnotes'][index]['note']+'", "'+res['emnotes'][index]['filepath']+'", "'+mobilefilepath+'", "'+res['emnotes'][index]['filetype']+'", "'+res['emnotes'][index]['manager_id']+'", "'+res['emnotes'][index]['company_id']+'", "'+res['emnotes'][index]['cdate']+'")';
-					quenotes.push(note_id);
 					tx.executeSql(qr);
 					
 				});
@@ -391,8 +402,6 @@ function uploadgallerypic() {
 	navigator.camera.getPicture(function(f) {
         var filetrasfer=f;
 		if(filetrasfer!=''){
-			//jQuery('.submitwrap img.justloading').remove();
-			//jQuery('.submitwrap').append('<img src="images/ajax-loader.gif" class="justloading" />');
 			jQuery('body .showmessage').remove();
 			var html='<div class="showmessage">Please wait while uploading image...</div>';
 			jQuery('body').append(html);
@@ -447,8 +456,6 @@ function uploadmyvideo(){
 	 }
 	if(filetrasfer!=''){
 		jQuery('#confirmuploadvideo').modal('hide');
-		//jQuery('.submitwrap img.justloading').remove();
-		//jQuery('.submitwrap').append('<img src="images/ajax-loader.gif" class="justloading" />');
 		jQuery('body .showmessage').remove();
 		var html='<div class="showmessage">Please wait while uploading video...</div>';
 		jQuery('body').append(html);
@@ -477,26 +484,22 @@ function uploadmyvideo(){
 					//jQuery('.submitwrap img.justloading').remove();
 					var cntents=r.response.split('||emg||');
 					var cls='';
-					jQuery('.notelists').append('<div class="note-content">Me: <span class="video-wrape"><a href="javascript:;" onclick="return showvideo(\''+filetrasfer+'\');"><img src="images/video1.png" alt="video" /> Click to view</a></span></div>');
+					jQuery('.notelists').append('<div class="note-content"><span class="clinicnote"><div class="note-content">Me: <span class="img-wrape"><a href="javascript:;" onclick="return showvideo(\''+filetrasfer+'\');"><img src="images/video1.png" alt="video" /> Click to view</a></span></span></div>');
 					jQuery('body .showmessage').remove();
 					var html='<div class="showmessage">'+cntents[2]+'</div>';
-					getgallerysinglenote(cntents[1],filetrasfer);
 					jQuery('body').append(html);
-					setTimeout(function(){jQuery('.showmessage').slideUp();
-					jQuery('#emergency').modal('hide');
-					setTimeout(function(){openallnotes('yes');},1000);
-					},3000);
+					setTimeout(function(){jQuery('.showmessage').slideUp();},3000);
+					getgallerysinglenote(cntents[1],filetrasfer);
 						
 			}, fail, options);
 		};
-		resolveLocalFileSystemURL(filetrasfer, successtranfer, function(){});
+		resolveLocalFileSystemURL(filetrasfer, successtranfer, function(){alert('fail to upload');});
     }
 }
 function uploadgalleryvideo() {
 	navigator.camera.getPicture(function(f) {
-        jQuery('#uploadvideopath').val(f);
+		jQuery('#uploadvideopath').val(f);
        jQuery('#confirmuploadvideo').modal();
-	   jQuery('#emergency').modal('hide');
 	}, function(){}, { 
         quality: 50,
 		sourceType: Camera.PictureSourceType.PHOTOLIBRARY,
