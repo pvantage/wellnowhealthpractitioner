@@ -1,3 +1,13 @@
+.img-wrape img{ max-width:50px; max-height:50px;}
+.camebtns a {margin-right:1px !important; float:left; width: 57px;}
+#uploadphoto1 i{font-size:25px !important;}
+#uploadphoto1{color:#ffffff; margin-right:4px;}
+#uploadphoto12 i{font-size:25px;}
+#uploadphoto12{color:#ffffff; margin-right:4px;}
+#uploadphoto13{color:#ffffff;}
+#uploadphoto13 img{float:none; width: 28px !important;     display: inline-block;     margin-top: 3px;}
+.img-wrape a{color:#FFFFFF; padding-left:10px;}
+.img-wrape i{color:#FFFFFF;}
 .showmessage{width:100%; background:#29a03f; color:#FFFFFF; height:auto; line-height:normal; font-size:16px; text-align:center; position:fixed; bottom:10px; left:0; z-index:999999; border-top:1px solid #FFFFFF; border-bottom:1px solid #FFFFFF; padding:8px;}
 .showpopmessage {
     width: 100%;

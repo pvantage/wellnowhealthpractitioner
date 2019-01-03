@@ -28,6 +28,7 @@
 		 tx.executeSql('CREATE TABLE IF NOT EXISTS wnh_emergency_notifications (id integer primary key autoincrement, emergency_notification_id integer DEFAULT "0", emergency_id integer DEFAULT "0", manager_id integer DEFAULT "0", company_id integer DEFAULT "0", clinic_id DEFAULT "0", cdate datetime, readbycompany integer DEFAULT "0", readbymanager integer DEFAULT "0", notification_for text, notification_type text, notify integer DEFAULT "0", previous_notify text DEFAULT "0", next_notify text DEFAULT "0", status text DEFAULT "pending", company_name text, notification_text text, deletenotification integer DEFAULT "0")');
 		 tx.executeSql('CREATE TABLE IF NOT EXISTS wnh_emergency_phone (id integer primary key autoincrement, phone_id integer DEFAULT "0", manager_id integer DEFAULT "0", company_id integer DEFAULT "0", clinic_id DEFAULT "0", cdate datetime, phone text)');
 		 tx.executeSql('CREATE TABLE IF NOT EXISTS wnh_managers (id integer primary key autoincrement, manager_id integer, name text, email text, phone text, clinic_id integer DEFAULT "0", status integer DEFAULT "1", image text, current_lati text, current_longi text, current_address text, bioinfo text, position_in_clinic text, deviceregID text, device_type text, loggedin integer DEFAULT "0")');
+		 tx.executeSql('CREATE TABLE IF NOT EXISTS wnh_testnotes (id integer primary key autoincrement, test_note_id integer DEFAULT "0", note text, filepath text, mobilefilepath text, filetype varchar(255), manager_id integer DEFAULT "0", company_id integer DEFAULT "0", cdate datetime)');
          
     }
 
